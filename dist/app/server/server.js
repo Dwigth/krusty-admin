@@ -85,8 +85,11 @@ var Server = /** @class */ (function () {
      * =============================================
      */
     Server.prototype.LoadTemplateEngine = function () {
-        hbs_1.default.registerPartials(exports.ROOTDIRNAME + 'views/partials');
         exports.WEB_SERVER.set('view engine', 'hbs');
+        hbs_1.default.registerPartials(exports.ROOTDIRNAME + 'views/partials');
+        if (enviroment_1.environments.logging) {
+            console.log(colors_1.default.america('Parciales de HBS =>'), exports.ROOTDIRNAME + 'views/partials');
+        }
     };
     /**
      * =============================================

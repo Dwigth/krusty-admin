@@ -47,5 +47,24 @@ export class Database implements IDatabase {
         }
         return this.instance;
     }
+    /**
+     * ====================================================
+     * 
+     * Ejecuta una consulta y retorna una promesa del tipo 
+     * especificado.
+     * 
+     * ====================================================
+     * @param query 
+     */
+    public async Query<T>(query: string): Promise<T> {
+        return new Promise((resolve, reject) => {
+
+            this.Pool.query(query, function (error, results, fields) {
+                if (error) reject(error);
+                resolve(<T>results)
+                // console.log('The solution is: ', results[0]);
+            });
+        });
+    }
 
 }

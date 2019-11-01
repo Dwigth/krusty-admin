@@ -1,10 +1,10 @@
 export const environments = {
     database: {
         connectionLimit: 10,
-        host: '',
-        user: '',
-        password: '',
-        database: ''
+        host: 'localhost',
+        user: 'root',
+        password: 'rootroot',
+        database: 'tscbit_matilde'
     },
     logging: true,
     enableSSL: false,

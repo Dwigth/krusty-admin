@@ -1,6 +1,10 @@
 import { Router } from "express";
-import { HomeRouter } from "./home/home.route";
+import { AuthRoutes } from "./auth/routes.idx";
+import { HomeRoutes } from "./home/routes.idx";
 
-export const routes: Router[] = [
-    HomeRouter
-];
+export let routes: Router[] = [];
+
+routes = routes.concat(
+    AuthRoutes,
+    HomeRoutes
+);

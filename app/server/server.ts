@@ -101,8 +101,11 @@ export class Server {
      * =============================================
      */
     LoadTemplateEngine() {
-        hbs.registerPartials(ROOTDIRNAME + 'views/partials');
         WEB_SERVER.set('view engine', 'hbs');
+        hbs.registerPartials(ROOTDIRNAME + 'views/partials');
+        if (environments.logging) {
+            console.log(colors.america('Parciales de HBS =>'), ROOTDIRNAME + 'views/partials');
+        }
     }
 
     /**
