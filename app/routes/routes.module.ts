@@ -14,6 +14,7 @@ import { Request, Response } from "express";
 export class Routes {
     constructor() {
         WEB_SERVER.use(routes);
+        this.GetUserDataSession();
         this.RouteNotMatched();
     }
     /**
@@ -27,6 +28,23 @@ export class Routes {
     RouteNotMatched() {
         WEB_SERVER.use('*', (req: Request, res: Response) => {
             res.status(404).render('404', { title: 404 });
+        });
+    }
+    /**
+     * ==========================================
+     * 
+     * Obtiene la información de sesión del usuario
+     * si no la obtiene lo redirige al Login
+     * 
+     * ==========================================
+     */
+    GetUserDataSession() {
+        WEB_SERVER.use('/home', (req: Request, res: Response) => {
+            const userData = req.session.user;
+            console.log('No hay datos de usuario redirigiendo');
+            if (userData === undefined) {
+                res.redirect('/login');
+            }
         });
     }
 }

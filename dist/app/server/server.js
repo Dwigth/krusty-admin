@@ -13,6 +13,7 @@ var middlewares_idx_1 = require("../server/middlewares.idx");
 var enviroment_1 = require("../../environments/enviroment");
 var fs_1 = require("fs");
 var routes_module_1 = require("../routes/routes.module");
+var helpers_module_1 = require("../helpers/hbs/helpers.module");
 exports.ROOTDIRNAME = __dirname.slice(0, __dirname.indexOf('dist'));
 var Server = /** @class */ (function () {
     function Server() {
@@ -32,6 +33,7 @@ var Server = /** @class */ (function () {
         this.LoadStaticFiles();
         this.LoadTemplateEngine();
         this.LoadRoutes();
+        this.SecurityConfig();
         // Siempre a lo ultimo de la jerarquía
         this.InitializeServer();
     };
@@ -87,6 +89,7 @@ var Server = /** @class */ (function () {
     Server.prototype.LoadTemplateEngine = function () {
         exports.WEB_SERVER.set('view engine', 'hbs');
         hbs_1.default.registerPartials(exports.ROOTDIRNAME + 'views/partials');
+        var HelpMod = new helpers_module_1.HelpersModule();
         if (enviroment_1.environments.logging) {
             console.log(colors_1.default.america('Parciales de HBS =>'), exports.ROOTDIRNAME + 'views/partials');
         }
@@ -110,6 +113,9 @@ var Server = /** @class */ (function () {
      */
     Server.prototype.LoadRoutes = function () {
         var routes = new routes_module_1.Routes();
+    };
+    Server.prototype.SecurityConfig = function () {
+        exports.WEB_SERVER.disable('x-powered-by');
     };
     return Server;
 }());

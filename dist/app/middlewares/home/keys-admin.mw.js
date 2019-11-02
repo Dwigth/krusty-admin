@@ -38,82 +38,53 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mysql_1 = __importDefault(require("mysql"));
-var enviroment_1 = require("../../environments/enviroment");
-var colors_1 = __importDefault(require("colors"));
-/**
- * ==============================================
- *
- * ### Clase que se encargará de las conexiones a
- * base de datos y operaciones relacionadas
- *
- * ==============================================
- *
- */
-var Database = /** @class */ (function () {
-    /**
-     * =====================================================
-     *
-     * Obtenemos la configuración de ambientes para crear un
-     * pool de conexiones
-     *
-     * =====================================================
-     */
-    function Database() {
-        try {
-            this.Pool = mysql_1.default.createPool(enviroment_1.environments.database);
-        }
-        catch (e) {
-            console.error(colors_1.default.red(e));
-        }
-        if (enviroment_1.environments.logging) {
-            console.log(colors_1.default.yellow('Conectado a: '), colors_1.default.rainbow(enviroment_1.environments.database.host));
-        }
-    }
-    Object.defineProperty(Database, "Instance", {
-        /**
-         * ====================================================
-         *
-         * Patrón SINGLETON para obtener la unica instancia de
-         * la clase
-         * @todo Mejorar la función
-         *
-         * ====================================================
-         */
-        get: function () {
-            if (this.instance == null) {
-                this.instance = new this;
+var axios_1 = __importDefault(require("axios"));
+var enviroment_1 = require("../../../environments/enviroment");
+var https_1 = __importDefault(require("https"));
+function ShowKeys(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var intance, resp;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    intance = axios_1.default.create({
+                        httpsAgent: new https_1.default.Agent({
+                            rejectUnauthorized: false
+                        })
+                    });
+                    return [4 /*yield*/, intance.post(enviroment_1.environments.MatildeAPIURL + '/actions', { comando: 'listar' })];
+                case 1:
+                    resp = _a.sent();
+                    res.render('admin-llaves', { keys: resp.data.data });
+                    return [2 /*return*/];
             }
-            return this.instance;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * ====================================================
-     *
-     * Ejecuta una consulta y retorna una promesa del tipo
-     * especificado.
-     *
-     * ====================================================
-     * @param query
-     */
-    Database.prototype.Query = function (query) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                return [2 /*return*/, new Promise(function (resolve, reject) {
-                        _this.Pool.query(query, function (error, results, fields) {
-                            if (error)
-                                reject(error);
-                            resolve(results);
-                            // console.log('The solution is: ', results[0]);
-                        });
-                    })];
-            });
         });
-    };
-    Database.instance = null;
-    return Database;
-}());
-exports.Database = Database;
+    });
+}
+exports.ShowKeys = ShowKeys;
+function CreateKeys(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var intance, ck, resp;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    intance = axios_1.default.create({
+                        httpsAgent: new https_1.default.Agent({
+                            rejectUnauthorized: false
+                        })
+                    });
+                    ck = req.body;
+                    ck.cantidad = Number(ck.cantidad);
+                    if (!(ck.cantidad > 0)) return [3 /*break*/, 2];
+                    return [4 /*yield*/, intance.post(enviroment_1.environments.MatildeAPIURL + '/actions', { comando: 'crear', cantidad: ck.cantidad, tipo: ck.tipo })];
+                case 1:
+                    resp = _a.sent();
+                    _a.label = 2;
+                case 2:
+                    res.redirect('/home');
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.CreateKeys = CreateKeys;

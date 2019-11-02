@@ -47,13 +47,15 @@ function Login(req, res) {
                     return [4 /*yield*/, authctl.login()];
                 case 1:
                     login = _a.sent();
-                    if (login) {
-                        res.redirect('404');
+                    if (login.valid) {
+                        delete login.user.contrasena;
+                        // req.cookies.user = JSON.stringify(login.user);
+                        res.redirect('home');
                     }
                     else {
                         res.render('login', {
                             title: 'Login',
-                            error: login
+                            error: !login.valid
                         });
                     }
                     return [2 /*return*/];

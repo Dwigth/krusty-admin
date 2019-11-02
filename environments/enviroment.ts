@@ -12,5 +12,10 @@ export const environments = {
         cert: '',
         key: ''
     },
+    MatildeAPIURL: 'https://tscbit.com:3000',
+    Session: {
+        Secret: 'asbn2',
+        expires: 3600000
+    },
     PORT: 3000
 }

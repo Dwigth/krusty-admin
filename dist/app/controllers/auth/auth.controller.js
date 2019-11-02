@@ -59,7 +59,7 @@ var AuthController = /** @class */ (function () {
                                             return [4 /*yield*/, bcrypt_1.compare(this.credentials.password, admin.contrasena)];
                                         case 1:
                                             valid = _a.sent();
-                                            return [2 /*return*/, valid];
+                                            return [2 /*return*/, { valid: valid, user: admin }];
                                     }
                                 });
                             }); })

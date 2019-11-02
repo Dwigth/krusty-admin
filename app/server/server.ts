@@ -9,6 +9,7 @@ import { MIDDLEWARES } from "../server/middlewares.idx";
 import { environments } from "../../environments/enviroment";
 import { readFileSync } from "fs";
 import { Routes } from '../routes/routes.module'
+import { HelpersModule } from '../helpers/hbs/helpers.module';
 
 /**
  * =====================
@@ -43,7 +44,7 @@ export class Server {
         this.LoadStaticFiles();
         this.LoadTemplateEngine();
         this.LoadRoutes();
-
+        this.SecurityConfig();
         // Siempre a lo ultimo de la jerarquía
         this.InitializeServer();
     }
@@ -103,6 +104,8 @@ export class Server {
     LoadTemplateEngine() {
         WEB_SERVER.set('view engine', 'hbs');
         hbs.registerPartials(ROOTDIRNAME + 'views/partials');
+        const HelpMod = new HelpersModule();
+
         if (environments.logging) {
             console.log(colors.america('Parciales de HBS =>'), ROOTDIRNAME + 'views/partials');
         }
@@ -128,5 +131,9 @@ export class Server {
      */
     LoadRoutes() {
         const routes = new Routes();
+    }
+
+    SecurityConfig() {
+        WEB_SERVER.disable('x-powered-by');
     }
 }

@@ -26,7 +26,11 @@ export class Database implements IDatabase {
      * =====================================================
      */
     constructor() {
-        this.Pool = mysql.createPool(environments.database);
+        try {
+            this.Pool = mysql.createPool(environments.database);
+        } catch (e) {
+            console.error(colors.red(e));
+        }
         if (environments.logging) {
             console.log(colors.yellow('Conectado a: '), colors.rainbow(environments.database.host))
         }

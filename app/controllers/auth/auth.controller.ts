@@ -17,7 +17,7 @@ export class AuthController implements IAuthController {
             .then(async admins => {
                 let admin = admins[0];
                 let valid = await compare(this.credentials.password, admin.contrasena);
-                return valid;
+                return { valid: valid, user: admin };
             })
             .catch(e => e)
     }

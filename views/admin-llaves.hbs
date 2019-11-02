@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+{{>head title='Llaves'}}
+
+<body class="">
+  <div class="page">
+    <div class="flex-fill">
+      {{>header}}
+      <div class="my-3 my-md-5">
+        <div class="container">
+          <div class="page-header">
+            <h1 class="page-title">
+              Administrador de llaves de Matilde
+            </h1>
+            <div class="page-subtitle">1 - 20 of 1713 users</div>
+            <div class="page-options d-flex">
+              <select class="form-control custom-select w-auto">
+                <option value="asc">Newest</option>
+                <option value="desc">Oldest</option>
+              </select>
+            </div>
+          </div>
+          <div class="row row-cards">
+            <div class="col-lg-4">
+              <form class="card" action="/create-keys" method="POST">
+                <div class="card-body">
+                  <div class="form-group">
+                    <div class="form-label">Cantidad</div>
+                    <input name="cantidad" type="number" min="1" class="form-control" />
+                  </div>
+                  <div class="form-group">
+                    <div class="form-label">Group</div>
+                    <div class="selectgroup w-100">
+                      <label class="selectgroup-item">
+                        <input name="tipo" type="radio" name="value" value="f" class="selectgroup-input" checked>
+                        <span class="selectgroup-button">Físicas</span>
+                      </label>
+                      <label class="selectgroup-item">
+                        <input name="tipo" type="radio" name="value" value="d" class="selectgroup-input">
+                        <span class="selectgroup-button">Digitales</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer text-right">
+                  <button type="submit" class="btn btn-primary">Crear</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-lg-8">
+              <div class="card">
+                <table class="table card-table table-vcenter">
+                  <tr>
+                    <th class="w-1"></th>
+                    <th>Nombre</th>
+                    <th class="d-none d-sm-table-cell">Fecha</th>
+                    <th class="d-none d-md-table-cell">Cantidad</th>
+                    <th class="d-none d-md-table-cell">Mostrar</th>
+                  </tr>
+                  {{display_keys keys}}
+                </table>
+              </div>
+
+              {{!-- <ul class="pagination ">
+                <li class="page-item page-prev disabled">
+                  <a class="page-link" href="#" tabindex="-1">
+                    Prev
+                  </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                <li class="page-item"><a class="page-link" href="#">5</a></li>
+                <li class="page-item page-next">
+                  <a class="page-link" href="#">
+                    Next
+                  </a>
+                </li>
+              </ul> --}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{>footer}}
+  </div>
+</body>
+
+</html>

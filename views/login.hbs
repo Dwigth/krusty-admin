@@ -15,6 +15,7 @@
             <form class="card" action="/login" method="post">
               <div class="card-body p-6">
                 <div class="card-title">Inicia a tu cuenta</div>
+                {{ login_error error}}
                 <div class="form-group">
                   <label class="form-label">Nombre de usuario</label>
                   <input name="username" type="text" class="form-control" id="username" aria-describedby="usernameHelp"

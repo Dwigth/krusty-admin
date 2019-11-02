@@ -7,12 +7,16 @@ export async function Login(req: Request, res: Response) {
     let credentials: ICredentials = req.body;
     const authctl = new AuthController(credentials);
     let login = await authctl.login();
-    if (login) {
-        res.redirect('404')
+    if (login.valid) {
+
+        delete login.user.contrasena;
+        // req.cookies.user = JSON.stringify(login.user);
+
+        res.redirect('home');
     } else {
         res.render('login', {
             title: 'Login',
-            error: login
+            error: !login.valid
         })
     }
 }
