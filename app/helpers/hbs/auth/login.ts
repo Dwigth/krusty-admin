@@ -21,6 +21,24 @@ export const LoginHelperManager: IHelperModel[] = [
             }
         }
     },
-
+    {
+        name: 'manage_credentials',
+        function: (user: any) => {
+            const script =
+                `<script>
+                if(localStorage.getItem('user') === null){
+                    if(${user} != undefined){
+                        localStorage.setItem('user',JSON.stringify(${user}));
+                        setTimeout(function(){
+                            location.href = '/home';
+                        },1000);
+                    } 
+                }else{
+                    location.href = '/home';
+                }
+                </script>`;
+            return new hbs.handlebars.SafeString(script);
+        }
+    }
 ];
 

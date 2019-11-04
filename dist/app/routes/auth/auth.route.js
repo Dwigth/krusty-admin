@@ -9,3 +9,4 @@ exports.AuthRouter.get('/login', function (req, res) {
     });
 });
 exports.AuthRouter.post('/login', login_mw_1.Login);
+exports.AuthRouter.get('/redirect', login_mw_1.Redirect);

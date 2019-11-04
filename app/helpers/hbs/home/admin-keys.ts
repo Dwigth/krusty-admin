@@ -14,7 +14,7 @@ export const AdminnHelperManager: IHelperModel[] = [
   /**
    * =============================================
    * 
-   * Este helper genera multiples TR para llenar una
+   * Este helper genera multiples <tr> para llenar una
    * tabla de llaves
    * 
    * =============================================
@@ -38,7 +38,8 @@ export const AdminnHelperManager: IHelperModel[] = [
                     <td class="d-none d-sm-table-cell">${K.fecha}</td>
                     <td class="d-none d-md-table-cell">${K.cantidad}</td>
                     <td class="d-none d-md-table-cell">
-                    <button class="btn btn-secondary hide"> Mostrar </button>
+                    <button class="btn btn-secondary hide" onclick="ShowKeys(this)" id="${K.nombre}"> Mostrar </button>
+                    <span id="${K.nombre + 'keys'}" style="display:none">${K.llaves.toString()}</span>
                     </td>
                   </tr>
                   `;

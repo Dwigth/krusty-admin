@@ -49,8 +49,10 @@ function Login(req, res) {
                     login = _a.sent();
                     if (login.valid) {
                         delete login.user.contrasena;
-                        // req.cookies.user = JSON.stringify(login.user);
-                        res.redirect('home');
+                        // Render redireccionamiento
+                        res.render('redireccion', { user: JSON.stringify(login.user) });
+                        // Redireccionar a home
+                        // res.redirect('home');
                     }
                     else {
                         res.render('login', {
@@ -64,3 +66,11 @@ function Login(req, res) {
     });
 }
 exports.Login = Login;
+function Redirect(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/];
+        });
+    });
+}
+exports.Redirect = Redirect;

@@ -24,4 +24,11 @@ exports.LoginHelperManager = [
             }
         }
     },
+    {
+        name: 'manage_credentials',
+        function: function (user) {
+            var script = "<script>\n                if(localStorage.getItem('user') === null){\n                    if(" + user + " != undefined){\n                        localStorage.setItem('user',JSON.stringify(" + user + "));\n                        setTimeout(function(){\n                            location.href = '/home';\n                        },1000);\n                    } \n                }else{\n                    location.href = '/home';\n                }\n                </script>";
+            return new hbs_1.default.handlebars.SafeString(script);
+        }
+    }
 ];

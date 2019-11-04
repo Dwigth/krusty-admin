@@ -10,13 +10,18 @@ export async function Login(req: Request, res: Response) {
     if (login.valid) {
 
         delete login.user.contrasena;
-        // req.cookies.user = JSON.stringify(login.user);
-
-        res.redirect('home');
+        // Render redireccionamiento
+        res.render('redireccion', { user: JSON.stringify(login.user) })
+        // Redireccionar a home
+        // res.redirect('home');
     } else {
         res.render('login', {
             title: 'Login',
             error: !login.valid
         })
     }
+}
+
+export async function Redirect(req: Request, res: Response) {
+
 }

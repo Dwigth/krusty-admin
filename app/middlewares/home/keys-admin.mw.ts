@@ -11,7 +11,6 @@ export async function ShowKeys(req: Request, res: Response) {
         })
     })
     const resp = await intance.post(environments.MatildeAPIURL + '/actions', { comando: 'listar' });
-
     res.render('admin-llaves', { keys: resp.data.data });
 }
 
