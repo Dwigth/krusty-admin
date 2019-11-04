@@ -45,10 +45,10 @@
                 {{!-- Profile Menu --}}
                 <div class="dropdown">
                     <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
-                        <span class="avatar" style="background-image: url({{user.img}})"></span>
+                        <span class="avatar" id="avatar" style="background-image: url()"></span>
                         <span class="ml-2 d-none d-lg-block">
-                            <span class="text-default">{{user.nombre}}</span>
-                            <small class="text-muted d-block mt-1">{{user.usuario}}</small>
+                            <span id="nombre" class="text-default"></span>
+                            <small id="nivel" class="text-muted d-block mt-1"></small>
                         </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
@@ -63,6 +63,7 @@
                     </div>
                 </div>
                 {{!-- End Profile Menu --}}
+                {{show_userdata}}
 
             </div>
             <a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse"

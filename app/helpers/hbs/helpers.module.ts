@@ -4,6 +4,7 @@ import { LoginHelperManager } from './auth/login';
 import { environments } from '../../../environments/enviroment';
 import { AdminnHelperManager } from './home/admin-keys';
 import { MenuHelperManager } from './home/menu';
+import { GeneralHelperManager } from './home/general';
 
 export class HelpersModule {
     Modules: IHelperModel[] = [];
@@ -12,7 +13,8 @@ export class HelpersModule {
         this.Modules = this.Modules.concat(
             LoginHelperManager,
             AdminnHelperManager,
-            MenuHelperManager
+            MenuHelperManager,
+            GeneralHelperManager
         );
         for (let i = 0; i < this.Modules.length; i++) {
             const module = this.Modules[i];
