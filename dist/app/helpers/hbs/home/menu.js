@@ -15,7 +15,7 @@ var menu_routes_1 = require("../../../routes/menu-routes");
  */
 exports.MenuHelperManager = [
     {
-        name: 'menu_builder',
+        name: 'main_menu_builder',
         function: function () {
             var menu = '';
             var length = menu_routes_1.MenuItems.length;
@@ -35,6 +35,24 @@ exports.MenuHelperManager = [
                     itemElem += ' </div></li>';
                     menu += itemElem;
                 }
+            }
+            return new hbs_1.default.handlebars.SafeString(menu);
+        }
+    },
+    {
+        name: 'user_menu_builder',
+        function: function () {
+            var menu = '';
+            var length = menu_routes_1.ProfileMenuItems.length;
+            for (var i = 0; i < length; i++) {
+                var item = menu_routes_1.ProfileMenuItems[i];
+                //Aqui irá cualquier excepción para mostrar la cuenta de las notificaciones
+                var itemElem = "\n                    <a class=\"dropdown-item\" href=\"" + item.route + "\">";
+                if (item.notification) {
+                    itemElem += "\n                        <span class=\"float-right\"><span class=\"badge badge-" + item.notification.color + "\">" + item.notification.count + "</span></span>";
+                }
+                itemElem += "\n                        <i class=\"dropdown-icon " + item.icon + "\"></i> " + item.name + "\n                    </a>\n                    ";
+                menu += itemElem;
             }
             return new hbs_1.default.handlebars.SafeString(menu);
         }

@@ -36,4 +36,29 @@ exports.MenuItems = [
         icon: 'fe fe-settings'
     }
 ];
-exports.ProfileMenuItems = [];
+exports.ProfileMenuItems = [
+    {
+        name: 'Perfil',
+        route: '/profile',
+        icon: 'fe fe-user'
+    },
+    {
+        name: 'Configuración',
+        route: '/user-settings',
+        icon: 'fe fe-settings'
+    },
+    {
+        name: 'Inbox',
+        route: '/inbox',
+        icon: 'fe fe-mail',
+        notification: {
+            count: 6,
+            color: 'primary'
+        }
+    },
+    {
+        name: 'Mensajes',
+        route: '/messages',
+        icon: 'fe fe-send'
+    }
+];

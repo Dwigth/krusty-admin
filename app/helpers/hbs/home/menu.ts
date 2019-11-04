@@ -1,6 +1,6 @@
 import { IHelperModel } from "../../../interfaces/helpers/helper";
 import hbs from 'hbs';
-import { MenuItems } from "../../../routes/menu-routes";
+import { MenuItems, ProfileMenuItems } from "../../../routes/menu-routes";
 
 /**
  * =======================================================
@@ -12,7 +12,7 @@ import { MenuItems } from "../../../routes/menu-routes";
  */
 export const MenuHelperManager: IHelperModel[] = [
     {
-        name: 'menu_builder',
+        name: 'main_menu_builder',
         function: () => {
 
             let menu = '';
@@ -49,6 +49,32 @@ export const MenuHelperManager: IHelperModel[] = [
                     menu += itemElem;
                 }
 
+            }
+            return new hbs.handlebars.SafeString(menu);
+        }
+    },
+    {
+        name: 'user_menu_builder',
+        function: () => {
+            let menu = '';
+            const length = ProfileMenuItems.length;
+            for (let i = 0; i < length; i++) {
+                const item = ProfileMenuItems[i];
+                //Aqui irá cualquier excepción para mostrar la cuenta de las notificaciones
+
+                let itemElem =
+                    `
+                    <a class="dropdown-item" href="${item.route}">`;
+                if (item.notification) {
+                    itemElem += `
+                        <span class="float-right"><span class="badge badge-${item.notification.color}">${item.notification.count}</span></span>`;
+                }
+
+                itemElem += `
+                        <i class="dropdown-icon ${item.icon}"></i> ${item.name}
+                    </a>
+                    `;
+                menu += itemElem;
             }
             return new hbs.handlebars.SafeString(menu);
         }
