@@ -3,6 +3,7 @@ import { IHelperModel } from '../../interfaces/helpers/helper';
 import { LoginHelperManager } from './auth/login';
 import { environments } from '../../../environments/enviroment';
 import { AdminnHelperManager } from './home/admin-keys';
+import { MenuHelperManager } from './home/menu';
 
 export class HelpersModule {
     Modules: IHelperModel[] = [];
@@ -10,7 +11,8 @@ export class HelpersModule {
     constructor() {
         this.Modules = this.Modules.concat(
             LoginHelperManager,
-            AdminnHelperManager
+            AdminnHelperManager,
+            MenuHelperManager
         );
         for (let i = 0; i < this.Modules.length; i++) {
             const module = this.Modules[i];

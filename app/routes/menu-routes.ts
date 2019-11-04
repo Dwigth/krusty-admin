@@ -1,0 +1,43 @@
+import { IMenuItem } from "../interfaces/controllers/Menu/menu-item";
+
+/**
+ * =====================================
+ * 
+ * Arreglo de items para poder construir
+ * el menú 
+ * 
+ * =====================================
+ */
+
+export const MenuItems: IMenuItem[] = [
+    {
+        name: 'Home',
+        route: '/home',
+        icon: 'fe fe-home'
+    },
+    {
+        name: 'Matilde',
+        route: '/matilde',
+        icon: 'fe fe-book-open',
+        children: [
+            {
+                name: 'Clientes',
+                route: '/matilde-clients'
+            },
+            {
+                name: 'Llaves',
+                route: '/matilde-keys',
+                icon: 'fe fe-info'
+            }
+        ]
+    },
+    {
+        name: 'Configuración',
+        route: '/settings',
+        icon: 'fe fe-settings'
+    }
+];
+
+export const ProfileMenuItems: IMenuItem[] = [
+
+]; 
