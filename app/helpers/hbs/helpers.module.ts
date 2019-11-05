@@ -5,6 +5,7 @@ import { environments } from '../../../environments/enviroment';
 import { AdminnHelperManager } from './home/admin-keys';
 import { MenuHelperManager } from './home/menu';
 import { GeneralHelperManager } from './home/general';
+import { MatildeHelperManager } from './home/matilde';
 
 export class HelpersModule {
     Modules: IHelperModel[] = [];
@@ -14,7 +15,8 @@ export class HelpersModule {
             LoginHelperManager,
             AdminnHelperManager,
             MenuHelperManager,
-            GeneralHelperManager
+            GeneralHelperManager,
+            MatildeHelperManager
         );
         for (let i = 0; i < this.Modules.length; i++) {
             const module = this.Modules[i];
