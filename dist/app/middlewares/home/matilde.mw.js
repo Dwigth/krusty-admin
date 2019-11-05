@@ -36,6 +36,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var cliente_controller_1 = require("../../controllers/models/matilde/cliente.controller");
+var tienda_controller_1 = require("../../controllers/models/matilde/tienda.controller");
+var principio_controller_1 = require("../../controllers/models/matilde/principio.controller");
+var producto_controller_1 = require("../../controllers/models/matilde/producto.controller");
+var metodo_controller_1 = require("../../controllers/models/matilde/metodo.controller");
 function MatildeClients(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var ct, resp;
@@ -53,3 +57,58 @@ function MatildeClients(req, res) {
     });
 }
 exports.MatildeClients = MatildeClients;
+function MatildeCatalogs(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var tiendactl, princioctl, productoctl, metodoctl, tiendas, metodos, principios, productos;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    tiendactl = new tienda_controller_1.TiendaController();
+                    princioctl = new principio_controller_1.PrincipioController();
+                    productoctl = new producto_controller_1.ProductoController();
+                    metodoctl = new metodo_controller_1.MetodoController();
+                    return [4 /*yield*/, tiendactl.GetAll()];
+                case 1:
+                    tiendas = _a.sent();
+                    return [4 /*yield*/, metodoctl.GetAll()];
+                case 2:
+                    metodos = _a.sent();
+                    return [4 /*yield*/, princioctl.GetAll()];
+                case 3:
+                    principios = _a.sent();
+                    return [4 /*yield*/, productoctl.GetAll()];
+                case 4:
+                    productos = _a.sent();
+                    res.render('matilde-catalogs', {
+                        tiendas: tiendas,
+                        metodos: metodos,
+                        principios: principios,
+                        productos: productos,
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.MatildeCatalogs = MatildeCatalogs;
+/**
+ * ====================================================
+ *
+ * Se debe obtener el nombre de usuario y el token
+ * actual para poder proceder
+ *
+ * ====================================================
+ */
+function MatildeCatalogsHandler(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var action, table;
+        return __generator(this, function (_a) {
+            action = req.params.action;
+            table = req.params.table;
+            console.log(action, table);
+            res.json({ action: action, table: table });
+            return [2 /*return*/];
+        });
+    });
+}
+exports.MatildeCatalogsHandler = MatildeCatalogsHandler;

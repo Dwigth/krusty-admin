@@ -8,6 +8,7 @@ export interface IClienteModel {
     updatedAt: string | Date;
 }
 export interface IClientWithLicence {
+    [index: string]: string;
     ID_USUARIO: string;
     nombre: string;
     apellidos: string;

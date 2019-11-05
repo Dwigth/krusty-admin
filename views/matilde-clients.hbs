@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" dir="ltr">
 
-{{>head}}
+{{>head title='Clientes' }}
 
 <body class="">
   <div class="page">
@@ -11,7 +11,14 @@
       <div class="my-3 my-md-5">
 
         <div class="container">
-          {{MatildeClientsDT clients}}
+          <div class="page-header">
+            <h1 class="page-title">
+              Matilde
+            </h1>
+            <div class="page-subtitle">Clientes con licencias</div>
+          </div>
+
+          {{DataTableMaker clients}}
         </div>
 
       </div>

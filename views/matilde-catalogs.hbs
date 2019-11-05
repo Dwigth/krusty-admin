@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+
+{{>head title='Catálogos'}}
+
+<body class="">
+    <div class="page">
+        <div class="flex-fill">
+            {{>header }}
+            <div class="my-3 my-md-5">
+                <div class="container">
+                    <div class="page-header">
+                        <h1 class="page-title">
+                            Matilde
+                        </h1>
+                        <div class="page-subtitle">Catálogos</div>
+
+                    </div>
+                    <h5>Tiendas</h5>
+                    {{DataTableMaker tiendas}}
+                    <h5>Metodos</h5>
+                    {{DataTableMaker metodos}}
+                    <h5>Principios</h5>
+                    {{DataTableMaker principios}}
+                    <h5>Productos</h5>
+                    {{DataTableMaker productos}}
+                </div>
+            </div>
+        </div>
+        {{>footer}}
+    </div>
+</body>
+
+</html>

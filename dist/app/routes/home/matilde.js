@@ -9,3 +9,5 @@ var keys_admin_mw_1 = require("../../middlewares/home/keys-admin.mw");
 exports.MatildeRouter = express_1.default.Router();
 exports.MatildeRouter.get('/matilde-clients', matilde_mw_1.MatildeClients);
 exports.MatildeRouter.get('/matilde-keys', keys_admin_mw_1.ShowKeys);
+exports.MatildeRouter.get('/matilde-catalogs', matilde_mw_1.MatildeCatalogs);
+exports.MatildeRouter.get('/matilde-catalogs/:action/:table', matilde_mw_1.MatildeCatalogsHandler);

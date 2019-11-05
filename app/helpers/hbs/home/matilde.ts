@@ -1,59 +1,76 @@
 import { IHelperModel } from "../../../interfaces/helpers/helper";
 import hbs from 'hbs';
-import { IKeys } from "../../../interfaces/Database/IKeys";
-import { IClienteModel, IClientWithLicence } from "../../../interfaces/Database/models/cliente";
 
 /**
  * =======================================================
  * 
- * Arreglo de objetos que contienen helpers personalizados
- * por modulo (carpeta).
+ * - Arreglo de objetos que contienen helpers personalizados
+ *   por modulo (carpeta).
+ * - Variables globales
  * 
  * =======================================================
  */
+
 export const MatildeHelperManager: IHelperModel[] = [
     /**
-     * =============================================
+     * ==================================================
      * 
-     * Este helper genera multiples TR para llenar una
+     * Este helper genera multiples <tr> para llenar una
      * tabla de llaves
      * 
-     * =============================================
+     * ==================================================
      */
     {
-        name: 'MatildeClientsDT',
-        function: (clients: IClientWithLicence[]) => {
+        name: 'DataTableMaker',
+        function: <T>(data: T[]) => {
+
+            const actions = [{ name: 'Crear', id: '' }, { name: 'Actualizar', id: '' }, { name: 'Borrar', id: '' }];
+            const objTitles = Object.getOwnPropertyNames(data[0]);
+
             let container = '<div class="card"><div class="table-responsive">';
+
+            let buttonContainer = '<div>';
+
+            actions.forEach(action => {
+                buttonContainer += `<button class="btn btn-primary p-2 m-2">${action.name}</button>`;
+            });
+            buttonContainer += '</div>';
+
+            container += buttonContainer;
+
+            // Inicio de la tabla
             let table = '<table class="table card-table table-vcenter text-nowrap datatable dataTable no-footer clients-datatable">';
-            const thead = `
-            <thead>
-                <th>ID_CLIENTE</th>
-                <th>Nombre</th>
-                <th>Apellidos</th>
-                <th>correo</th>
-                <th>key</th>
-                <th>Licencia</th>
-                <th>createdAt</th>
-            </thead>
-            `;
+            let thead = `<thead>`;
+            // Obtención de los títulos
+            // Se agrega un espacio para el checkbox
+            thead += '<th></th>';
+            objTitles.forEach(title => {
+                thead += `<th>${title}</th>`;
+            });
+
+            thead += '</thead>';
+            // Inicio del body
             let tbody = '<tbody>';
-            let td = '';
-            for (let i = 0; i < clients.length; i++) {
-                const client = clients[i];
-                td += `
-                <tr>
-                    <td>${client.ID_USUARIO}</td>
-                    <td>${client.nombre}</td>
-                    <td>${client.apellidos}</td>
-                    <td>${client.correo}</td>
-                    <td>${client.key}</td>
-                    <td>${client.ID_LICENCIA}</td>
-                    <td>${client.createdAt}</td>
-                </tr>
-                `;
+
+            // Contenido del tbody
+            let tr = '';
+            for (let i = 0; i < data.length; i++) {
+                // Implementación de un "Index Signature"
+                // @todo saber porque
+                const row = <{ [index: string]: any }>data[i];
+                tr += '<tr>';
+                // Se agrega checkbox para obtener el estado de la fila
+                tr += `<td><input id="${i}" class="checkbox" type="checkbox"></td>`;
+                for (let j = 0; j < objTitles.length; j++) {
+                    const property = objTitles[j];
+                    tr += `<td>${row[property]}</td>`;
+                }
+                tr += '</tr>';
             }
-            tbody += td;
+            tbody += tr;
             tbody += '</tbody>';
+
+            // Se agrega a la tabla
             table += thead;
             table += tbody;
             table += '</table>';
@@ -61,8 +78,8 @@ export const MatildeHelperManager: IHelperModel[] = [
             const script = `
             <script>
             require(['./admin-template/assets/plugins/datatables/datatables.min.js', 'jquery'], 
-            function(datatable, $) {
-                $('.clients-datatable').DataTable();
+            function(datatable, $) {                
+                var table = $('.datatable').DataTable();
                 });
             </script>
             `;

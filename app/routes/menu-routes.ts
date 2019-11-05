@@ -26,8 +26,11 @@ export const MenuItems: IMenuItem[] = [
             },
             {
                 name: 'Llaves',
-                route: '/matilde-keys',
-                icon: 'fe fe-info'
+                route: '/matilde-keys'
+            },
+            {
+                name: 'Catálogos',
+                route: '/matilde-catalogs'
             }
         ]
     },
