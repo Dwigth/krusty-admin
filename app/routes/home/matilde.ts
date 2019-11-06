@@ -8,4 +8,4 @@ export const MatildeRouter = express.Router();
 MatildeRouter.get('/matilde-clients', MatildeClients);
 MatildeRouter.get('/matilde-keys', ShowKeys);
 MatildeRouter.get('/matilde-catalogs', MatildeCatalogs);
-MatildeRouter.get('/matilde-catalogs/:action/:table', MatildeCatalogsHandler);
+MatildeRouter.post('/matilde-catalogs/:action/:table', MatildeCatalogsHandler);

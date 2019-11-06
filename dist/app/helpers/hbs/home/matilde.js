@@ -17,32 +17,30 @@ exports.MatildeHelperManager = [
     /**
      * ==================================================
      *
-     * Este helper genera multiples <tr> para llenar una
-     * tabla de llaves
-     *
+     * Este helper genera tablas.
+     * @requires modal.js
+     * @requires dt-custom-actions.js
      * ==================================================
      */
     {
         name: 'DataTableMaker',
-        function: function (data) {
-            var actions = [{ name: 'Crear', id: '' }, { name: 'Actualizar', id: '' }, { name: 'Borrar', id: '' }];
+        function: function (data, id) {
             var objTitles = Object.getOwnPropertyNames(data[0]);
-            var container = '<div class="card"><div class="table-responsive">';
-            var buttonContainer = '<div>';
-            actions.forEach(function (action) {
-                buttonContainer += "<button class=\"btn btn-primary p-2 m-2\">" + action.name + "</button>";
-            });
-            buttonContainer += '</div>';
+            var container = '<div class="card card-dt"><div class="table-responsive" >';
+            var buttonContainer = '<div> <button class="btn btn-secondary btn-sm p-2 m-2 create">Agregar</button> </div>';
+            //Aqui ira el JSON data escondido
+            var JSONDataContainer = "<span id=\"" + id + "-data\" style=\"display:none\">" + JSON.stringify(data) + "</span>";
             container += buttonContainer;
+            container += JSONDataContainer;
             // Inicio de la tabla
-            var table = '<table class="table card-table table-vcenter text-nowrap datatable dataTable no-footer clients-datatable">';
+            var table = "<table id=\"" + id + "\" class=\"table card-table table-vcenter text-nowrap datatable dataTable no-footer clients-datatable\">";
             var thead = "<thead>";
             // Obtención de los títulos
             // Se agrega un espacio para el checkbox
-            thead += '<th></th>';
             objTitles.forEach(function (title) {
                 thead += "<th>" + title + "</th>";
             });
+            thead += '<th></th>';
             thead += '</thead>';
             // Inicio del body
             var tbody = '<tbody>';
@@ -54,11 +52,12 @@ exports.MatildeHelperManager = [
                 var row = data[i];
                 tr += '<tr>';
                 // Se agrega checkbox para obtener el estado de la fila
-                tr += "<td><input id=\"" + i + "\" class=\"checkbox\" type=\"checkbox\"></td>";
+                // tr += `<td><input id="${i}" onclick="checkbox(this)" class="checkbox" type="checkbox"></td>`;
                 for (var j = 0; j < objTitles.length; j++) {
                     var property = objTitles[j];
                     tr += "<td>" + row[property] + "</td>";
                 }
+                tr += "\n                <td class=\"text-right\">\n                <div class=\"dropdown\">\n                  <button class=\"btn btn-secondary btn-sm dropdown-toggle\" data-toggle=\"dropdown\">Acciones</button>\n                  <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\n                    <a class=\"dropdown-item\" onclick=\"Update('" + id + "'," + i + ")\">Editar</a>\n                    <a class=\"dropdown-item\" onclick=\"Delete('" + id + "'," + i + ")\">Eliminar</a>\n                </div>\n                </div>\n              </td>";
                 tr += '</tr>';
             }
             tbody += tr;
@@ -67,8 +66,6 @@ exports.MatildeHelperManager = [
             table += thead;
             table += tbody;
             table += '</table>';
-            var script = "\n            <script>\n            require(['./admin-template/assets/plugins/datatables/datatables.min.js', 'jquery'], \n            function(datatable, $) {                \n                var table = $('.datatable').DataTable();\n                });\n            </script>\n            ";
-            table += script;
             container += table;
             container += '</div></div>';
             return new hbs_1.default.handlebars.SafeString(container);

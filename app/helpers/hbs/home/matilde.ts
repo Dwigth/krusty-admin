@@ -7,7 +7,7 @@ import hbs from 'hbs';
  * - Arreglo de objetos que contienen helpers personalizados
  *   por modulo (carpeta).
  * - Variables globales
- * 
+ *  
  * =======================================================
  */
 
@@ -15,38 +15,36 @@ export const MatildeHelperManager: IHelperModel[] = [
     /**
      * ==================================================
      * 
-     * Este helper genera multiples <tr> para llenar una
-     * tabla de llaves
-     * 
+     * Este helper genera tablas.
+     * @requires modal.js
+     * @requires dt-custom-actions.js 
      * ==================================================
      */
     {
         name: 'DataTableMaker',
-        function: <T>(data: T[]) => {
+        function: <T>(data: T[], id: string) => {
 
-            const actions = [{ name: 'Crear', id: '' }, { name: 'Actualizar', id: '' }, { name: 'Borrar', id: '' }];
             const objTitles = Object.getOwnPropertyNames(data[0]);
 
-            let container = '<div class="card"><div class="table-responsive">';
+            let container = '<div class="card card-dt"><div class="table-responsive" >';
 
-            let buttonContainer = '<div>';
-
-            actions.forEach(action => {
-                buttonContainer += `<button class="btn btn-primary p-2 m-2">${action.name}</button>`;
-            });
-            buttonContainer += '</div>';
+            let buttonContainer = '<div> <button class="btn btn-secondary btn-sm p-2 m-2 create">Agregar</button> </div>';
+            //Aqui ira el JSON data escondido
+            let JSONDataContainer = `<span id="${id}-data" style="display:none">${JSON.stringify(data)}</span>`;
 
             container += buttonContainer;
+            container += JSONDataContainer;
 
             // Inicio de la tabla
-            let table = '<table class="table card-table table-vcenter text-nowrap datatable dataTable no-footer clients-datatable">';
+            let table = `<table id="${id}" class="table card-table table-vcenter text-nowrap datatable dataTable no-footer clients-datatable">`;
             let thead = `<thead>`;
             // Obtención de los títulos
             // Se agrega un espacio para el checkbox
-            thead += '<th></th>';
             objTitles.forEach(title => {
                 thead += `<th>${title}</th>`;
             });
+            thead += '<th></th>';
+
 
             thead += '</thead>';
             // Inicio del body
@@ -60,11 +58,21 @@ export const MatildeHelperManager: IHelperModel[] = [
                 const row = <{ [index: string]: any }>data[i];
                 tr += '<tr>';
                 // Se agrega checkbox para obtener el estado de la fila
-                tr += `<td><input id="${i}" class="checkbox" type="checkbox"></td>`;
+                // tr += `<td><input id="${i}" onclick="checkbox(this)" class="checkbox" type="checkbox"></td>`;
                 for (let j = 0; j < objTitles.length; j++) {
                     const property = objTitles[j];
                     tr += `<td>${row[property]}</td>`;
                 }
+                tr += `
+                <td class="text-right">
+                <div class="dropdown">
+                  <button class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">Acciones</button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" onclick="Update('${id}',${i})">Editar</a>
+                    <a class="dropdown-item" onclick="Delete('${id}',${i})">Eliminar</a>
+                </div>
+                </div>
+              </td>`;
                 tr += '</tr>';
             }
             tbody += tr;
@@ -75,15 +83,6 @@ export const MatildeHelperManager: IHelperModel[] = [
             table += tbody;
             table += '</table>';
 
-            const script = `
-            <script>
-            require(['./admin-template/assets/plugins/datatables/datatables.min.js', 'jquery'], 
-            function(datatable, $) {                
-                var table = $('.datatable').DataTable();
-                });
-            </script>
-            `;
-            table += script;
             container += table;
             container += '</div></div>';
             return new hbs.handlebars.SafeString(container);

@@ -6,5 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var keys_admin_mw_1 = require("../../middlewares/home/keys-admin.mw");
 exports.HomeRouter = express_1.default.Router();
+exports.HomeRouter.get('/', function (req, res) {
+    res.render('login', {
+        title: 'Inicio de sesión'
+    });
+});
 exports.HomeRouter.get('/home', keys_admin_mw_1.ShowKeys);
 exports.HomeRouter.post('/create-keys', keys_admin_mw_1.CreateKeys);

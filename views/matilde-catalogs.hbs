@@ -17,18 +17,23 @@
 
                     </div>
                     <h5>Tiendas</h5>
-                    {{DataTableMaker tiendas}}
+                    {{DataTableMaker tiendas 'tiendas'}}
                     <h5>Metodos</h5>
-                    {{DataTableMaker metodos}}
+                    {{DataTableMaker metodos 'metodos'}}
                     <h5>Principios</h5>
-                    {{DataTableMaker principios}}
+                    {{DataTableMaker principios 'principios'}}
                     <h5>Productos</h5>
-                    {{DataTableMaker productos}}
+                    {{DataTableMaker productos 'productos'}}
                 </div>
             </div>
         </div>
         {{>footer}}
     </div>
+
+    <script src="./apps/admin-template/modal.js"></script>
+    <script src="./apps/admin-template/dt-custom-actions.js"></script>
+    <script src="./apps/admin-template/catalogos-matilde.js"></script>
+
 </body>
 
 </html>
