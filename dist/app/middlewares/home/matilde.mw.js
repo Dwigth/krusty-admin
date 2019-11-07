@@ -91,6 +91,37 @@ function MatildeCatalogs(req, res) {
     });
 }
 exports.MatildeCatalogs = MatildeCatalogs;
+function MatildeCatalogsNames(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var tiendactl, princioctl, productoctl, metodoctl, _a, _b, _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0:
+                    tiendactl = new tienda_controller_1.TiendaController();
+                    princioctl = new principio_controller_1.PrincipioController();
+                    productoctl = new producto_controller_1.ProductoController();
+                    metodoctl = new metodo_controller_1.MetodoController();
+                    _b = (_a = res).json;
+                    _c = {};
+                    return [4 /*yield*/, tiendactl.GetNames()];
+                case 1:
+                    _c.tiendas = _d.sent();
+                    return [4 /*yield*/, princioctl.GetNames()];
+                case 2:
+                    _c.principios = _d.sent();
+                    return [4 /*yield*/, productoctl.GetNames()];
+                case 3:
+                    _c.productos = _d.sent();
+                    return [4 /*yield*/, metodoctl.GetNames()];
+                case 4:
+                    _b.apply(_a, [(_c.metodos = _d.sent(),
+                            _c)]);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.MatildeCatalogsNames = MatildeCatalogsNames;
 /**
  * ====================================================
  *

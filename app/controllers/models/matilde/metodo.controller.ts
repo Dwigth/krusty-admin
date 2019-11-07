@@ -13,4 +13,10 @@ export class MetodoController implements IMetodoModel {
         return resp;
     }
 
+    public async GetNames() {
+        let query = `SELECT id_metodo,nombre FROM metodo`;
+        const resp = await Database.Instance.Query<string[]>(query);
+        return resp;
+    }
+
 }

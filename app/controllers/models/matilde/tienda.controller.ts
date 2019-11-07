@@ -15,6 +15,12 @@ export class TiendaController implements ITiendaModel {
         return resp;
     }
 
+    public async GetNames() {
+        let query = `SELECT id_tienda,nombre FROM tienda`;
+        const resp = await Database.Instance.Query<string[]>(query);
+        return resp;
+    }
+
     public async Update(previews: Array<ITiendaModel>) {
 
     }

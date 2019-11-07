@@ -3,7 +3,9 @@
  * @requires dt-custom-actions.js 
  * 
  * Funciones personalizada
+ * VARIABLES GLOBALES
  */
+
 
 /**
  * @todo Hacer la función para eliminar en backend
@@ -24,15 +26,39 @@ function Delete(tabla, index) {
     }).catch((e) => {
         console.error(e);
     })
-
-
-
 }
 
-function Update(tabla, index) {
+async function Update(tabla, index) {
     console.log('Actualizar', tabla, index);
     const data = JSON.parse(document.getElementById(tabla + '-data').textContent)[index];
-    let modal = new Modal();
+    let Fields = Object.getOwnPropertyNames(data);
+    //Obtener los datos
+    const names = await fetch('/matilde-catalogs-names', { method: 'GET' }).then(resp => resp.json());
+    //Hash-Table de datos
+    let selectableFields = {
+        "metodo": names.metodos,
+        "principio": names.principios,
+        "tienda": names.tiendas
+    };
+    let selectables = Object.getOwnPropertyNames(selectableFields);
+    // Construcción del html
+    // @todo Renderizar selects
+    let html = '<form>';
+    Fields.map(field => {
+
+        html += `<div class="form-group">
+                    <label class="form-label">${field}</label>
+                    <input name="${field}" type="text" value="${data[field]}" class="form-control">
+                </div>
+                `;
+    });
+    html += '</form>'
+    let options = {
+        html: html
+    };
+    let modal = new Modal(options);
+    modal.InsertHTML();
     modal.Open();
+
 }
 

@@ -59,6 +59,7 @@ require(
                 </div>
                 `;
             }
+            form += '</form>';
             return form;
         }
     });

@@ -18,13 +18,16 @@
             <div class="page-subtitle">Clientes con licencias</div>
           </div>
 
-          {{DataTableMaker clients}}
+          {{DataTableMaker clients 'clientes'}}
         </div>
 
       </div>
     </div>
     {{>footer}}
   </div>
+
+  <script src="./apps/admin-template/modal.js"></script>
+  <script src="./apps/admin-template/dt-custom-actions.js"></script>
 </body>
 
 </html>

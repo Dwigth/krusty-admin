@@ -45,7 +45,7 @@ var PrincipioController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "SELECT * FROM principio";
+                        query = "\n        SELECT p.id_principio,p.nombre, m.nombre AS \"metodo\" FROM principio p\n        INNER JOIN metodo m\n        ON p.id_metodo = m.id_metodo\n        ";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
                     case 1:
                         resp = _a.sent();
@@ -54,13 +54,13 @@ var PrincipioController = /** @class */ (function () {
             });
         });
     };
-    PrincipioController.prototype.GetPrincipiosNames = function () {
+    PrincipioController.prototype.GetNames = function () {
         return __awaiter(this, void 0, void 0, function () {
             var query, resp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "SELECT nombre FROM principio";
+                        query = "SELECT id_principio,nombre FROM principio";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
                     case 1:
                         resp = _a.sent();

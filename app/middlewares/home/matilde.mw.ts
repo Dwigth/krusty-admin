@@ -31,6 +31,19 @@ export async function MatildeCatalogs(req: Request, res: Response) {
     });
 }
 
+export async function MatildeCatalogsNames(req: Request, res: Response) {
+    const tiendactl = new TiendaController();
+    const princioctl = new PrincipioController();
+    const productoctl = new ProductoController();
+    const metodoctl = new MetodoController();
+    res.json({
+        tiendas: await tiendactl.GetNames(),
+        principios: await princioctl.GetNames(),
+        productos: await productoctl.GetNames(),
+        metodos: await metodoctl.GetNames()
+    })
+}
+
 /**
  * ====================================================
  * 

@@ -35,6 +35,12 @@ export class ProductoController implements IProductoModel {
         return resp;
     }
 
+    public async GetNames() {
+        let query = `SELECT id_producto,nombre FROM producto`;
+        const resp = await Database.Instance.Query<string[]>(query);
+        return resp;
+    }
+
     public async CreateProduct() {
 
     }

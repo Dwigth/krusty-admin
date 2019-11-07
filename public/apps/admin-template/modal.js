@@ -34,6 +34,14 @@ window.onload = (function () {
     body.insertBefore(backdrop, body.firstChild);
 });
 
+/**
+ * @param options: 
+ * - id: string
+ * - html: string, 
+ * - data:Array<{}>
+ * 
+ * @todo Agregar un metodo wildcard para excluir propiedades
+ */
 class Modal {
 
     constructor(options) {
@@ -106,10 +114,36 @@ class Modal {
             this.Open();
             this.RenderOptions(false)
 
+            confirmBtn.addEventListener('click', () => {
+                result = true;
+                this.Loader();
+                resolve(result);
+                setTimeout(() => {
+                    this.CleanContainer();
+                    this.Close();
+                }, 500);
+            });
+
             // 'Rechazado por el usuario.'
-            confirmBtn.addEventListener('click', () => { result = true; resolve(result); this.Close(); })
-            declineBtn.addEventListener('click', () => { result = false; this.Close(); reject(result); })
+            declineBtn.addEventListener('click', () => { result = false; this.Close(); reject(result); });
         });
+    }
+    /**
+     * Agrega un efecto de carga
+     */
+    Loader() {
+        const loader = document.createElement('div');
+        const dimmer = document.createElement('div');
+        dimmer.classList.add('dimmer', 'active');
+        dimmer.appendChild(loader)
+        loader.classList.add('loader');
+        this.container.appendChild(dimmer);
+    }
+    /**
+     * Limpia todo lo que esté dentro del contenedor
+     */
+    CleanContainer() {
+        this.container.innerHTML = '';
     }
 }
 

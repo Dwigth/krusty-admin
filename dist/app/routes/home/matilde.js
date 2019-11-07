@@ -11,3 +11,4 @@ exports.MatildeRouter.get('/matilde-clients', matilde_mw_1.MatildeClients);
 exports.MatildeRouter.get('/matilde-keys', keys_admin_mw_1.ShowKeys);
 exports.MatildeRouter.get('/matilde-catalogs', matilde_mw_1.MatildeCatalogs);
 exports.MatildeRouter.post('/matilde-catalogs/:action/:table', matilde_mw_1.MatildeCatalogsHandler);
+exports.MatildeRouter.get('/matilde-catalogs-names', matilde_mw_1.MatildeCatalogsNames);

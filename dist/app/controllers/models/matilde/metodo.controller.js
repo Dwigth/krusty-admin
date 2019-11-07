@@ -54,6 +54,21 @@ var MetodoController = /** @class */ (function () {
             });
         });
     };
+    MetodoController.prototype.GetNames = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var query, resp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "SELECT id_metodo,nombre FROM metodo";
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 1:
+                        resp = _a.sent();
+                        return [2 /*return*/, resp];
+                }
+            });
+        });
+    };
     return MetodoController;
 }());
 exports.MetodoController = MetodoController;

@@ -9,13 +9,17 @@ export class PrincipioController implements IPrincipioModel {
     constructor() { }
 
     public async GetAll() {
-        let query = `SELECT * FROM principio`;
+        let query = `
+        SELECT p.id_principio,p.nombre, m.nombre AS "metodo" FROM principio p
+        INNER JOIN metodo m
+        ON p.id_metodo = m.id_metodo
+        `;
         const resp = await Database.Instance.Query<IPrincipioModel[]>(query);
         return resp;
     }
 
-    public async GetPrincipiosNames() {
-        let query = `SELECT nombre FROM principio`;
+    public async GetNames() {
+        let query = `SELECT id_principio,nombre FROM principio`;
         const resp = await Database.Instance.Query<string[]>(query);
         return resp;
     }
