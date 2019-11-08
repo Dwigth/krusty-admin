@@ -5,6 +5,7 @@ import { TiendaController } from "../../controllers/models/matilde/tienda.contro
 import { PrincipioController } from "../../controllers/models/matilde/principio.controller";
 import { ProductoController } from "../../controllers/models/matilde/producto.controller";
 import { MetodoController } from "../../controllers/models/matilde/metodo.controller";
+import { environments } from "../../../environments/enviroment";
 
 export async function MatildeClients(req: Request, res: Response) {
     const ct = new ClienteController();
@@ -55,6 +56,157 @@ export async function MatildeCatalogsNames(req: Request, res: Response) {
 export async function MatildeCatalogsHandler(req: Request, res: Response) {
     const action = req.params.action;
     const table = req.params.table;
-    console.log(action, table);
-    res.json({ action, table });
+    const data = req.body;
+
+    if (environments.logging) {
+        console.log(data)
+    }
+
+    switch (table) {
+        case 'tienda':
+
+            const tiendactl = new TiendaController();
+
+            switch (action) {
+                case 'read':
+                    tiendactl.GetAll().then(data => res.json(data)).catch(e => res.json(e))
+                    break;
+                case 'create':
+                    tiendactl.Create(data).then(resp => {
+                        res.json({ msg: 'Crear un item de tienda' })
+                    }).catch(e => {
+                        res.json({ msg: 'Crear un item de tienda' })
+                    });
+                    break;
+                case 'update':
+                    tiendactl.Update(data).then(resp => {
+                        res.json({ msg: 'Actualizar un item de tienda' })
+                    }).catch(e => {
+                        res.json({ msg: 'Actualizar un item de tienda' })
+                    });
+                    break;
+                case 'delete':
+                    tiendactl.Delete(data).then(resp => {
+                        res.json({ msg: 'Eliminar un item de tienda' })
+                    }).catch(e => {
+                        res.json({ msg: 'Error al eliminar un item de tienda' })
+                    });
+                    break;
+
+                default:
+                    res.json({ msg: 'Debe especificar una acción item de tienda' })
+                    break;
+            }
+            break;
+        case 'metodo':
+            const metodoctl = new MetodoController();
+
+            switch (action) {
+                case 'read':
+                    metodoctl.GetAll().then(data => res.json(data)).catch(e => res.json(e))
+                    break;
+                case 'create':
+                    metodoctl.Create(data).then(resp => {
+                        res.json({ msg: 'Crear un item de tienda' })
+                    }).catch(e => {
+                        res.json({ msg: 'Crear un item de tienda' })
+                    });
+                    break;
+                case 'update':
+                    metodoctl.Update(data).then(resp => {
+                        res.json({ msg: 'Actualizar un item de metodo' })
+                    }).catch(e => {
+                        res.json({ msg: 'Actualizar un item de metodo' })
+                    });
+
+                    break;
+                case 'delete':
+                    metodoctl.Delete(data).then(resp => {
+                        res.json({ msg: 'Eliminar un item de metodo' })
+                    }).catch(e => {
+                        res.json({ msg: 'Error al eliminar un item de metodo' })
+                    });
+                    break;
+
+                default:
+                    res.json({ msg: 'Debe especificar una acción item de metodos' })
+                    break;
+            }
+            break;
+        case 'principio':
+            const princioctl = new PrincipioController();
+
+            switch (action) {
+                case 'read':
+                    princioctl.GetAll().then(data => res.json(data)).catch(e => res.json(e))
+                    break;
+                case 'create':
+                    princioctl.Create(data).then(resp => {
+                        res.json({ msg: 'Crear un item de tienda' })
+                    }).catch(e => {
+                        res.json({ msg: 'Crear un item de tienda' })
+                    });
+                    break;
+                case 'update':
+                    princioctl.Update(data).then(resp => {
+                        res.json({ msg: 'Actualizar un item de principio' })
+                    }).catch(e => {
+                        res.json({ msg: 'Actualizar un item de principio' })
+                    });
+
+                    break;
+                case 'delete':
+                    princioctl.Delete(data).then(resp => {
+                        res.json({ msg: 'Eliminar un item de principio' })
+                    }).catch(e => {
+                        res.json({ msg: 'Error al eliminar un item de principio' })
+                    });
+
+                    break;
+
+                default:
+                    res.json({ msg: 'Debe especificar una acción item de principios' })
+                    break;
+            }
+            break;
+        case 'producto':
+            const productoctl = new ProductoController();
+            switch (action) {
+                case 'read':
+                    productoctl.GetAll().then(data => res.json(data)).catch(e => res.json(e))
+                    break;
+                case 'create':
+                    productoctl.Create(data).then(resp => {
+                        res.json({ msg: 'Crear un item de producto' })
+                    }).catch(e => {
+                        res.json({ msg: 'Crear un item de producto' })
+                    });
+                    break;
+                case 'update':
+                    productoctl.Update(data).then(resp => {
+                        res.json({ msg: 'Actualizar un item de producto' })
+                    }).catch(e => {
+                        res.json({ msg: 'Actualizar un item de producto' })
+                    });
+
+                    break;
+                case 'delete':
+                    productoctl.Delete(data).then(resp => {
+                        res.json({ msg: 'Eliminar un item de producto' })
+                    }).catch(e => {
+                        res.json({ msg: 'Error al eliminar un item de producto' })
+                    });
+
+                    break;
+
+                default:
+                    res.json({ msg: 'Debe especificar una acción item de productos' })
+                    break;
+            }
+            break;
+
+        default:
+            res.json({ msg: 'Su consulta está mal formada' });
+            break;
+    }
 }

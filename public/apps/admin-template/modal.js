@@ -92,15 +92,18 @@ class Modal {
         }
     }
     /**
-     * Retorna un valor boolean si el modal se ha confirmado
+     * Retorna un valor `boolean` dependiendo de la decisión del usuario.
+     * @todo Implementar esta función de manera que no sea destructiva.
+     * @todo Cambiar parametro string a un objeto
      */
-    async Confirm(message) {
+    async Confirm(options) {
         return new Promise((resolve, reject) => {
             let messageCtn = `
                 <div>
-                    <label class="form-label">${message}</label>
+                    <label class="form-label">${options.message}</label>
                     <div id="actions"></div>
                 </div>`;
+            let temp = this.container.innerHTML;
             this.container.innerHTML = messageCtn;
             let space = document.getElementById('actions');
             let confirmBtn = document.createElement('button');
@@ -118,14 +121,21 @@ class Modal {
                 result = true;
                 this.Loader();
                 resolve(result);
+                if (options.callback) {
+                    options.callback();
+                }
                 setTimeout(() => {
                     this.CleanContainer();
                     this.Close();
                 }, 500);
             });
-
             // 'Rechazado por el usuario.'
-            declineBtn.addEventListener('click', () => { result = false; this.Close(); reject(result); });
+            declineBtn.addEventListener('click', () => {
+                result = false;
+                this.Close();
+                this.container = temp;
+                reject(result);
+            });
         });
     }
     /**

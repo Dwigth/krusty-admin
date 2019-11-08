@@ -1,8 +1,8 @@
 /**
- * Este script se encargará de manejar todos los eventos CRUD de las
- * DataTables.
- * Cada una de las datatable tienen checkboxes que obtendran la posición
- * de los elementos seleccionados.
+ * Este script se encargará de inicializar las DataTables
+ * @see https://datatables.net/examples/ajax/null_data_source.html
+ * @see https://stackoverflow.com/questions/25377637/datatables-cannot-read-property-mdata-of-undefined
+ * @see https://stackoverflow.com/questions/27778389/how-to-manually-update-datatables-table-with-new-json-data
  */
 
 require(
@@ -16,50 +16,37 @@ require(
         var length = instances.length;
 
         for (let i = 0; i < length; i++) {
+            // Tablas
             const dt = instances[i];
+            // Datos escondidos en un elemento HTML
+            const data = JSON.parse(document.getElementById(`${dt.id}-data`).textContent);
+            // Titulos de las tablas
+            const titles = Object.getOwnPropertyNames(data[0]);
+            // Arreglo de columnas
+            const columns = [];
+            // Se agregan los titulos a las columnas
+            titles.map(title => {
+                columns.push({ data: title });
+            })
+            // Agregamos un ultimo elemento donde estarán nuestras opciones
+            // Esto para evitar conflictos con DataTable
+            columns.push({ data: '' });
 
-            // Instancia DataTable
-            var table = $('#' + dt.id).DataTable();
-            // ID del elemento donde estará guardado los datos JSON en un STRING
-            var JSONData = JSON.parse(document.getElementById(dt.id + '-data').textContent);
-            // Opciones globales para la creación del modal
-            var options = {
-                id: dt.id,
-                html: CreateForm(JSONData),
-                data: JSONData
-            }
+            // Instancia DataTable con opciones personalizables
+            var table = $('#' + dt.id).DataTable({
+                columns: columns,
+                columnDefs: [{
+                    "targets": -1,
+                    "data": null,
+                    "defaultContent": `<div class="dropdown">
+                                        <button class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">Acciones</button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" onclick="Update('${dt.id}',this)">Editar</a>
+                                        <a class="dropdown-item" onclick="Delete('${dt.id}',this)">Eliminar</a>
+                                    </div>
+                                    </div>`
+                }]
+            });
 
-            //Boton de creación
-            var createBtn = document.getElementsByClassName('card-dt')[i].getElementsByClassName('create')[0];
-            createBtn.addEventListener('click', (function (optionsCopy) {
-                return function () {
-                    var modal = new Modal(optionsCopy);
-                    modal.InsertHTML();
-                    modal.Open();
-                }
-            })(options));
-        }
-
-        /**
-         * Devuelve un string que contiene un form con inputs de tipo texto 
-         * por default
-         * @returns string
-         * @param {Array<{}>} data
-         * @param {Function} action 
-         */
-        function CreateForm(data) {
-            const objTitles = Object.getOwnPropertyNames(data[0]);
-            let form = '<form>';
-            for (let i = 0; i < objTitles.length; i++) {
-                const title = objTitles[i];
-                form += `
-                <div class="form-group">
-                    <label class="form-label">${title}</label>
-                    <input name="${title}" type="text" class="form-control">
-                </div>
-                `;
-            }
-            form += '</form>';
-            return form;
         }
     });

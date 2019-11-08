@@ -15,9 +15,18 @@ export const MatildeHelperManager: IHelperModel[] = [
     /**
      * ==================================================
      * 
-     * Este helper genera tablas.
+     * Este helper genera tablas interactivas con el plugin DataTable.
+     * Cada tabla se genera con 1 boton de agregar con una función Create(id) que toma como 
+     * parametro el id de la tabla, tambien un dropdown de acciones con opciones de editar y 
+     * eliminar, al igual que el boton agregar tienen un función asociada que toma como parametro
+     * el id de la tabla y su posición en la tabla.
+     * Esto está hecho de esta manera para que con un script personalizado puedas desarrollar la logica de 
+     * cada una de esas funciones dandote como referencia el id de la tabla y la posición en el arreglo de 
+     * datos.
      * @requires modal.js
      * @requires dt-custom-actions.js 
+     * 
+     * @return string
      * ==================================================
      */
     {
@@ -28,7 +37,7 @@ export const MatildeHelperManager: IHelperModel[] = [
 
             let container = '<div class="card card-dt"><div class="table-responsive" >';
 
-            let buttonContainer = '<div> <button class="btn btn-secondary btn-sm p-2 m-2 create">Agregar</button> </div>';
+            let buttonContainer = `<div> <button onclick="Create('${id}')" class="btn btn-secondary btn-sm p-2 m-2 create">Agregar</button> </div>`;
             //Aqui ira el JSON data escondido
             let JSONDataContainer = `<span id="${id}-data" style="display:none">${JSON.stringify(data)}</span>`;
 

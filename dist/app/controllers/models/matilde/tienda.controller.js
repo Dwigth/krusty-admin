@@ -34,8 +34,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var Database_1 = require("../../../db/Database");
+var enviroment_1 = require("../../../../environments/enviroment");
+var colors_1 = __importDefault(require("colors"));
 var TiendaController = /** @class */ (function () {
     function TiendaController() {
     }
@@ -69,19 +74,84 @@ var TiendaController = /** @class */ (function () {
             });
         });
     };
+    TiendaController.prototype.Delete = function (previews) {
+        return __awaiter(this, void 0, void 0, function () {
+            var query;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!Array.isArray(previews)) return [3 /*break*/, 1];
+                        return [3 /*break*/, 3];
+                    case 1:
+                        query = "DELETE FROM tienda WHERE id_tienda = " + previews.id_tienda;
+                        if (enviroment_1.environments.logging) {
+                            console.log(colors_1.default.yellow(query));
+                        }
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * @todo Trabajar con arreglo de objetos
+     * @param previews Objeto o arreglo de objetos
+     */
     TiendaController.prototype.Update = function (previews) {
         return __awaiter(this, void 0, void 0, function () {
+            var query;
             return __generator(this, function (_a) {
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        if (!Array.isArray(previews)) return [3 /*break*/, 1];
+                        previews.map(function (data) {
+                            var query = "UPDATE tienda SET nombre = '" + data.nombre + "', direccion = '" + data.direccion + "' \n            WHERE id_tienda = " + data.id_tienda + ";";
+                            if (enviroment_1.environments.logging) {
+                                console.log('>>>', colors_1.default.yellow(query));
+                            }
+                        });
+                        return [3 /*break*/, 3];
+                    case 1:
+                        query = "UPDATE tienda SET nombre = '" + previews.nombre + "', direccion = '" + previews.direccion + "' \n            WHERE id_tienda = " + previews.id_tienda + ";";
+                        if (enviroment_1.environments.logging) {
+                            console.log(colors_1.default.yellow(query));
+                        }
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
             });
         });
     };
     TiendaController.prototype.Create = function (previews) {
         return __awaiter(this, void 0, void 0, function () {
+            var query, queryValues, query;
             return __generator(this, function (_a) {
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        if (!Array.isArray(previews)) return [3 /*break*/, 1];
+                        query = "INSERT INTO tienda (nombre, direccion) VALUES";
+                        queryValues = previews.map(function (pre) { return "(" + pre.nombre + "," + pre.direccion + ")"; });
+                        query += queryValues;
+                        if (enviroment_1.environments.logging) {
+                            console.log(colors_1.default.yellow(query));
+                        }
+                        return [3 /*break*/, 3];
+                    case 1:
+                        query = "INSERT INTO tienda (nombre, direccion) VALUES ('" + previews.nombre + "','" + previews.direccion + "')";
+                        if (enviroment_1.environments.logging) {
+                            console.log(colors_1.default.yellow(query));
+                        }
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
             });
         });
+    };
+    TiendaController.prototype.toString = function () {
+        return this.id_tienda + this.nombre + this.direccion;
     };
     return TiendaController;
 }());

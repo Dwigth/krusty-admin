@@ -34,8 +34,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var Database_1 = require("../../../db/Database");
+var enviroment_1 = require("../../../../environments/enviroment");
+var colors_1 = __importDefault(require("colors"));
 var MetodoController = /** @class */ (function () {
     function MetodoController() {
     }
@@ -65,6 +70,82 @@ var MetodoController = /** @class */ (function () {
                     case 1:
                         resp = _a.sent();
                         return [2 /*return*/, resp];
+                }
+            });
+        });
+    };
+    MetodoController.prototype.Delete = function (previews) {
+        return __awaiter(this, void 0, void 0, function () {
+            var query;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!Array.isArray(previews)) return [3 /*break*/, 1];
+                        return [3 /*break*/, 3];
+                    case 1:
+                        query = "DELETE FROM metodo WHERE id_metodo = " + previews.id_metodo;
+                        if (enviroment_1.environments.logging) {
+                            console.log(colors_1.default.yellow(query));
+                        }
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * @todo Trabajar con arreglo de objetos
+     * @param previews Objeto o arreglo de objetos
+     */
+    MetodoController.prototype.Update = function (previews) {
+        return __awaiter(this, void 0, void 0, function () {
+            var query;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!Array.isArray(previews)) return [3 /*break*/, 1];
+                        previews.map(function (data) {
+                            var query = "UPDATE metodo SET nombre = '" + data.nombre + "' \n            WHERE id_metodo = " + data.id_metodo + ";";
+                            if (enviroment_1.environments.logging) {
+                                console.log(colors_1.default.yellow(query));
+                            }
+                        });
+                        return [3 /*break*/, 3];
+                    case 1:
+                        query = "UPDATE metodo SET nombre = '" + previews.nombre + "' \n            WHERE id_metodo = " + previews.id_metodo + ";";
+                        if (enviroment_1.environments.logging) {
+                            console.log(colors_1.default.yellow(query));
+                        }
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    MetodoController.prototype.Create = function (previews) {
+        return __awaiter(this, void 0, void 0, function () {
+            var query, queryValues, query;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!Array.isArray(previews)) return [3 /*break*/, 1];
+                        query = "INSERT INTO metodo (nombre) VALUES";
+                        queryValues = previews.map(function (pre) { return "(" + pre.nombre; });
+                        query += queryValues;
+                        if (enviroment_1.environments.logging) {
+                            console.log(colors_1.default.yellow(query));
+                        }
+                        return [3 /*break*/, 3];
+                    case 1:
+                        query = "INSERT INTO metodo (nombre) VALUES ('" + previews.nombre + "')";
+                        if (enviroment_1.environments.logging) {
+                            console.log(colors_1.default.yellow(query));
+                        }
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
