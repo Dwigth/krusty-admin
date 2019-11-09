@@ -41,8 +41,12 @@ export const AdminnHelperManager: IHelperModel[] = [
                     <button class="btn btn-secondary hide" onclick="ShowKeys(this)" id="${K.nombre}"> Mostrar </button>
                     <span id="${K.nombre + 'keys'}" style="display:none">${K.llaves.toString()}</span>
                     </td>
-                  </tr>
-                  `;
+                    <td class="d-none d-sm-table-cell">
+                      <button class="btn btn-secondary">
+                      <i class="fe fe-printer"></i>
+                      </button>
+                    </td>
+                  </tr>`;
       }
       return new hbs.handlebars.SafeString(result);
     }
