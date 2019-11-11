@@ -14,6 +14,7 @@ var enviroment_1 = require("../../environments/enviroment");
 var fs_1 = require("fs");
 var routes_module_1 = require("../routes/routes.module");
 var helpers_module_1 = require("../helpers/hbs/helpers.module");
+var model_test_1 = require("../test/controllers/model.test");
 exports.ROOTDIRNAME = __dirname.slice(0, __dirname.indexOf('dist'));
 var Server = /** @class */ (function () {
     function Server() {
@@ -36,6 +37,7 @@ var Server = /** @class */ (function () {
         this.SecurityConfig();
         // Siempre a lo ultimo de la jerarquía
         this.InitializeServer();
+        this.LoadTests();
     };
     /**
      * =============================================
@@ -116,6 +118,9 @@ var Server = /** @class */ (function () {
     };
     Server.prototype.SecurityConfig = function () {
         exports.WEB_SERVER.disable('x-powered-by');
+    };
+    Server.prototype.LoadTests = function () {
+        var modelTest = new model_test_1.ModelTest();
     };
     return Server;
 }());

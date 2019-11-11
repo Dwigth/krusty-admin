@@ -1,17 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -47,51 +34,46 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var Database_1 = require("../../db/Database");
-var AdminController = /** @class */ (function (_super) {
-    __extends(AdminController, _super);
-    function AdminController() {
-        return _super.call(this) || this;
+var nodemailer_1 = __importDefault(require("nodemailer"));
+var enviroment_1 = require("../../../environments/enviroment");
+var MailController = /** @class */ (function () {
+    function MailController() {
+        var options = enviroment_1.environments.mailConfig.nodemailer;
+        this.NodemailerTransporter = nodemailer_1.default.createTransport(options);
     }
     /**
      *
-     * @param id_admin
      */
-    AdminController.prototype.SearchAdminById = function (id_admin) {
+    MailController.prototype.SendResetPasswordEmail = function (token, userMail) {
         return __awaiter(this, void 0, void 0, function () {
-            var query, resultado;
+            var html, info;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "SELECT * FROM admin WHERE id_admin = " + id_admin;
-                        return [4 /*yield*/, this.Query(query)];
+                        html = '';
+                        html += "\n            <div>\n                <img src=\"../../../../public/admin-template/krusty-lab/images/logo-krusty.svg\">\n            </div>\n            <div>\n                Por favor haga click al siguiente <a href=\"http://localhost:3000/new-password/" + token + "\">link</a> para reestaurar tu contrase\u00F1a. <br>\n                <small>Si usted no ha solicitado este proceso por favor ignore este correo.</small>\n            </div>\n        ";
+                        return [4 /*yield*/, this.NodemailerTransporter.sendMail({
+                                from: "\"[TSCBiT] Recuperaci\u00F3n de contrase\u00F1a\" <" + enviroment_1.environments.mailConfig.nodemailer.auth.user + ">",
+                                to: userMail,
+                                subject: 'Proceso de recuperación de contraseñas',
+                                text: 'Hello world? TEST',
+                                html: html // html body
+                            })];
                     case 1:
-                        resultado = _a.sent();
-                        return [2 /*return*/, resultado];
+                        info = _a.sent();
+                        console.log('Message sent: %s', info.messageId);
+                        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+                        // Preview only available when sending through an Ethereal account
+                        console.log('Preview URL: %s', nodemailer_1.default.getTestMessageUrl(info));
+                        return [2 /*return*/];
                 }
             });
         });
     };
-    /**
-     *
-     * @param usuario
-     */
-    AdminController.prototype.SearchAdminByParam = function (param, value) {
-        return __awaiter(this, void 0, void 0, function () {
-            var query, resultado;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        query = "SELECT * FROM admin WHERE " + param + " LIKE '%" + value + "%'";
-                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
-                    case 1:
-                        resultado = _a.sent();
-                        return [2 /*return*/, resultado];
-                }
-            });
-        });
-    };
-    return AdminController;
-}(Database_1.Database));
-exports.AdminController = AdminController;
+    return MailController;
+}());
+exports.MailController = MailController;

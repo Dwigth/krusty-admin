@@ -10,6 +10,7 @@ import { environments } from "../../environments/enviroment";
 import { readFileSync } from "fs";
 import { Routes } from '../routes/routes.module'
 import { HelpersModule } from '../helpers/hbs/helpers.module';
+import { ModelTest } from '../test/controllers/model.test';
 
 /**
  * =====================
@@ -47,6 +48,7 @@ export class Server {
         this.SecurityConfig();
         // Siempre a lo ultimo de la jerarquía
         this.InitializeServer();
+        this.LoadTests();
     }
 
     /**
@@ -135,5 +137,9 @@ export class Server {
 
     SecurityConfig() {
         WEB_SERVER.disable('x-powered-by');
+    }
+
+    LoadTests() {
+        const modelTest = new ModelTest();
     }
 }

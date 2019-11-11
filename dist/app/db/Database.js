@@ -113,6 +113,34 @@ var Database = /** @class */ (function () {
             });
         });
     };
+    Database.prototype.Queryable = function (query) {
+        return __awaiter(this, void 0, void 0, function () {
+            var queryPromise, queryResult, result;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        queryPromise = new Promise(function (resolve, reject) {
+                            var queryResult = _this.Pool.query(query, function (error, results, fields) {
+                                if (error)
+                                    reject(error);
+                                console.log(fields);
+                                resolve({ results: results, fields: fields });
+                                // console.log('The solution is: ', results[0]);
+                            });
+                        });
+                        return [4 /*yield*/, queryPromise];
+                    case 1:
+                        queryResult = _a.sent();
+                        result = {
+                            DataValues: queryResult.results,
+                            QueryValues: queryResult.fields
+                        };
+                        return [2 /*return*/, result];
+                }
+            });
+        });
+    };
     Database.instance = null;
     return Database;
 }());

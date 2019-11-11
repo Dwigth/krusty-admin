@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var auth_controller_1 = require("../../controllers/auth/auth.controller");
+var mail_controller_1 = require("../../controllers/general/mail.controller");
 function Login(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var credentials, authctl, login;
@@ -74,21 +75,80 @@ function Redirect(req, res) {
     });
 }
 exports.Redirect = Redirect;
+/**
+ * [GET]
+ * Este middleware envía al usuario a la pagina para enviar correo
+ * @param req
+ * @param res
+ */
 function ForgotPassword(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            res.render('forgot-password');
+            res.render('forgot-password', { title: 'Recuperar contraseña' });
             return [2 /*return*/];
         });
     });
 }
 exports.ForgotPassword = ForgotPassword;
+/**
+ * [POST]
+ * Este middleware envia el correo
+ * @param req
+ * @param res
+ */
 function ForgotPasswordProcess(req, res) {
     return __awaiter(this, void 0, void 0, function () {
+        var options, nmi, authCtl, token;
         return __generator(this, function (_a) {
-            res.render('forgot-password');
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    options = {
+                        receiver: req.body.email
+                    };
+                    nmi = new mail_controller_1.MailController();
+                    console.log(options);
+                    authCtl = new auth_controller_1.AuthController();
+                    return [4 /*yield*/, authCtl.forgotPassword(options.receiver)];
+                case 1:
+                    token = _a.sent();
+                    // // Enviar correo
+                    // let info = await nmi.SendResetPasswordEmail(token, options.receiver);
+                    res.render('forgot-password', {
+                        msg: '¡Listo! Se te ha enviado un correo a tu dirección.'
+                    });
+                    return [2 /*return*/];
+            }
         });
     });
 }
 exports.ForgotPasswordProcess = ForgotPasswordProcess;
+/**
+ * [GET]
+ * Renderiza la pagina para reestablecer la cotraseña, tambien verifica que
+ * no haya expirado el link
+ * @param req
+ * @param res
+ */
+function RestorePasswordPage(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            console.log(req.params.token);
+            //Obtener token para obtener foto de usuario
+            res.render('new-password', { userImg: '' });
+            return [2 /*return*/];
+        });
+    });
+}
+exports.RestorePasswordPage = RestorePasswordPage;
+/**
+ * [POST]
+ * Reestablece la contraseña
+ * @param req
+ * @param res
+ */
+function RestorePassword(req, res) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2 /*return*/];
+    }); });
+}
+exports.RestorePassword = RestorePassword;

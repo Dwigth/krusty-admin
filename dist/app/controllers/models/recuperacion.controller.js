@@ -1,17 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -49,49 +36,53 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Database_1 = require("../../db/Database");
-var AdminController = /** @class */ (function (_super) {
-    __extends(AdminController, _super);
-    function AdminController() {
-        return _super.call(this) || this;
+var enviroment_1 = require("../../../environments/enviroment");
+/**
+ * Esta clase se encargará de generar tickets y relaciones entre el administrador y posiblemente en un futuro
+ * de usuarios externos
+ */
+var RecuperacionController = /** @class */ (function () {
+    function RecuperacionController() {
     }
-    /**
-     *
-     * @param id_admin
-     */
-    AdminController.prototype.SearchAdminById = function (id_admin) {
+    RecuperacionController.prototype.CreateAdminRelation = function (relation) {
         return __awaiter(this, void 0, void 0, function () {
-            var query, resultado;
+            var query, resp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "SELECT * FROM admin WHERE id_admin = " + id_admin;
-                        return [4 /*yield*/, this.Query(query)];
-                    case 1:
-                        resultado = _a.sent();
-                        return [2 /*return*/, resultado];
-                }
-            });
-        });
-    };
-    /**
-     *
-     * @param usuario
-     */
-    AdminController.prototype.SearchAdminByParam = function (param, value) {
-        return __awaiter(this, void 0, void 0, function () {
-            var query, resultado;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        query = "SELECT * FROM admin WHERE " + param + " LIKE '%" + value + "%'";
+                        query = "INSERT INTO admin_recuperacion \n        (id_recuperacion, id_admin) VALUES ('" + relation.id_recuperacion + "','" + relation.id_admin + "')";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
                     case 1:
-                        resultado = _a.sent();
-                        return [2 /*return*/, resultado];
+                        resp = _a.sent();
+                        if (enviroment_1.environments.logging) {
+                            console.log(resp);
+                        }
+                        return [2 /*return*/, resp];
                 }
             });
         });
     };
-    return AdminController;
-}(Database_1.Database));
-exports.AdminController = AdminController;
+    RecuperacionController.prototype.CreateAdminTicket = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var query, resp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "INSERT INTO recuperacion_contra (id, fecha_peticion, fecha_limite, token_acceso, activo) VALUES (\n            NULL, \n            '" + this.TicketRecuperacion.fecha_peticion + "', \n            '" + this.TicketRecuperacion.fecha_limite + "', \n            '" + this.TicketRecuperacion.token_acceso + "', \n            '" + this.TicketRecuperacion.activo + "'\n            )";
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 1:
+                        resp = _a.sent();
+                        if (enviroment_1.environments.logging) {
+                            console.log(query, resp);
+                        }
+                        return [2 /*return*/, resp];
+                }
+            });
+        });
+    };
+    RecuperacionController.prototype.SetAdminTicket = function (ticket) {
+        this.TicketRecuperacion = ticket;
+    };
+    return RecuperacionController;
+}());
+exports.RecuperacionController = RecuperacionController;

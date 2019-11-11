@@ -1,7 +1,8 @@
-import mysql from "mysql";
+import mysql, { Query } from "mysql";
 import { environments } from "../../environments/enviroment";
 import { IDatabase } from "../interfaces/Database/IDatabase";
 import colors from 'colors';
+import { QueryValues } from "../interfaces/Database/QueryValues";
 
 /**
  * ==============================================
@@ -65,10 +66,28 @@ export class Database implements IDatabase {
 
             this.Pool.query(query, function (error, results, fields) {
                 if (error) reject(error);
-                resolve(<T>results)
+                resolve(results)
                 // console.log('The solution is: ', results[0]);
             });
         });
+    }
+
+    public async Queryable<T>(query: string): Promise<QueryValues<T>> {
+        let queryPromise = new Promise<{ results: any, fields: any }>((resolve, reject) => {
+            const queryResult = this.Pool.query(query, function (error, results, fields) {
+                if (error) reject(error);
+                console.log(fields);
+
+                resolve({ results, fields })
+                // console.log('The solution is: ', results[0]);
+            });
+        });
+        let queryResult = await queryPromise;
+        const result: QueryValues<T> = {
+            DataValues: <T>queryResult.results,
+            QueryValues: queryResult.fields
+        }
+        return result;
     }
 
 }

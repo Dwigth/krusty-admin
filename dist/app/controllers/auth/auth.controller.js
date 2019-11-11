@@ -37,10 +37,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var admin_controller_1 = require("../models/admin.controller");
 var bcrypt_1 = require("bcrypt");
+var bcrypt_2 = require("bcrypt");
+var recuperacion_controller_1 = require("../models/recuperacion.controller");
 var AuthController = /** @class */ (function () {
     function AuthController(credentials) {
         this.credentials = credentials;
     }
+    AuthController.prototype.SetCredential = function (credential) {
+        this.credentials = credential;
+    };
     AuthController.prototype.login = function () {
         return __awaiter(this, void 0, void 0, function () {
             var adminctl;
@@ -49,7 +54,7 @@ var AuthController = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         adminctl = new admin_controller_1.AdminController();
-                        return [4 /*yield*/, adminctl.SearchAdminByUsername(this.credentials.username)
+                        return [4 /*yield*/, adminctl.SearchAdminByParam('usuario', this.credentials.username)
                                 .then(function (admins) { return __awaiter(_this, void 0, void 0, function () {
                                 var admin, valid;
                                 return __generator(this, function (_a) {
@@ -70,8 +75,46 @@ var AuthController = /** @class */ (function () {
         });
     };
     AuthController.prototype.register = function () { };
-    AuthController.prototype.changePassword = function () { };
-    AuthController.prototype.forgotPassword = function () { };
+    AuthController.prototype.changePassword = function () {
+    };
+    /**
+     * Proceso el cual consiste en crear un ticket de procesamiento para cambio de contraseña
+     * estableciendo los puntos de partida para hacer la accion de restauración y su limite de tiempo.
+     * @returns {string} token
+     */
+    AuthController.prototype.forgotPassword = function (email) {
+        return __awaiter(this, void 0, void 0, function () {
+            var adminCtl, adminUser, initialDate, limiteDate, recuperacion, _a, recupctl, ticketRecuperacion;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        adminCtl = new admin_controller_1.AdminController();
+                        return [4 /*yield*/, adminCtl.SearchAdminByParam('email', email)];
+                    case 1:
+                        adminUser = _b.sent();
+                        initialDate = new Date();
+                        limiteDate = new Date(initialDate.getFullYear(), initialDate.getMonth(), initialDate.getDate(), initialDate.getHours(), initialDate.getMinutes(), initialDate.getSeconds() + 300);
+                        _a = {
+                            activo: 1,
+                            fecha_peticion: initialDate.toISOString(),
+                            fecha_limite: limiteDate.toISOString()
+                        };
+                        return [4 /*yield*/, bcrypt_2.hash(Date.now().toString(), 10)];
+                    case 2:
+                        recuperacion = (_a.token_acceso = _b.sent(),
+                            _a);
+                        console.log(recuperacion);
+                        recupctl = new recuperacion_controller_1.RecuperacionController();
+                        recupctl.SetAdminTicket(recuperacion);
+                        return [4 /*yield*/, recupctl.CreateAdminTicket()];
+                    case 3:
+                        ticketRecuperacion = _b.sent();
+                        // recupctl.CreateAdminRelation({ id_admin: adminUser[0].id_admin, id_recuperacion: ticketRecuperacion.id });
+                        return [2 /*return*/, ticketRecuperacion.token_acceso];
+                }
+            });
+        });
+    };
     return AuthController;
 }());
 exports.AuthController = AuthController;

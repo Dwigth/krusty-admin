@@ -19,5 +19,20 @@ exports.environments = {
         Secret: 'asbn2',
         expires: 3600000
     },
-    PORT: 3000
+    PORT: 3000,
+    mailConfig: {
+        nodemailer: {
+            host: "tscbit.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: "alfa@tscbit.com",
+                pass: "TLOVpfM[#S}H"
+            },
+            tls: {
+                // do not fail on invalid certs
+                rejectUnauthorized: false
+            }
+        }
+    }
 };
