@@ -6,6 +6,8 @@ import { PrincipioController } from "../../controllers/models/matilde/principio.
 import { ProductoController } from "../../controllers/models/matilde/producto.controller";
 import { MetodoController } from "../../controllers/models/matilde/metodo.controller";
 import { environments } from "../../../environments/enviroment";
+import { KeysController } from "../../controllers/models/matilde/keys.controller";
+import { IKeys } from "../../interfaces/Database/IKeys";
 
 export async function MatildeClients(req: Request, res: Response) {
     const ct = new ClienteController();
@@ -209,4 +211,16 @@ export async function MatildeCatalogsHandler(req: Request, res: Response) {
             res.json({ msg: 'Su consulta está mal formada' });
             break;
     }
+}
+
+export async function MatildeCode(req: Request, res: Response) {
+    const keyctl = new KeysController();
+    const keys = <IKeys[]>await keyctl.GetKeys();
+    const selected = req.params.selected;
+    const selectedObj = keys.find(k => k.nombre == selected);
+    res.render('matilde-codes', {
+        options: {
+            keys: selectedObj,
+        }
+    })
 }

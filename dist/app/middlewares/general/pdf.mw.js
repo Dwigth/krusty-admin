@@ -39,7 +39,7 @@ var keys_controller_1 = require("../../controllers/models/matilde/keys.controlle
 var fs_1 = require("fs");
 function CodePDFGenerator(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var keyctl, keys, label64, y, x, spacebtw, html;
+        var keyctl, keys, label64, image, y, x, spacebtw, html;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -48,16 +48,17 @@ function CodePDFGenerator(req, res) {
                 case 1:
                     keys = _a.sent();
                     label64 = fs_1.readFileSync('public/images/matilde/labelv2_base64.txt', 'utf-8');
+                    image = '/images/matilde/label.png';
                     y = 49.13;
                     x = 170.07;
                     spacebtw = 20;
-                    html = "\n    <html>\n        <head></head>\n        <body>\n        <div style=\"text-align:center;width:100%;\">\n        ";
+                    html = "\n    <html>\n        <head></head>\n        <body>\n            <div style=\"width:100%;display: flex;flex-direction: row;flex-wrap: wrap;\">\n        ";
                     // Aqui obtendremos el target a mostrar
                     keys[1].llaves.map(function (key, i) {
-                        var keyElement = "<div style=\"position:relative;width:25%;\"><img style=\"width:" + x + "px;height:" + y + "px;\n        margin-right:" + spacebtw + "px;margin-bottom:3.5px\" src=\"" + label64 + "\" />\n        <small style=\"color:white;font-size:1rem;position:absolute;left:70px;bottom:20px;\">" + key + "</small>\n        </div>";
+                        var keyElement = "\n        <div style=\"position:relative;width:25%;\">\n        <img style=\"width:" + x + "px;height:" + y + "px;margin-right:" + spacebtw + "px;margin-bottom:3.5px\" src=\"" + label64 + "\" />\n        <small style=\"color:white;font-size:1rem;position:absolute;left:70px;bottom:20px;\">" + key + "</small>\n        </div>";
                         html += keyElement;
                     });
-                    html += "  \n            </div>\n        </body>\n    </html";
+                    html += "</div>\n        </body>\n    </html";
                     // console.log(html);
                     res.pdfFromHTML({
                         filename: "Test.pdf",

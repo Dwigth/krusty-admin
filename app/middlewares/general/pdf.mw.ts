@@ -2,12 +2,13 @@ import { Request, Response } from "express";
 import colors from "colors";
 import { KeysController } from "../../controllers/models/matilde/keys.controller";
 import { IKeys } from "../../interfaces/Database/IKeys";
-import { readFileSync } from "fs";
+import { readFileSync, writeFile } from "fs";
 
 export async function CodePDFGenerator(req: Request, res: Response) {
     const keyctl = new KeysController();
     const keys = <IKeys[]>await keyctl.GetKeys();
     const label64 = readFileSync('public/images/matilde/labelv2_base64.txt', 'utf-8');
+    const image = '/images/matilde/label.png';
     const y = 49.13;  // 1.3cm
     const x = 170.07; // 4.5cm
     const spacebtw = 20;
@@ -15,19 +16,18 @@ export async function CodePDFGenerator(req: Request, res: Response) {
     <html>
         <head></head>
         <body>
-        <div style="text-align:center;width:100%;">
+            <div style="width:100%;display: flex;flex-direction: row;flex-wrap: wrap;">
         `;
     // Aqui obtendremos el target a mostrar
     keys[1].llaves.map((key: string, i: number) => {
-        let keyElement = `<div style="position:relative;width:25%;"><img style="width:${x}px;height:${y}px;
-        margin-right:${spacebtw}px;margin-bottom:3.5px" src="${label64}" />
+        let keyElement = `
+        <div style="position:relative;width:25%;">
+        <img style="width:${x}px;height:${y}px;margin-right:${spacebtw}px;margin-bottom:3.5px" src="${label64}" />
         <small style="color:white;font-size:1rem;position:absolute;left:70px;bottom:20px;">${key}</small>
         </div>`;
         html += keyElement;
     });
-
-    html += `  
-            </div>
+    html += `</div>
         </body>
     </html`;
 

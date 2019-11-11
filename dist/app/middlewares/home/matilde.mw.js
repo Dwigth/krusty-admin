@@ -41,6 +41,7 @@ var principio_controller_1 = require("../../controllers/models/matilde/principio
 var producto_controller_1 = require("../../controllers/models/matilde/producto.controller");
 var metodo_controller_1 = require("../../controllers/models/matilde/metodo.controller");
 var enviroment_1 = require("../../../environments/enviroment");
+var keys_controller_1 = require("../../controllers/models/matilde/keys.controller");
 function MatildeClients(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var ct, resp;
@@ -279,3 +280,26 @@ function MatildeCatalogsHandler(req, res) {
     });
 }
 exports.MatildeCatalogsHandler = MatildeCatalogsHandler;
+function MatildeCode(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var keyctl, keys, selected, selectedObj;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    keyctl = new keys_controller_1.KeysController();
+                    return [4 /*yield*/, keyctl.GetKeys()];
+                case 1:
+                    keys = _a.sent();
+                    selected = req.params.selected;
+                    selectedObj = keys.find(function (k) { return k.nombre == selected; });
+                    res.render('matilde-codes', {
+                        options: {
+                            keys: selectedObj,
+                        }
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.MatildeCode = MatildeCode;

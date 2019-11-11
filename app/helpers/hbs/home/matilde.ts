@@ -96,5 +96,50 @@ export const MatildeHelperManager: IHelperModel[] = [
             container += '</div></div>';
             return new hbs.handlebars.SafeString(container);
         }
+    },
+    {
+        name: 'matilde-codes',
+        function: (options: any) => {
+            const y = 49.13;  // 1.3cm
+            const x = 170.07; // 4.5cm
+            const spacebtw = 20;
+            const image = '/images/matilde/label.png';
+
+            let html = `
+    <html>
+        <head>
+        <style>
+         @media print {
+      * {
+        color: rgba(0, 0, 0, 0);
+        text-shadow: 0 0 0 #ccc;
+      }
+
+      @media print and (-webkit-min-device-pixel-ratio:0) {
+        * {
+          color: #ccc;
+          -webkit-print-color-adjust: exact;
+        }
+      }
+   }
+        </style>
+        </head>
+        <body>
+            <div style="width:100%;display: flex;flex-direction: row;flex-wrap: wrap;">
+        `;
+            // Aqui obtendremos el target a mostrar
+            options.keys.llaves.map((key: string, i: number) => {
+                let keyElement = `
+        <div style="position:relative;width:25%;">
+        <img style="width:${x}px;height:${y}px;margin-right:${spacebtw}px;margin-bottom:3.5px" src="${image}" />
+        <small style="color:white;font-size:1rem;position:absolute;left:70px;bottom:20px;">${key}</small>
+        </div>`;
+                html += keyElement;
+            });
+            html += `</div>
+        </body>
+    </html`;
+            return new hbs.handlebars.SafeString(html);
+        }
     }
 ];

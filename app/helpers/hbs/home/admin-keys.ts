@@ -42,7 +42,7 @@ export const AdminnHelperManager: IHelperModel[] = [
                     <span id="${K.nombre + 'keys'}" style="display:none">${K.llaves.toString()}</span>
                     </td>
                     <td class="d-none d-sm-table-cell">
-                      <button class="btn btn-secondary">
+                      <button onclick="PrintKeys('${K.nombre}')" class="btn btn-secondary">
                       <i class="fe fe-printer"></i>
                       </button>
                     </td>

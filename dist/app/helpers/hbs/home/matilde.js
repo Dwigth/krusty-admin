@@ -79,5 +79,22 @@ exports.MatildeHelperManager = [
             container += '</div></div>';
             return new hbs_1.default.handlebars.SafeString(container);
         }
+    },
+    {
+        name: 'matilde-codes',
+        function: function (options) {
+            var y = 49.13; // 1.3cm
+            var x = 170.07; // 4.5cm
+            var spacebtw = 20;
+            var image = '/images/matilde/label.png';
+            var html = "\n    <html>\n        <head>\n        <style>\n         @media print {\n      * {\n        color: rgba(0, 0, 0, 0);\n        text-shadow: 0 0 0 #ccc;\n      }\n\n      @media print and (-webkit-min-device-pixel-ratio:0) {\n        * {\n          color: #ccc;\n          -webkit-print-color-adjust: exact;\n        }\n      }\n   }\n        </style>\n        </head>\n        <body>\n            <div style=\"width:100%;display: flex;flex-direction: row;flex-wrap: wrap;\">\n        ";
+            // Aqui obtendremos el target a mostrar
+            options.keys.llaves.map(function (key, i) {
+                var keyElement = "\n        <div style=\"position:relative;width:25%;\">\n        <img style=\"width:" + x + "px;height:" + y + "px;margin-right:" + spacebtw + "px;margin-bottom:3.5px\" src=\"" + image + "\" />\n        <small style=\"color:white;font-size:1rem;position:absolute;left:70px;bottom:20px;\">" + key + "</small>\n        </div>";
+                html += keyElement;
+            });
+            html += "</div>\n        </body>\n    </html";
+            return new hbs_1.default.handlebars.SafeString(html);
+        }
     }
 ];

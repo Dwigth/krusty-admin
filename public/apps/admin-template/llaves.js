@@ -57,3 +57,8 @@ function CloseKeys() {
     const backdrop = document.getElementById('keys-backdrop');
     backdrop.style.visibility = 'hidden';
 }
+
+function PrintKeys(keyname) {
+    let codesWindow = window.open('/matilde-codes/' + keyname);
+    codesWindow.print();
+}
