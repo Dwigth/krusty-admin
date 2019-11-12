@@ -6,7 +6,8 @@ exports.environments = {
         host: 'localhost',
         user: 'root',
         password: 'rootroot',
-        database: 'tscbit_matilde'
+        database: 'tscbit_matilde',
+        timezone: 'utc'
     },
     logging: true,
     enableSSL: false,

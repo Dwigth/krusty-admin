@@ -107,7 +107,6 @@ var Database = /** @class */ (function () {
                             if (error)
                                 reject(error);
                             resolve(results);
-                            // console.log('The solution is: ', results[0]);
                         });
                     })];
             });

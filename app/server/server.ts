@@ -10,7 +10,10 @@ import { environments } from "../../environments/enviroment";
 import { readFileSync } from "fs";
 import { Routes } from '../routes/routes.module'
 import { HelpersModule } from '../helpers/hbs/helpers.module';
-import { ModelTest } from '../test/controllers/model.test';
+
+import * as moment from 'moment-timezone';
+import 'moment/locale/es-us';
+
 
 /**
  * =====================
@@ -46,9 +49,9 @@ export class Server {
         this.LoadTemplateEngine();
         this.LoadRoutes();
         this.SecurityConfig();
+        this.LoadTimeUtilities();
         // Siempre a lo ultimo de la jerarquía
         this.InitializeServer();
-        this.LoadTests();
     }
 
     /**
@@ -139,7 +142,16 @@ export class Server {
         WEB_SERVER.disable('x-powered-by');
     }
 
-    LoadTests() {
-        const modelTest = new ModelTest();
+    /**
+     * =============================================
+     * 
+     * Carga utilerias y establece configuraciones 
+     * para usar momentjs
+     * 
+     * =============================================
+     */
+    LoadTimeUtilities() {
+        moment.tz("America/Mexico_City");
+        moment.locale('es');
     }
 }

@@ -1,14 +1,15 @@
 import { IAuthController } from "../../interfaces/controllers/auth/auth";
 import { ICredentials } from "../../interfaces/controllers/auth/credentials";
 import { AdminController } from "../models/admin.controller";
-import { compare } from 'bcrypt';
-import { RecuperacionContra } from "../../interfaces/Database/models/recuperacion_contra";
-import { hash } from "bcrypt";
+import { compare, hash } from 'bcrypt';
+import { IRecuperacionContra } from "../../interfaces/Database/models/recuperacion_contra";
 import { RecuperacionController } from "../models/recuperacion.controller";
-
+import crypto from 'crypto';
 export class AuthController implements IAuthController {
 
     private credentials: ICredentials;
+    private hash = crypto.createHash('sha256');
+    private saltRounds = 15;
 
     constructor(credentials?: ICredentials) {
         this.credentials = credentials;
@@ -31,8 +32,17 @@ export class AuthController implements IAuthController {
 
     register() { }
 
-    changePassword() {
-
+    /**
+     * Cambia el hash de la contraseña de administrador
+     * @param id_admin 
+     */
+    public async changePassword() {
+        //Esta será la nueva contraseña
+        let newHash = await hash(this.credentials.password, this.saltRounds);
+        let admCtl = new AdminController();
+        admCtl.contrasena = newHash;
+        admCtl.nombre = this.credentials.username;
+        await admCtl.UpdateAdminPassword();
     }
 
     /**
@@ -53,18 +63,16 @@ export class AuthController implements IAuthController {
             initialDate.getMinutes(),
             initialDate.getSeconds() + 300
         );
-        let recuperacion: RecuperacionContra = {
+        let recuperacion: IRecuperacionContra = {
             activo: 1,
             fecha_peticion: initialDate.toISOString(),
             fecha_limite: limiteDate.toISOString(),
-            token_acceso: await hash(Date.now().toString(), 10),
+            token_acceso: this.hash.update(Date.now().toString()).digest('hex')
         };
-        console.log(recuperacion);
-
         const recupctl = new RecuperacionController();
         recupctl.SetAdminTicket(recuperacion);
         let ticketRecuperacion = await recupctl.CreateAdminTicket();
-        // recupctl.CreateAdminRelation({ id_admin: adminUser[0].id_admin, id_recuperacion: ticketRecuperacion.id });
+        recupctl.CreateAdminRelation({ id_admin: adminUser[0].id_admin, id_recuperacion: ticketRecuperacion.id });
         return ticketRecuperacion.token_acceso;
     }
 

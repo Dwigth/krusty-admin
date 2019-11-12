@@ -34,9 +34,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var auth_controller_1 = require("../../controllers/auth/auth.controller");
 var mail_controller_1 = require("../../controllers/general/mail.controller");
+var admin_controller_1 = require("../../controllers/models/admin.controller");
+var recuperacion_controller_1 = require("../../controllers/models/recuperacion.controller");
+var moment_1 = __importDefault(require("moment"));
 function Login(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var credentials, authctl, login;
@@ -106,7 +112,6 @@ function ForgotPasswordProcess(req, res) {
                         receiver: req.body.email
                     };
                     nmi = new mail_controller_1.MailController();
-                    console.log(options);
                     authCtl = new auth_controller_1.AuthController();
                     return [4 /*yield*/, authCtl.forgotPassword(options.receiver)];
                 case 1:
@@ -114,6 +119,7 @@ function ForgotPasswordProcess(req, res) {
                     // // Enviar correo
                     // let info = await nmi.SendResetPasswordEmail(token, options.receiver);
                     res.render('forgot-password', {
+                        title: 'Recuperar contraseña',
                         msg: '¡Listo! Se te ha enviado un correo a tu dirección.'
                     });
                     return [2 /*return*/];
@@ -131,11 +137,43 @@ exports.ForgotPasswordProcess = ForgotPasswordProcess;
  */
 function RestorePasswordPage(req, res) {
     return __awaiter(this, void 0, void 0, function () {
+        var token, adminCtl, recuperacionCtl, recuperacionTicket, timestamp, limite, peticion, canPass, adminRecup, adminUser;
         return __generator(this, function (_a) {
-            console.log(req.params.token);
-            //Obtener token para obtener foto de usuario
-            res.render('new-password', { userImg: '' });
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    token = req.params.token;
+                    adminCtl = new admin_controller_1.AdminController();
+                    recuperacionCtl = new recuperacion_controller_1.RecuperacionController();
+                    return [4 /*yield*/, recuperacionCtl.SearchRecuperacionByParam('token_acceso', token).then(function (resp) { return resp[0]; })];
+                case 1:
+                    recuperacionTicket = _a.sent();
+                    timestamp = moment_1.default().format('YYYY-MM-DD HH:mm:ss');
+                    limite = moment_1.default(recuperacionTicket.fecha_limite).utc().format('YYYY-MM-DD HH:mm:ss');
+                    peticion = moment_1.default(recuperacionTicket.fecha_peticion).utc().format('YYYY-MM-DD HH:mm:ss');
+                    canPass = moment_1.default(timestamp).isBetween(peticion, limite);
+                    console.log(timestamp.red, peticion.green, limite.yellow, canPass);
+                    if (recuperacionTicket == undefined) {
+                        res.render('403', { title: 'Tiempo agotado' });
+                        return [2 /*return*/];
+                    }
+                    if (recuperacionTicket.activo == 0) {
+                        res.render('403', { title: 'Tiempo agotado' });
+                        return [2 /*return*/];
+                    }
+                    if (!canPass) {
+                        res.render('403', { title: 'Tiempo agotado' });
+                        return [2 /*return*/];
+                    }
+                    return [4 /*yield*/, recuperacionCtl.SearchAdminRelation(recuperacionTicket.id)];
+                case 2:
+                    adminRecup = _a.sent();
+                    return [4 /*yield*/, adminCtl.SearchAdminById(adminRecup.id_admin).then(function (resp) { return resp[0]; })];
+                case 3:
+                    adminUser = _a.sent();
+                    //Obtener token para obtener foto de usuario
+                    res.render('new-password', { user: adminUser, title: 'Reestablezca su contraseña', token: token });
+                    return [2 /*return*/];
+            }
         });
     });
 }
@@ -147,8 +185,37 @@ exports.RestorePasswordPage = RestorePasswordPage;
  * @param res
  */
 function RestorePassword(req, res) {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
-    }); });
+    return __awaiter(this, void 0, void 0, function () {
+        var token, password, nombre, recuperacionCtl, authCtl, recuperacionTicket, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    token = req.body.token;
+                    password = req.body.password;
+                    nombre = req.body.nombre;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 5, , 6]);
+                    recuperacionCtl = new recuperacion_controller_1.RecuperacionController();
+                    authCtl = new auth_controller_1.AuthController({ username: nombre, password: password });
+                    return [4 /*yield*/, authCtl.changePassword()];
+                case 2:
+                    _a.sent();
+                    return [4 /*yield*/, recuperacionCtl.SearchRecuperacionByParam('token_acceso', token).then(function (resp) { return resp[0]; })];
+                case 3:
+                    recuperacionTicket = _a.sent();
+                    return [4 /*yield*/, recuperacionCtl.DeactivateTicketRecuperacion(recuperacionTicket.id)];
+                case 4:
+                    _a.sent();
+                    res.render('success-password');
+                    return [3 /*break*/, 6];
+                case 5:
+                    e_1 = _a.sent();
+                    res.render('403');
+                    return [3 /*break*/, 6];
+                case 6: return [2 /*return*/];
+            }
+        });
+    });
 }
 exports.RestorePassword = RestorePassword;

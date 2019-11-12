@@ -1,17 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -49,10 +36,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Database_1 = require("../../db/Database");
-var AdminController = /** @class */ (function (_super) {
-    __extends(AdminController, _super);
+var AdminController = /** @class */ (function () {
     function AdminController() {
-        return _super.call(this) || this;
     }
     /**
      *
@@ -65,7 +50,7 @@ var AdminController = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         query = "SELECT * FROM admin WHERE id_admin = " + id_admin;
-                        return [4 /*yield*/, this.Query(query)];
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
                     case 1:
                         resultado = _a.sent();
                         return [2 /*return*/, resultado];
@@ -92,6 +77,21 @@ var AdminController = /** @class */ (function (_super) {
             });
         });
     };
+    AdminController.prototype.UpdateAdminPassword = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var query, resultado;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "UPDATE admin SET contrasena = '" + this.contrasena + "' WHERE admin.nombre = '" + this.nombre + "'";
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 1:
+                        resultado = _a.sent();
+                        return [2 /*return*/, resultado];
+                }
+            });
+        });
+    };
     return AdminController;
-}(Database_1.Database));
+}());
 exports.AdminController = AdminController;

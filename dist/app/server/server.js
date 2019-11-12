@@ -2,6 +2,13 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var http_1 = __importDefault(require("http"));
 var https_1 = __importDefault(require("https"));
@@ -14,7 +21,8 @@ var enviroment_1 = require("../../environments/enviroment");
 var fs_1 = require("fs");
 var routes_module_1 = require("../routes/routes.module");
 var helpers_module_1 = require("../helpers/hbs/helpers.module");
-var model_test_1 = require("../test/controllers/model.test");
+var moment = __importStar(require("moment-timezone"));
+require("moment/locale/es-us");
 exports.ROOTDIRNAME = __dirname.slice(0, __dirname.indexOf('dist'));
 var Server = /** @class */ (function () {
     function Server() {
@@ -35,9 +43,9 @@ var Server = /** @class */ (function () {
         this.LoadTemplateEngine();
         this.LoadRoutes();
         this.SecurityConfig();
+        this.LoadTimeUtilities();
         // Siempre a lo ultimo de la jerarquía
         this.InitializeServer();
-        this.LoadTests();
     };
     /**
      * =============================================
@@ -119,8 +127,17 @@ var Server = /** @class */ (function () {
     Server.prototype.SecurityConfig = function () {
         exports.WEB_SERVER.disable('x-powered-by');
     };
-    Server.prototype.LoadTests = function () {
-        var modelTest = new model_test_1.ModelTest();
+    /**
+     * =============================================
+     *
+     * Carga utilerias y establece configuraciones
+     * para usar momentjs
+     *
+     * =============================================
+     */
+    Server.prototype.LoadTimeUtilities = function () {
+        moment.tz("America/Mexico_City");
+        moment.locale('es');
     };
     return Server;
 }());

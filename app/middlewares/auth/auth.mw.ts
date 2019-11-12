@@ -3,6 +3,10 @@ import colors from "colors";
 import { ICredentials } from "../../interfaces/controllers/auth/credentials";
 import { AuthController } from "../../controllers/auth/auth.controller";
 import { MailController } from "../../controllers/general/mail.controller";
+import { AdminController } from "../../controllers/models/admin.controller";
+import { RecuperacionController } from "../../controllers/models/recuperacion.controller";
+import moment from "moment";
+
 
 export async function Login(req: Request, res: Response) {
     let credentials: ICredentials = req.body;
@@ -46,14 +50,13 @@ export async function ForgotPasswordProcess(req: Request, res: Response) {
         receiver: req.body.email
     }
     let nmi = new MailController();
-    console.log(options);
-
     let authCtl = new AuthController();
     // // Proceso de creación de tickets
     let token = await authCtl.forgotPassword(options.receiver);
     // // Enviar correo
     // let info = await nmi.SendResetPasswordEmail(token, options.receiver);
     res.render('forgot-password', {
+        title: 'Recuperar contraseña',
         msg: '¡Listo! Se te ha enviado un correo a tu dirección.'
     });
 }
@@ -66,9 +69,41 @@ export async function ForgotPasswordProcess(req: Request, res: Response) {
  * @param res 
  */
 export async function RestorePasswordPage(req: Request, res: Response) {
-    console.log(req.params.token);
+    const token = req.params.token;
+    const adminCtl = new AdminController();
+
+    const recuperacionCtl = new RecuperacionController();
+    const recuperacionTicket = await recuperacionCtl.SearchRecuperacionByParam('token_acceso', token).then(resp => resp[0]);
+
+    const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
+    const limite = moment(recuperacionTicket.fecha_limite).utc().format('YYYY-MM-DD HH:mm:ss');
+    const peticion = moment(recuperacionTicket.fecha_peticion).utc().format('YYYY-MM-DD HH:mm:ss');
+
+
+    let canPass = moment(timestamp).isBetween(peticion, limite);
+    console.log(timestamp.red, peticion.green, limite.yellow, canPass);
+
+    if (recuperacionTicket == undefined) {
+        res.render('403', { title: 'Tiempo agotado' });
+        return;
+    }
+    if (recuperacionTicket.activo == 0) {
+        res.render('403', { title: 'Tiempo agotado' });
+        return;
+    }
+    if (!canPass) {
+        res.render('403', { title: 'Tiempo agotado' });
+        return;
+    }
+
+    // Relacion de administradores y tickets de recuperacion
+    const adminRecup = await recuperacionCtl.SearchAdminRelation(recuperacionTicket.id);
+
+    // Obtener el usuario
+    const adminUser = await adminCtl.SearchAdminById(adminRecup.id_admin).then(resp => resp[0]);
+
     //Obtener token para obtener foto de usuario
-    res.render('new-password', { userImg: '' });
+    res.render('new-password', { user: adminUser, title: 'Reestablezca su contraseña', token: token });
 }
 
 /**
@@ -77,4 +112,21 @@ export async function RestorePasswordPage(req: Request, res: Response) {
  * @param req 
  * @param res 
  */
-export async function RestorePassword(req: Request, res: Response) { }
+export async function RestorePassword(req: Request, res: Response) {
+    const token = req.body.token;
+    const password = req.body.password;
+    const nombre = req.body.nombre;
+
+    try {
+        const recuperacionCtl = new RecuperacionController();
+        const authCtl = new AuthController({ username: nombre, password: password });
+        await authCtl.changePassword();
+        const recuperacionTicket = await recuperacionCtl.SearchRecuperacionByParam('token_acceso', token).then(resp => resp[0]);
+        await recuperacionCtl.DeactivateTicketRecuperacion(recuperacionTicket.id);
+        res.render('success-password')
+    } catch (e) {
+        res.render('403');
+    }
+    // Reedirigirlo a una página de exito
+    // res.redirect('change-passworld-successfully')
+}

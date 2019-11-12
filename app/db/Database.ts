@@ -66,8 +66,7 @@ export class Database implements IDatabase {
 
             this.Pool.query(query, function (error, results, fields) {
                 if (error) reject(error);
-                resolve(results)
-                // console.log('The solution is: ', results[0]);
+                resolve(results);
             });
         });
     }
@@ -77,7 +76,6 @@ export class Database implements IDatabase {
             const queryResult = this.Pool.query(query, function (error, results, fields) {
                 if (error) reject(error);
                 console.log(fields);
-
                 resolve({ results, fields })
                 // console.log('The solution is: ', results[0]);
             });

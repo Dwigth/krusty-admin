@@ -34,13 +34,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var admin_controller_1 = require("../models/admin.controller");
 var bcrypt_1 = require("bcrypt");
-var bcrypt_2 = require("bcrypt");
 var recuperacion_controller_1 = require("../models/recuperacion.controller");
+var crypto_1 = __importDefault(require("crypto"));
 var AuthController = /** @class */ (function () {
     function AuthController(credentials) {
+        this.hash = crypto_1.default.createHash('sha256');
+        this.saltRounds = 15;
         this.credentials = credentials;
     }
     AuthController.prototype.SetCredential = function (credential) {
@@ -75,7 +80,28 @@ var AuthController = /** @class */ (function () {
         });
     };
     AuthController.prototype.register = function () { };
+    /**
+     * Cambia el hash de la contraseña de administrador
+     * @param id_admin
+     */
     AuthController.prototype.changePassword = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var newHash, admCtl;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, bcrypt_1.hash(this.credentials.password, this.saltRounds)];
+                    case 1:
+                        newHash = _a.sent();
+                        admCtl = new admin_controller_1.AdminController();
+                        admCtl.contrasena = newHash;
+                        admCtl.nombre = this.credentials.username;
+                        return [4 /*yield*/, admCtl.UpdateAdminPassword()];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     /**
      * Proceso el cual consiste en crear un ticket de procesamiento para cambio de contraseña
@@ -84,32 +110,28 @@ var AuthController = /** @class */ (function () {
      */
     AuthController.prototype.forgotPassword = function (email) {
         return __awaiter(this, void 0, void 0, function () {
-            var adminCtl, adminUser, initialDate, limiteDate, recuperacion, _a, recupctl, ticketRecuperacion;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var adminCtl, adminUser, initialDate, limiteDate, recuperacion, recupctl, ticketRecuperacion;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         adminCtl = new admin_controller_1.AdminController();
                         return [4 /*yield*/, adminCtl.SearchAdminByParam('email', email)];
                     case 1:
-                        adminUser = _b.sent();
+                        adminUser = _a.sent();
                         initialDate = new Date();
                         limiteDate = new Date(initialDate.getFullYear(), initialDate.getMonth(), initialDate.getDate(), initialDate.getHours(), initialDate.getMinutes(), initialDate.getSeconds() + 300);
-                        _a = {
+                        recuperacion = {
                             activo: 1,
                             fecha_peticion: initialDate.toISOString(),
-                            fecha_limite: limiteDate.toISOString()
+                            fecha_limite: limiteDate.toISOString(),
+                            token_acceso: this.hash.update(Date.now().toString()).digest('hex')
                         };
-                        return [4 /*yield*/, bcrypt_2.hash(Date.now().toString(), 10)];
-                    case 2:
-                        recuperacion = (_a.token_acceso = _b.sent(),
-                            _a);
-                        console.log(recuperacion);
                         recupctl = new recuperacion_controller_1.RecuperacionController();
                         recupctl.SetAdminTicket(recuperacion);
                         return [4 /*yield*/, recupctl.CreateAdminTicket()];
-                    case 3:
-                        ticketRecuperacion = _b.sent();
-                        // recupctl.CreateAdminRelation({ id_admin: adminUser[0].id_admin, id_recuperacion: ticketRecuperacion.id });
+                    case 2:
+                        ticketRecuperacion = _a.sent();
+                        recupctl.CreateAdminRelation({ id_admin: adminUser[0].id_admin, id_recuperacion: ticketRecuperacion.id });
                         return [2 /*return*/, ticketRecuperacion.token_acceso];
                 }
             });

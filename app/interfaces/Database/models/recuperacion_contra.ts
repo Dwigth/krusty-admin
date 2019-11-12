@@ -1,4 +1,6 @@
-export interface RecuperacionContra {
+
+
+export interface IRecuperacionContra {
     id?: number;
     fecha_peticion: string;
     fecha_limite: string;

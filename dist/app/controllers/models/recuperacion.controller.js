@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -37,13 +50,70 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Database_1 = require("../../db/Database");
 var enviroment_1 = require("../../../environments/enviroment");
+var Model_1 = require("../../db/Model");
 /**
  * Esta clase se encargará de generar tickets y relaciones entre el administrador y posiblemente en un futuro
  * de usuarios externos
  */
-var RecuperacionController = /** @class */ (function () {
+var RecuperacionController = /** @class */ (function (_super) {
+    __extends(RecuperacionController, _super);
     function RecuperacionController() {
+        return _super.call(this) || this;
     }
+    RecuperacionController.prototype.SearchRecuperacionByParam = function (param, value) {
+        return __awaiter(this, void 0, void 0, function () {
+            var query, resultado;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "SELECT * FROM recuperacion_contra WHERE " + param + " LIKE '%" + value + "%'";
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 1:
+                        resultado = _a.sent();
+                        if (enviroment_1.environments.logging) {
+                            console.log('Busqueda por parametro ===========>', resultado[0]);
+                        }
+                        return [2 /*return*/, resultado];
+                }
+            });
+        });
+    };
+    RecuperacionController.prototype.GetRecuperacionById = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var query, resp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "SELECT * FROM recuperacion_contra WHERE id = " + id;
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 1:
+                        resp = _a.sent();
+                        if (enviroment_1.environments.logging) {
+                            console.log('=================>', resp[0]);
+                        }
+                        return [2 /*return*/, resp[0]];
+                }
+            });
+        });
+    };
+    RecuperacionController.prototype.SearchAdminRelation = function (id_recuperacion) {
+        return __awaiter(this, void 0, void 0, function () {
+            var query, resp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "SELECT * FROM admin_recuperacion WHERE id_recuperacion = " + id_recuperacion + " ";
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 1:
+                        resp = _a.sent();
+                        if (enviroment_1.environments.logging) {
+                            console.log('==============', resp[0]);
+                        }
+                        return [2 /*return*/, resp[0]];
+                }
+            });
+        });
+    };
     RecuperacionController.prototype.CreateAdminRelation = function (relation) {
         return __awaiter(this, void 0, void 0, function () {
             var query, resp;
@@ -64,18 +134,24 @@ var RecuperacionController = /** @class */ (function () {
     };
     RecuperacionController.prototype.CreateAdminTicket = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var query, resp;
+            var query, resp, recuperacionContra;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        this.TicketRecuperacion.fecha_peticion = this.moment.format('YYYY-MM-DD HH:mm:ss');
+                        this.TicketRecuperacion.fecha_limite = this.moment.add(5, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                        console.log('Antes de insertar', this.TicketRecuperacion);
                         query = "INSERT INTO recuperacion_contra (id, fecha_peticion, fecha_limite, token_acceso, activo) VALUES (\n            NULL, \n            '" + this.TicketRecuperacion.fecha_peticion + "', \n            '" + this.TicketRecuperacion.fecha_limite + "', \n            '" + this.TicketRecuperacion.token_acceso + "', \n            '" + this.TicketRecuperacion.activo + "'\n            )";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
                     case 1:
                         resp = _a.sent();
+                        return [4 /*yield*/, this.GetRecuperacionById(resp.insertId)];
+                    case 2:
+                        recuperacionContra = _a.sent();
                         if (enviroment_1.environments.logging) {
-                            console.log(query, resp);
+                            console.log('3.', recuperacionContra);
                         }
-                        return [2 /*return*/, resp];
+                        return [2 /*return*/, recuperacionContra];
                 }
             });
         });
@@ -83,6 +159,24 @@ var RecuperacionController = /** @class */ (function () {
     RecuperacionController.prototype.SetAdminTicket = function (ticket) {
         this.TicketRecuperacion = ticket;
     };
+    RecuperacionController.prototype.DeactivateTicketRecuperacion = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var query, resp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "UPDATE recuperacion_contra SET activo = '0' WHERE recuperacion_contra.id = " + id;
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 1:
+                        resp = _a.sent();
+                        if (enviroment_1.environments.logging) {
+                            console.log(resp);
+                        }
+                        return [2 /*return*/, resp];
+                }
+            });
+        });
+    };
     return RecuperacionController;
-}());
+}(Model_1.Model));
 exports.RecuperacionController = RecuperacionController;
