@@ -54,7 +54,7 @@ export async function ForgotPasswordProcess(req: Request, res: Response) {
     // // Proceso de creación de tickets
     let token = await authCtl.forgotPassword(options.receiver);
     // // Enviar correo
-    // let info = await nmi.SendResetPasswordEmail(token, options.receiver);
+    let info = await nmi.SendResetPasswordEmail(token, options.receiver);
     res.render('forgot-password', {
         title: 'Recuperar contraseña',
         msg: '¡Listo! Se te ha enviado un correo a tu dirección.'

@@ -104,7 +104,7 @@ exports.ForgotPassword = ForgotPassword;
  */
 function ForgotPasswordProcess(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var options, nmi, authCtl, token;
+        var options, nmi, authCtl, token, info;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -116,8 +116,9 @@ function ForgotPasswordProcess(req, res) {
                     return [4 /*yield*/, authCtl.forgotPassword(options.receiver)];
                 case 1:
                     token = _a.sent();
-                    // // Enviar correo
-                    // let info = await nmi.SendResetPasswordEmail(token, options.receiver);
+                    return [4 /*yield*/, nmi.SendResetPasswordEmail(token, options.receiver)];
+                case 2:
+                    info = _a.sent();
                     res.render('forgot-password', {
                         title: 'Recuperar contraseña',
                         msg: '¡Listo! Se te ha enviado un correo a tu dirección.'
