@@ -6,6 +6,7 @@ export interface IAdminModel {
     activo: number;
 }
 export interface IAdmin {
+    [key: string]: any;
     id_admin: number;
     usuario: string;
     contrasena: string;

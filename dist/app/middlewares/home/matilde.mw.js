@@ -280,6 +280,11 @@ function MatildeCatalogsHandler(req, res) {
     });
 }
 exports.MatildeCatalogsHandler = MatildeCatalogsHandler;
+/**
+ * @todo Pendiente documentación
+ * @param req
+ * @param res
+ */
 function MatildeCode(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var keyctl, keys, selected, selectedObj;

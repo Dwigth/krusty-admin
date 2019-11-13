@@ -59,7 +59,7 @@ var AuthController = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         adminctl = new admin_controller_1.AdminController();
-                        return [4 /*yield*/, adminctl.SearchAdminByParam('usuario', this.credentials.username)
+                        return [4 /*yield*/, adminctl.SearchAdminByParam('nombre', this.credentials.username)
                                 .then(function (admins) { return __awaiter(_this, void 0, void 0, function () {
                                 var admin, valid;
                                 return __generator(this, function (_a) {

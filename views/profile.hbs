@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+
+{{>head title='Perfil'}}
+
+<body class="">
+    <div class="page">
+        <div class="flex-fill">
+            {{>header }}
+
+            <div class="my-3 my-md-5">
+                {{#if adminUser.guest }}
+                <div class="container">
+                    <div>Estamos trabajando en ello</div>
+                </div>
+
+                {{/if }}
+
+                {{#unless adminUser.guest }}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="card card-profile">
+                                <div class="card-header" style="background-image: url({{adminUser.data.portada_img}});">
+                                </div>
+                                <div class="card-body text-center">
+                                    <img class="card-profile-img" src="{{adminUser.img}}">
+                                    <h3 class="mb-3">{{adminUser.nombre}}</h3>
+                                    <p class="mb-4">
+                                        {{adminUser.data.bio}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <form id="updateForm" class="card">
+                                <input type="hidden" name="id_admin" value="{{adminUser.id_admin}}">
+                                <input type="hidden" name="portada_img" value="{{adminUser.data.portada_img}}">
+                                <input type="hidden" name="img" value="{{adminUser.img}}">
+                                <div class="card-body">
+                                    <h3 class="card-title">Editar Perfil</h3>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label class="form-label">Compañía</label>
+                                                <input type="text" class="form-control" disabled=""
+                                                    placeholder="Company" value="Krusty Laboratories">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Nombre de usuario</label>
+                                                <input name="usuario" type="text" class="form-control"
+                                                    placeholder="Username" value="{{adminUser.nombre}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Correo electrónico</label>
+                                                <input type="email" name="email" class="form-control"
+                                                    placeholder="Email" value="{{adminUser.email}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Nombre</label>
+                                                <input type="text" name="nombre" class="form-control"
+                                                    placeholder="Nombre" value="{{adminUser.data.nombre}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Apellidos</label>
+                                                <input type="text" name="apellidos" class="form-control"
+                                                    placeholder="Apellidos" value="{{adminUser.data.apellidos}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label">Dirección</label>
+                                                <input type="text" name="direccion" class="form-control"
+                                                    placeholder="Dirección de hogar"
+                                                    value="{{adminUser.data.direccion}}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label">Sobre mí</label>
+                                                <textarea rows="5" name="bio" class="form-control"
+                                                    placeholder="Here can be your description"
+                                                    value="">{{adminUser.data.bio}}</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Perfil de Facebook</label>
+                                                <input name="fb_profile" type="text" class="form-control" placeholder=""
+                                                    value="{{adminUser.data.fb_profile}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Perfil de Twitter</label>
+                                                <input name="twt_profile" type="text" class="form-control"
+                                                    placeholder="FB" value="{{adminUser.data.twt_profile}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Numero telefónico</label>
+                                                <input name="number" type="email" class="form-control" placeholder="TWT"
+                                                    value="{{adminUser.data.number}}">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="card-footer text-right">
+                                    <button type="button" id="updateBtn" class="btn btn-primary">Actualizar
+                                        Perfil</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {{/unless}}
+            </div>
+        </div>
+        <script src="/apps/admin-template/modal.js"></script>
+
+        {{>footer}}
+    </div>
+</body>
+
+</html>

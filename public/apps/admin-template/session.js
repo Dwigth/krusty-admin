@@ -19,6 +19,14 @@ class Session {
             }
         }
     }
+    Get() {
+        const session = JSON.parse(localStorage.getItem('user'));
+        return session;
+    }
+    Update(obj) {
+        const newData = JSON.stringify(obj);
+        localStorage.setItem('user', newData);
+    }
 }
 const session = new Session();
 session.Watch();

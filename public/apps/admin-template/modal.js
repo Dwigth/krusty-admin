@@ -7,7 +7,7 @@ window.onload = (function () {
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.type = 'text/css';
-    link.href = './admin-template/assets/css/custom/modal.css';
+    link.href = '/admin-template/assets/css/custom/modal.css';
     head.appendChild(link);
 
     const backdrop = document.createElement('div');
@@ -93,6 +93,7 @@ class Modal {
     }
     /**
      * Retorna un valor `boolean` dependiendo de la decisión del usuario.
+     * @param {*} [message,callback] param - Objeto que tiene como propiedades msg y un callback
      * @todo Implementar esta función de manera que no sea destructiva.
      * @todo Cambiar parametro string a un objeto
      */

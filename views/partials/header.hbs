@@ -2,8 +2,7 @@
     <div class="container">
         <div class="d-flex">
             <a class="header-brand" href="/home">
-                <img src="./admin-template/krusty-lab/images/logo-krusty.svg" class="header-brand-img"
-                    alt="krusty logo">
+                <img src="/admin-template/krusty-lab/images/logo-krusty.svg" class="header-brand-img" alt="krusty logo">
             </a>
             <div class="d-flex order-lg-2 ml-auto">
                 {{!-- Notificaciones --}}
@@ -51,7 +50,7 @@
                             <small id="nivel" class="text-muted d-block mt-1"></small>
                         </span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                    <div id="user-dropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                         {{user_menu_builder}}
                         <div class="dropdown-divider"></div>
                         <a id="cerrar-sesion" class="dropdown-item" href="#">

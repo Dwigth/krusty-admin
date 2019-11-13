@@ -24,7 +24,7 @@ export class AdminController implements IAdminModel {
         return resultado;
     }
     /**
-     * 
+     * @todo extender uso
      * @param usuario 
      */
     public async SearchAdminByParam(param: string, value: string) {
@@ -35,6 +35,16 @@ export class AdminController implements IAdminModel {
 
     public async UpdateAdminPassword() {
         let query = `UPDATE admin SET contrasena = '${this.contrasena}' WHERE admin.nombre = '${this.nombre}'`;
+        let resultado = await Database.Instance.Query<Query>(query);
+        return resultado;
+    }
+    public async UpdateAdminName() {
+        let query = `UPDATE admin SET nombre = '${this.nombre}' WHERE admin.id_admin = '${this.id_admin}'`;
+        let resultado = await Database.Instance.Query<Query>(query);
+        return resultado;
+    }
+    public async UpdateAdminEmail() {
+        let query = `UPDATE admin SET email = '${this.email}' WHERE admin.id_admin = '${this.id_admin}'`;
         let resultado = await Database.Instance.Query<Query>(query);
         return resultado;
     }

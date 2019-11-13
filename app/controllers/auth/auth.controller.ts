@@ -21,7 +21,7 @@ export class AuthController implements IAuthController {
 
     async login() {
         const adminctl = new AdminController();
-        return await adminctl.SearchAdminByParam('usuario', this.credentials.username)
+        return await adminctl.SearchAdminByParam('nombre', this.credentials.username)
             .then(async admins => {
                 let admin = admins[0];
                 let valid = await compare(this.credentials.password, admin.contrasena);

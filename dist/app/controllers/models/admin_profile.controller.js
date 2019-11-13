@@ -36,92 +36,47 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Database_1 = require("../../db/Database");
-var AdminController = /** @class */ (function () {
-    function AdminController() {
+var AdminProfileController = /** @class */ (function () {
+    function AdminProfileController(inst) {
+        this.instance = inst;
     }
+    AdminProfileController.prototype.Create = function () { };
     /**
-     *
-     * @param id_admin
+     * Actualiza todos las propiedades de la tabla
      */
-    AdminController.prototype.SearchAdminById = function (id_admin) {
+    AdminProfileController.prototype.Update = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var query, resultado;
+            var query, resp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "SELECT * FROM admin WHERE id_admin = " + id_admin;
+                        query = "UPDATE admin_profile SET \n        portada_img = '" + this.instance.portada_img + "',\n        bio =  '" + this.instance.bio + "',\n        fb_profile = '" + this.instance.fb_profile + "',\n        twt_profile = '" + this.instance.twt_profile + "',\n        number =  '" + this.instance.number + "',\n        nombre =  '" + this.instance.nombre + "',\n        apellidos =  '" + this.instance.apellidos + "',\n        direccion =  '" + this.instance.direccion + "'\n        WHERE id_admin = " + this.instance.id_admin;
                         return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
                     case 1:
-                        resultado = _a.sent();
-                        return [2 /*return*/, resultado];
+                        resp = _a.sent();
+                        return [2 /*return*/, resp];
                 }
             });
         });
     };
-    /**
-     * @todo extender uso
-     * @param usuario
-     */
-    AdminController.prototype.SearchAdminByParam = function (param, value) {
+    AdminProfileController.prototype.GetByAdminId = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var query, resultado;
+            var query, resp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "SELECT * FROM admin WHERE " + param + " LIKE '%" + value + "%'";
-                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                        query = "SELECT * FROM admin_profile WHERE id_admin = " + this.instance.id_admin;
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query).then(function (res) { return res[0]; })];
                     case 1:
-                        resultado = _a.sent();
-                        return [2 /*return*/, resultado];
+                        resp = _a.sent();
+                        return [2 /*return*/, resp];
                 }
             });
         });
     };
-    AdminController.prototype.UpdateAdminPassword = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var query, resultado;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        query = "UPDATE admin SET contrasena = '" + this.contrasena + "' WHERE admin.nombre = '" + this.nombre + "'";
-                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
-                    case 1:
-                        resultado = _a.sent();
-                        return [2 /*return*/, resultado];
-                }
-            });
-        });
+    AdminProfileController.prototype.SetAdminProfile = function (inst) {
+        this.instance = inst;
     };
-    AdminController.prototype.UpdateAdminName = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var query, resultado;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        query = "UPDATE admin SET nombre = '" + this.nombre + "' WHERE admin.id_admin = '" + this.id_admin + "'";
-                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
-                    case 1:
-                        resultado = _a.sent();
-                        return [2 /*return*/, resultado];
-                }
-            });
-        });
-    };
-    AdminController.prototype.UpdateAdminEmail = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var query, resultado;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        query = "UPDATE admin SET email = '" + this.email + "' WHERE admin.id_admin = '" + this.id_admin + "'";
-                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
-                    case 1:
-                        resultado = _a.sent();
-                        return [2 /*return*/, resultado];
-                }
-            });
-        });
-    };
-    return AdminController;
+    return AdminProfileController;
 }());
-exports.AdminController = AdminController;
+exports.AdminProfileController = AdminProfileController;

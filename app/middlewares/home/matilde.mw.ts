@@ -213,6 +213,11 @@ export async function MatildeCatalogsHandler(req: Request, res: Response) {
     }
 }
 
+/**
+ * @todo Pendiente documentación
+ * @param req 
+ * @param res 
+ */
 export async function MatildeCode(req: Request, res: Response) {
     const keyctl = new KeysController();
     const keys = <IKeys[]>await keyctl.GetKeys();
