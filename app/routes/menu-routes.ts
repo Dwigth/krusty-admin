@@ -34,11 +34,6 @@ export const MenuItems: IMenuItem[] = [
             }
         ]
     },
-    {
-        name: 'Configuración',
-        route: '/settings',
-        icon: 'fe fe-settings'
-    }
 ];
 
 export const ProfileMenuItems: IMenuItem[] = [
@@ -49,7 +44,7 @@ export const ProfileMenuItems: IMenuItem[] = [
     },
     {
         name: 'Configuración',
-        route: '/user-settings',
+        route: '/settings',
         icon: 'fe fe-settings'
     },
     {

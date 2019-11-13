@@ -1,430 +1,256 @@
 <!doctype html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta http-equiv="Content-Language" content="en" />
-    <meta name="msapplication-TileColor" content="#2d89ef">
-    <meta name="theme-color" content="#4188c9">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="MobileOptimized" content="320">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon"/>
-    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
-    <!-- Generated: 2019-04-04 16:55:45 +0200 -->
-    <title>tabler.github.io - a responsive, flat and full featured admin template</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
-    <script src="./assets/js/require.min.js"></script>
-    <script>
-      requirejs.config({
-          baseUrl: '.'
-      });
-    </script>
-    <!-- Dashboard Core -->
-    <link href="./assets/css/dashboard.css" rel="stylesheet" />
-    <script src="./assets/js/dashboard.js"></script>
-    <!-- c3.js Charts Plugin -->
-    <link href="./assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
-    <script src="./assets/plugins/charts-c3/plugin.js"></script>
-    <!-- Google Maps Plugin -->
-    <link href="./assets/plugins/maps-google/plugin.css" rel="stylesheet" />
-    <script src="./assets/plugins/maps-google/plugin.js"></script>
-    <!-- Input Mask Plugin -->
-    <script src="./assets/plugins/input-mask/plugin.js"></script>
-    <!-- Datatables Plugin -->
-    <script src="./assets/plugins/datatables/plugin.js"></script>
-  </head>
-  <body class="">
-    <div class="page">
-      <div class="flex-fill">
-        <div class="header py-4">
-          <div class="container">
-            <div class="d-flex">
-              <a class="header-brand" href="./index.html">
-                <img src="./demo/brand/tabler.svg" class="header-brand-img" alt="tabler logo">
-              </a>
-              <div class="d-flex order-lg-2 ml-auto">
-                <div class="nav-item d-none d-md-flex">
-                  <a href="https://github.com/tabler/tabler" class="btn btn-sm btn-outline-primary" target="_blank">Source code</a>
+
+<body class="">
+  <div class="page">
+    <div class="flex-fill">
+
+      <div class="my-3 my-md-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <form action="https://httpbin.org/post" method="post" class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Form elements</h3>
                 </div>
-                <div class="dropdown d-none d-md-flex">
-                  <a class="nav-link icon" data-toggle="dropdown">
-                    <i class="fe fe-bell"></i>
-                    <span class="nav-unread"></span>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                    <a href="#" class="dropdown-item d-flex">
-                      <span class="avatar mr-3 align-self-center" style="background-image: url(demo/faces/male/41.jpg)"></span>
-                      <div>
-                        <strong>Nathan</strong> pushed new commit: Fix page load performance issue.
-                        <div class="small text-muted">10 minutes ago</div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                      <div class="form-group">
+                        <label class="form-label">Static</label>
+                        <div class="form-control-plaintext">Username</div>
                       </div>
-                    </a>
-                    <a href="#" class="dropdown-item d-flex">
-                      <span class="avatar mr-3 align-self-center" style="background-image: url(demo/faces/female/1.jpg)"></span>
-                      <div>
-                        <strong>Alice</strong> started new task: Tabler UI design.
-                        <div class="small text-muted">1 hour ago</div>
+                      <div class="form-group">
+                        <label class="form-label">Text</label>
+                        <input type="text" class="form-control" name="example-text-input" placeholder="Text..">
                       </div>
-                    </a>
-                    <a href="#" class="dropdown-item d-flex">
-                      <span class="avatar mr-3 align-self-center" style="background-image: url(demo/faces/female/18.jpg)"></span>
-                      <div>
-                        <strong>Rose</strong> deployed new version of NodeJS REST Api V3
-                        <div class="small text-muted">2 hours ago</div>
+                      <div class="form-group">
+                        <label class="form-label">Disabled</label>
+                        <input type="text" class="form-control" name="example-disabled-input" placeholder="Disabled.."
+                          value="Well, she turned me into a newt." disabled>
                       </div>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item text-center">Mark all as read</a>
-                  </div>
-                </div>
-                <div class="dropdown">
-                  <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
-                    <span class="avatar" style="background-image: url(./demo/faces/female/25.jpg)"></span>
-                    <span class="ml-2 d-none d-lg-block">
-                      <span class="text-default">Jane Pearson</span>
-                      <small class="text-muted d-block mt-1">Administrator</small>
-                    </span>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                    <a class="dropdown-item" href="#">
-                      <i class="dropdown-icon fe fe-user"></i> Profile
-                    </a>
-                    <a class="dropdown-item" href="#">
-                      <i class="dropdown-icon fe fe-settings"></i> Settings
-                    </a>
-                    <a class="dropdown-item" href="#">
-                      <span class="float-right"><span class="badge badge-primary">6</span></span>
-                      <i class="dropdown-icon fe fe-mail"></i> Inbox
-                    </a>
-                    <a class="dropdown-item" href="#">
-                      <i class="dropdown-icon fe fe-send"></i> Message
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">
-                      <i class="dropdown-icon fe fe-help-circle"></i> Need help?
-                    </a>
-                    <a class="dropdown-item" href="#">
-                      <i class="dropdown-icon fe fe-log-out"></i> Sign out
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse" data-target="#headerMenuCollapse">
-                <span class="header-toggler-icon"></span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="header collapse d-lg-flex p-0" id="headerMenuCollapse">
-          <div class="container">
-            <div class="row align-items-center">
-              <div class="col-lg-3 ml-auto">
-                <form class="input-icon my-3 my-lg-0">
-                  <input type="search" class="form-control header-search" placeholder="Search&hellip;" tabindex="1">
-                  <div class="input-icon-addon">
-                    <i class="fe fe-search"></i>
-                  </div>
-                </form>
-              </div>
-              <div class="col-lg order-lg-first">
-                <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
-                  <li class="nav-item">
-                    <a href="./index.html" class="nav-link"><i class="fe fe-home"></i> Home</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-box"></i> Interface</a>
-                    <div class="dropdown-menu dropdown-menu-arrow">
-                      <a href="./cards.html" class="dropdown-item ">Cards design</a>
-                      <a href="./charts.html" class="dropdown-item ">Charts</a>
-                      <a href="./pricing-cards.html" class="dropdown-item ">Pricing cards</a>
-                    </div>
-                  </li>
-                  <li class="nav-item dropdown">
-                    <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-calendar"></i> Components</a>
-                    <div class="dropdown-menu dropdown-menu-arrow">
-                      <a href="./maps.html" class="dropdown-item ">Maps</a>
-                      <a href="./icons.html" class="dropdown-item ">Icons</a>
-                      <a href="./store.html" class="dropdown-item ">Store</a>
-                      <a href="./blog.html" class="dropdown-item ">Blog</a>
-                      <a href="./carousel.html" class="dropdown-item ">Carousel</a>
-                    </div>
-                  </li>
-                  <li class="nav-item dropdown">
-                    <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-file"></i> Pages</a>
-                    <div class="dropdown-menu dropdown-menu-arrow">
-                      <a href="./profile.html" class="dropdown-item ">Profile</a>
-                      <a href="./login.html" class="dropdown-item ">Login</a>
-                      <a href="./register.html" class="dropdown-item ">Register</a>
-                      <a href="./forgot-password.html" class="dropdown-item ">Forgot password</a>
-                      <a href="./400.html" class="dropdown-item ">400 error</a>
-                      <a href="./401.html" class="dropdown-item ">401 error</a>
-                      <a href="./403.html" class="dropdown-item ">403 error</a>
-                      <a href="./404.html" class="dropdown-item ">404 error</a>
-                      <a href="./500.html" class="dropdown-item ">500 error</a>
-                      <a href="./503.html" class="dropdown-item ">503 error</a>
-                      <a href="./email.html" class="dropdown-item ">Email</a>
-                      <a href="./empty.html" class="dropdown-item ">Empty page</a>
-                      <a href="./rtl.html" class="dropdown-item ">RTL mode</a>
-                    </div>
-                  </li>
-                  <li class="nav-item dropdown">
-                    <a href="./form-elements.html" class="nav-link active"><i class="fe fe-check-square"></i> Forms</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./gallery.html" class="nav-link"><i class="fe fe-image"></i> Gallery</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./docs/index.html" class="nav-link"><i class="fe fe-file-text"></i> Documentation</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="my-3 my-md-5">
-          <div class="container">
-            <div class="row">
-              <div class="col-12">
-                <form action="https://httpbin.org/post" method="post" class="card">
-                  <div class="card-header">
-                    <h3 class="card-title">Form elements</h3>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-6 col-lg-4">
-                        <div class="form-group">
-                          <label class="form-label">Static</label>
-                          <div class="form-control-plaintext">Username</div>
+                      <div class="form-group">
+                        <label class="form-label">Readonly</label>
+                        <input type="text" class="form-control" name="example-disabled-input" placeholder="Disabled.."
+                          value="Well, how'd you become king, then?" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Textarea <span class="form-label-small">56/100</span></label>
+                        <textarea class="form-control" name="example-textarea-input" rows="6"
+                          placeholder="Content..">Oh! Come and see the violence inherent in the system! Help, help, I'm being repressed! We shall say 'Ni' again to you, if you do not appease us. I'm not a witch. I'm not a witch. Camelot!</textarea>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Image Check</label>
+                        <div class="row gutters-sm">
+                          <div class="col-6 col-sm-4">
+                            <label class="imagecheck mb-4">
+                              <input name="imagecheck" type="checkbox" value="1" class="imagecheck-input" />
+                              <figure class="imagecheck-figure">
+                                <img src="./demo/photos/nathan-anderson-316188-500.jpg" alt="}"
+                                  class="imagecheck-image">
+                              </figure>
+                            </label>
+                          </div>
+                          <div class="col-6 col-sm-4">
+                            <label class="imagecheck mb-4">
+                              <input name="imagecheck" type="checkbox" value="2" class="imagecheck-input" checked />
+                              <figure class="imagecheck-figure">
+                                <img src="./demo/photos/nathan-dumlao-287713-500.jpg" alt="}" class="imagecheck-image">
+                              </figure>
+                            </label>
+                          </div>
+                          <div class="col-6 col-sm-4">
+                            <label class="imagecheck mb-4">
+                              <input name="imagecheck" type="checkbox" value="3" class="imagecheck-input" />
+                              <figure class="imagecheck-figure">
+                                <img src="./demo/photos/nicolas-picard-208276-500.jpg" alt="}" class="imagecheck-image">
+                              </figure>
+                            </label>
+                          </div>
+                          <div class="col-6 col-sm-4">
+                            <label class="imagecheck mb-4">
+                              <input name="imagecheck" type="checkbox" value="4" class="imagecheck-input" checked />
+                              <figure class="imagecheck-figure">
+                                <img src="./demo/photos/oskar-vertetics-53043-500.jpg" alt="}" class="imagecheck-image">
+                              </figure>
+                            </label>
+                          </div>
+                          <div class="col-6 col-sm-4">
+                            <label class="imagecheck mb-4">
+                              <input name="imagecheck" type="checkbox" value="5" class="imagecheck-input" />
+                              <figure class="imagecheck-figure">
+                                <img src="./demo/photos/priscilla-du-preez-181896-500.jpg" alt="}"
+                                  class="imagecheck-image">
+                              </figure>
+                            </label>
+                          </div>
+                          <div class="col-6 col-sm-4">
+                            <label class="imagecheck mb-4">
+                              <input name="imagecheck" type="checkbox" value="6" class="imagecheck-input" />
+                              <figure class="imagecheck-figure">
+                                <img src="./demo/photos/ricardo-gomez-angel-262359-500.jpg" alt="}"
+                                  class="imagecheck-image">
+                              </figure>
+                            </label>
+                          </div>
+                          <div class="col-6 col-sm-4">
+                            <label class="imagecheck mb-4">
+                              <input name="imagecheck" type="checkbox" value="7" class="imagecheck-input" checked />
+                              <figure class="imagecheck-figure">
+                                <img src="./demo/photos/sam-ferrara-136526-500.jpg" alt="}" class="imagecheck-image">
+                              </figure>
+                            </label>
+                          </div>
+                          <div class="col-6 col-sm-4">
+                            <label class="imagecheck mb-4">
+                              <input name="imagecheck" type="checkbox" value="8" class="imagecheck-input" />
+                              <figure class="imagecheck-figure">
+                                <img src="./demo/photos/sean-afnan-244576-500.jpg" alt="}" class="imagecheck-image">
+                              </figure>
+                            </label>
+                          </div>
+                          <div class="col-6 col-sm-4">
+                            <label class="imagecheck mb-4">
+                              <input name="imagecheck" type="checkbox" value="9" class="imagecheck-input" />
+                              <figure class="imagecheck-figure">
+                                <img src="./demo/photos/sophie-higginbottom-133982-500.jpg" alt="}"
+                                  class="imagecheck-image">
+                              </figure>
+                            </label>
+                          </div>
                         </div>
-                        <div class="form-group">
-                          <label class="form-label">Text</label>
-                          <input type="text" class="form-control" name="example-text-input" placeholder="Text..">
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Color Input</label>
+                        <div class="row gutters-xs">
+                          <div class="col-auto">
+                            <label class="colorinput">
+                              <input name="color" type="checkbox" value="azure" class="colorinput-input" />
+                              <span class="colorinput-color bg-azure"></span>
+                            </label>
+                          </div>
+                          <div class="col-auto">
+                            <label class="colorinput">
+                              <input name="color" type="checkbox" value="indigo" class="colorinput-input" checked />
+                              <span class="colorinput-color bg-indigo"></span>
+                            </label>
+                          </div>
+                          <div class="col-auto">
+                            <label class="colorinput">
+                              <input name="color" type="checkbox" value="purple" class="colorinput-input" />
+                              <span class="colorinput-color bg-purple"></span>
+                            </label>
+                          </div>
+                          <div class="col-auto">
+                            <label class="colorinput">
+                              <input name="color" type="checkbox" value="pink" class="colorinput-input" />
+                              <span class="colorinput-color bg-pink"></span>
+                            </label>
+                          </div>
+                          <div class="col-auto">
+                            <label class="colorinput">
+                              <input name="color" type="checkbox" value="red" class="colorinput-input" />
+                              <span class="colorinput-color bg-red"></span>
+                            </label>
+                          </div>
+                          <div class="col-auto">
+                            <label class="colorinput">
+                              <input name="color" type="checkbox" value="orange" class="colorinput-input" />
+                              <span class="colorinput-color bg-orange"></span>
+                            </label>
+                          </div>
+                          <div class="col-auto">
+                            <label class="colorinput">
+                              <input name="color" type="checkbox" value="yellow" class="colorinput-input" />
+                              <span class="colorinput-color bg-yellow"></span>
+                            </label>
+                          </div>
+                          <div class="col-auto">
+                            <label class="colorinput">
+                              <input name="color" type="checkbox" value="lime" class="colorinput-input" />
+                              <span class="colorinput-color bg-lime"></span>
+                            </label>
+                          </div>
+                          <div class="col-auto">
+                            <label class="colorinput">
+                              <input name="color" type="checkbox" value="green" class="colorinput-input" />
+                              <span class="colorinput-color bg-green"></span>
+                            </label>
+                          </div>
+                          <div class="col-auto">
+                            <label class="colorinput">
+                              <input name="color" type="checkbox" value="teal" class="colorinput-input" />
+                              <span class="colorinput-color bg-teal"></span>
+                            </label>
+                          </div>
                         </div>
-                        <div class="form-group">
-                          <label class="form-label">Disabled</label>
-                          <input type="text" class="form-control" name="example-disabled-input" placeholder="Disabled.." value="Well, she turned me into a newt." disabled>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Input group</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control" placeholder="Search for...">
+                          <span class="input-group-append">
+                            <button class="btn btn-primary" type="button">Go!</button>
+                          </span>
                         </div>
-                        <div class="form-group">
-                          <label class="form-label">Readonly</label>
-                          <input type="text" class="form-control" name="example-disabled-input" placeholder="Disabled.." value="Well, how'd you become king, then?" readonly>
-                        </div>
-                        <div class="form-group">
-                          <label class="form-label">Textarea <span class="form-label-small">56/100</span></label>
-                          <textarea class="form-control" name="example-textarea-input" rows="6" placeholder="Content..">Oh! Come and see the violence inherent in the system! Help, help, I'm being repressed! We shall say 'Ni' again to you, if you do not appease us. I'm not a witch. I'm not a witch. Camelot!</textarea>
-                        </div>
-                        <div class="form-group">
-                          <label class="form-label">Image Check</label>
-                          <div class="row gutters-sm">
-                            <div class="col-6 col-sm-4">
-                              <label class="imagecheck mb-4">
-                                <input name="imagecheck" type="checkbox" value="1" class="imagecheck-input"  />
-                                <figure class="imagecheck-figure">
-                                  <img src="./demo/photos/nathan-anderson-316188-500.jpg" alt="}" class="imagecheck-image">
-                                </figure>
-                              </label>
-                            </div>
-                            <div class="col-6 col-sm-4">
-                              <label class="imagecheck mb-4">
-                                <input name="imagecheck" type="checkbox" value="2" class="imagecheck-input"  checked />
-                                <figure class="imagecheck-figure">
-                                  <img src="./demo/photos/nathan-dumlao-287713-500.jpg" alt="}" class="imagecheck-image">
-                                </figure>
-                              </label>
-                            </div>
-                            <div class="col-6 col-sm-4">
-                              <label class="imagecheck mb-4">
-                                <input name="imagecheck" type="checkbox" value="3" class="imagecheck-input"  />
-                                <figure class="imagecheck-figure">
-                                  <img src="./demo/photos/nicolas-picard-208276-500.jpg" alt="}" class="imagecheck-image">
-                                </figure>
-                              </label>
-                            </div>
-                            <div class="col-6 col-sm-4">
-                              <label class="imagecheck mb-4">
-                                <input name="imagecheck" type="checkbox" value="4" class="imagecheck-input"  checked />
-                                <figure class="imagecheck-figure">
-                                  <img src="./demo/photos/oskar-vertetics-53043-500.jpg" alt="}" class="imagecheck-image">
-                                </figure>
-                              </label>
-                            </div>
-                            <div class="col-6 col-sm-4">
-                              <label class="imagecheck mb-4">
-                                <input name="imagecheck" type="checkbox" value="5" class="imagecheck-input"  />
-                                <figure class="imagecheck-figure">
-                                  <img src="./demo/photos/priscilla-du-preez-181896-500.jpg" alt="}" class="imagecheck-image">
-                                </figure>
-                              </label>
-                            </div>
-                            <div class="col-6 col-sm-4">
-                              <label class="imagecheck mb-4">
-                                <input name="imagecheck" type="checkbox" value="6" class="imagecheck-input"  />
-                                <figure class="imagecheck-figure">
-                                  <img src="./demo/photos/ricardo-gomez-angel-262359-500.jpg" alt="}" class="imagecheck-image">
-                                </figure>
-                              </label>
-                            </div>
-                            <div class="col-6 col-sm-4">
-                              <label class="imagecheck mb-4">
-                                <input name="imagecheck" type="checkbox" value="7" class="imagecheck-input"  checked />
-                                <figure class="imagecheck-figure">
-                                  <img src="./demo/photos/sam-ferrara-136526-500.jpg" alt="}" class="imagecheck-image">
-                                </figure>
-                              </label>
-                            </div>
-                            <div class="col-6 col-sm-4">
-                              <label class="imagecheck mb-4">
-                                <input name="imagecheck" type="checkbox" value="8" class="imagecheck-input"  />
-                                <figure class="imagecheck-figure">
-                                  <img src="./demo/photos/sean-afnan-244576-500.jpg" alt="}" class="imagecheck-image">
-                                </figure>
-                              </label>
-                            </div>
-                            <div class="col-6 col-sm-4">
-                              <label class="imagecheck mb-4">
-                                <input name="imagecheck" type="checkbox" value="9" class="imagecheck-input"  />
-                                <figure class="imagecheck-figure">
-                                  <img src="./demo/photos/sophie-higginbottom-133982-500.jpg" alt="}" class="imagecheck-image">
-                                </figure>
-                              </label>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Input group buttons</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control">
+                          <div class="input-group-append">
+                            <button type="button" class="btn btn-primary">Action</button>
+                            <button data-toggle="dropdown" type="button"
+                              class="btn btn-primary dropdown-toggle"></button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                              <a class="dropdown-item" href="javascript:void(0)">
+                                News
+                              </a>
+                              <a class="dropdown-item" href="javascript:void(0)">
+                                Messages
+                              </a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="javascript:void(0)">
+                                Edit Profile
+                              </a>
                             </div>
                           </div>
                         </div>
-                        <div class="form-group">
-                          <label class="form-label">Color Input</label>
-                          <div class="row gutters-xs">
-                            <div class="col-auto">
-                              <label class="colorinput">
-                                <input name="color" type="checkbox" value="azure" class="colorinput-input" />
-                                <span class="colorinput-color bg-azure"></span>
-                              </label>
-                            </div>
-                            <div class="col-auto">
-                              <label class="colorinput">
-                                <input name="color" type="checkbox" value="indigo" class="colorinput-input"  checked/>
-                                <span class="colorinput-color bg-indigo"></span>
-                              </label>
-                            </div>
-                            <div class="col-auto">
-                              <label class="colorinput">
-                                <input name="color" type="checkbox" value="purple" class="colorinput-input" />
-                                <span class="colorinput-color bg-purple"></span>
-                              </label>
-                            </div>
-                            <div class="col-auto">
-                              <label class="colorinput">
-                                <input name="color" type="checkbox" value="pink" class="colorinput-input" />
-                                <span class="colorinput-color bg-pink"></span>
-                              </label>
-                            </div>
-                            <div class="col-auto">
-                              <label class="colorinput">
-                                <input name="color" type="checkbox" value="red" class="colorinput-input" />
-                                <span class="colorinput-color bg-red"></span>
-                              </label>
-                            </div>
-                            <div class="col-auto">
-                              <label class="colorinput">
-                                <input name="color" type="checkbox" value="orange" class="colorinput-input" />
-                                <span class="colorinput-color bg-orange"></span>
-                              </label>
-                            </div>
-                            <div class="col-auto">
-                              <label class="colorinput">
-                                <input name="color" type="checkbox" value="yellow" class="colorinput-input" />
-                                <span class="colorinput-color bg-yellow"></span>
-                              </label>
-                            </div>
-                            <div class="col-auto">
-                              <label class="colorinput">
-                                <input name="color" type="checkbox" value="lime" class="colorinput-input" />
-                                <span class="colorinput-color bg-lime"></span>
-                              </label>
-                            </div>
-                            <div class="col-auto">
-                              <label class="colorinput">
-                                <input name="color" type="checkbox" value="green" class="colorinput-input" />
-                                <span class="colorinput-color bg-green"></span>
-                              </label>
-                            </div>
-                            <div class="col-auto">
-                              <label class="colorinput">
-                                <input name="color" type="checkbox" value="teal" class="colorinput-input" />
-                                <span class="colorinput-color bg-teal"></span>
-                              </label>
-                            </div>
-                          </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Icon input</label>
+                        <div class="input-icon mb-3">
+                          <input type="text" class="form-control" placeholder="Search for...">
+                          <span class="input-icon-addon">
+                            <i class="fe fe-search"></i>
+                          </span>
                         </div>
-                        <div class="form-group">
-                          <label class="form-label">Input group</label>
-                          <div class="input-group">
+                        <div class="input-icon">
+                          <span class="input-icon-addon">
+                            <i class="fe fe-user"></i>
+                          </span>
+                          <input type="text" class="form-control" placeholder="Username">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Separated inputs</label>
+                        <div class="row gutters-xs">
+                          <div class="col">
                             <input type="text" class="form-control" placeholder="Search for...">
-                            <span class="input-group-append">
-                              <button class="btn btn-primary" type="button">Go!</button>
-                            </span>
                           </div>
+                          <span class="col-auto">
+                            <button class="btn btn-secondary" type="button"><i class="fe fe-search"></i></button>
+                          </span>
                         </div>
-                        <div class="form-group">
-                          <label class="form-label">Input group buttons</label>
-                          <div class="input-group">
-                            <input type="text" class="form-control">
-                            <div class="input-group-append">
-                              <button type="button" class="btn btn-primary">Action</button>
-                              <button data-toggle="dropdown" type="button" class="btn btn-primary dropdown-toggle"></button>
-                              <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                  News
-                                </a>
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                  Messages
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                  Edit Profile
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label class="form-label">Icon input</label>
-                          <div class="input-icon mb-3">
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">ZIP Code</label>
+                        <div class="row gutters-sm">
+                          <div class="col">
                             <input type="text" class="form-control" placeholder="Search for...">
-                            <span class="input-icon-addon">
-                              <i class="fe fe-search"></i>
-                            </span>
                           </div>
-                          <div class="input-icon">
-                            <span class="input-icon-addon">
-                              <i class="fe fe-user"></i>
-                            </span>
-                            <input type="text" class="form-control" placeholder="Username">
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label class="form-label">Separated inputs</label>
-                          <div class="row gutters-xs">
-                            <div class="col">
-                              <input type="text" class="form-control" placeholder="Search for...">
-                            </div>
-                            <span class="col-auto">
-                              <button class="btn btn-secondary" type="button"><i class="fe fe-search"></i></button>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label class="form-label">ZIP Code</label>
-                          <div class="row gutters-sm">
-                            <div class="col">
-                              <input type="text" class="form-control" placeholder="Search for...">
-                            </div>
-                            <span class="col-auto align-self-center">
-                              <span class="form-help" data-toggle="popover" data-placement="top"
-								  data-content="<p>ZIP Code must be US or CDN format. You can use an extended ZIP+4 code to determine address more accurately.</p>
+                          <span class="col-auto align-self-center">
+                            <span class="form-help" data-toggle="popover" data-placement="top" data-content="<p>ZIP Code must be US or CDN format. You can use an extended ZIP+4 code to determine address more accurately.</p>
                               <p class='mb-0'><a href=''>USP ZIP codes lookup tools</a></p>
                               ">?</span>
                           </span>
@@ -434,17 +260,19 @@
                     <div class="col-md-6 col-lg-4">
                       <div class="form-group">
                         <label class="form-label">Password</label>
-                        <input type="password" class="form-control" name="example-password-input" placeholder="Password..">
+                        <input type="password" class="form-control" name="example-password-input"
+                          placeholder="Password..">
                       </div>
                       <div class="form-group">
                         <label class="form-label">Valid State</label>
-                        <input type="text" class="form-control is-valid" name="example-text-input-valid" placeholder="Valid State..">
+                        <input type="text" class="form-control is-valid" name="example-text-input-valid"
+                          placeholder="Valid State..">
                         <input type="text" class="form-control mt-3 state-valid" value="Valid state">
                       </div>
                       <div class="form-group">
                         <label class="form-label">Invalid State</label>
                         <input type="text" class="form-control is-invalid" name="example-text-input-invalid"
-						   placeholder="Invalid State..">
+                          placeholder="Invalid State..">
                         <div class="invalid-feedback">Invalid feedback</div>
                         <input type="text" class="form-control mt-3 state-invalid" value="Invalid state">
                       </div>
@@ -508,7 +336,8 @@
                         <div class="selectgroup w-100">
                           <label class="selectgroup-item">
                             <input type="radio" name="transportation" value="2" class="selectgroup-input">
-                            <span class="selectgroup-button selectgroup-button-icon"><i class="fe fe-smartphone"></i></span>
+                            <span class="selectgroup-button selectgroup-button-icon"><i
+                                class="fe fe-smartphone"></i></span>
                           </label>
                           <label class="selectgroup-item">
                             <input type="radio" name="transportation" value="1" class="selectgroup-input" checked="">
@@ -516,7 +345,8 @@
                           </label>
                           <label class="selectgroup-item">
                             <input type="radio" name="transportation" value="6" class="selectgroup-input">
-                            <span class="selectgroup-button selectgroup-button-icon"><i class="fe fe-monitor"></i></span>
+                            <span class="selectgroup-button selectgroup-button-icon"><i
+                                class="fe fe-monitor"></i></span>
                           </label>
                           <label class="selectgroup-item">
                             <input type="radio" name="transportation" value="6" class="selectgroup-input">
@@ -537,7 +367,8 @@
                           </label>
                           <label class="selectgroup-item">
                             <input type="radio" name="icon-input" value="3" class="selectgroup-input">
-                            <span class="selectgroup-button selectgroup-button-icon"><i class="fe fe-cloud-rain"></i></span>
+                            <span class="selectgroup-button selectgroup-button-icon"><i
+                                class="fe fe-cloud-rain"></i></span>
                           </label>
                           <label class="selectgroup-item">
                             <input type="radio" name="icon-input" value="4" class="selectgroup-input">
@@ -630,7 +461,8 @@
                         <div class="form-label">Radios</div>
                         <div class="custom-controls-stacked">
                           <label class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" name="example-radios" value="option1" checked>
+                            <input type="radio" class="custom-control-input" name="example-radios" value="option1"
+                              checked>
                             <div class="custom-control-label">Option 1</div>
                           </label>
                           <label class="custom-control custom-radio">
@@ -638,11 +470,13 @@
                             <div class="custom-control-label">Option 2</div>
                           </label>
                           <label class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" name="example-radios" value="option3" disabled>
+                            <input type="radio" class="custom-control-input" name="example-radios" value="option3"
+                              disabled>
                             <div class="custom-control-label">Option Disabled</div>
                           </label>
                           <label class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" name="example-radios2" value="option4" disabled checked>
+                            <input type="radio" class="custom-control-input" name="example-radios2" value="option4"
+                              disabled checked>
                             <div class="custom-control-label">Option Disabled Checked</div>
                           </label>
                         </div>
@@ -651,15 +485,18 @@
                         <div class="form-label">Inline Radios</div>
                         <div class="custom-controls-stacked">
                           <label class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" name="example-inline-radios" value="option1" checked>
+                            <input type="radio" class="custom-control-input" name="example-inline-radios"
+                              value="option1" checked>
                             <span class="custom-control-label">Option 1</span>
                           </label>
                           <label class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" name="example-inline-radios" value="option2">
+                            <input type="radio" class="custom-control-input" name="example-inline-radios"
+                              value="option2">
                             <span class="custom-control-label">Option 2</span>
                           </label>
                           <label class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" name="example-inline-radios" value="option3">
+                            <input type="radio" class="custom-control-input" name="example-inline-radios"
+                              value="option3">
                             <span class="custom-control-label">Option 3</span>
                           </label>
                         </div>
@@ -668,19 +505,23 @@
                         <div class="form-label">Checkboxes</div>
                         <div class="custom-controls-stacked">
                           <label class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1" checked>
+                            <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1"
+                              checked>
                             <span class="custom-control-label">Option 1</span>
                           </label>
                           <label class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" name="example-checkbox2" value="option2">
+                            <input type="checkbox" class="custom-control-input" name="example-checkbox2"
+                              value="option2">
                             <span class="custom-control-label">Option 2</span>
                           </label>
                           <label class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" name="example-checkbox3" value="option3" disabled>
+                            <input type="checkbox" class="custom-control-input" name="example-checkbox3" value="option3"
+                              disabled>
                             <span class="custom-control-label">Option Disabled</span>
                           </label>
                           <label class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" name="example-checkbox4" value="option4" checked disabled>
+                            <input type="checkbox" class="custom-control-input" name="example-checkbox4" value="option4"
+                              checked disabled>
                             <span class="custom-control-label">Option Disabled Checked</span>
                           </label>
                         </div>
@@ -689,15 +530,18 @@
                         <div class="form-label">Inline Checkboxes</div>
                         <div>
                           <label class="custom-control custom-checkbox custom-control-inline">
-                            <input type="checkbox" class="custom-control-input" name="example-inline-checkbox1" value="option1" checked>
+                            <input type="checkbox" class="custom-control-input" name="example-inline-checkbox1"
+                              value="option1" checked>
                             <span class="custom-control-label">Option 1</span>
                           </label>
                           <label class="custom-control custom-checkbox custom-control-inline">
-                            <input type="checkbox" class="custom-control-input" name="example-inline-checkbox2" value="option2">
+                            <input type="checkbox" class="custom-control-input" name="example-inline-checkbox2"
+                              value="option2">
                             <span class="custom-control-label">Option 2</span>
                           </label>
                           <label class="custom-control custom-checkbox custom-control-inline">
-                            <input type="checkbox" class="custom-control-input" name="example-inline-checkbox3" value="option3">
+                            <input type="checkbox" class="custom-control-input" name="example-inline-checkbox3"
+                              value="option3">
                             <span class="custom-control-label">Option 3</span>
                           </label>
                         </div>
@@ -896,13 +740,15 @@
                           <span class="input-group-prepend" id="basic-addon1">
                             <span class="input-group-text">@</span>
                           </span>
-                          <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                          <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                            aria-describedby="basic-addon1">
                         </div>
                       </div>
                       <div class="form-group">
                         <label class="form-label">Subdomain</label>
                         <div class="input-group">
-                          <input type="text" class="form-control" placeholder="Your subdomain" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                          <input type="text" class="form-control" placeholder="Your subdomain"
+                            aria-label="Recipient's username" aria-describedby="basic-addon2">
                           <span class="input-group-append" id="basic-addon2">
                             <span class="input-group-text">.example.com</span>
                           </span>
@@ -923,7 +769,8 @@
                           <span class="input-group-prepend">
                             <span class="input-group-text">$</span>
                           </span>
-                          <input type="text" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
+                          <input type="text" class="form-control text-right"
+                            aria-label="Amount (to the nearest dollar)">
                           <span class="input-group-append">
                             <span class="input-group-text">.00</span>
                           </span>
@@ -933,7 +780,8 @@
                         <label class="form-label">Button input</label>
                         <div class="input-group">
                           <div class="input-group-prepend">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                              aria-haspopup="true" aria-expanded="false">
                               Action
                             </button>
                             <div class="dropdown-menu">
@@ -1068,9 +916,11 @@
                         <label class="form-label">Countries</label>
                         <select name="country" id="select-countries" class="form-control custom-select">
                           <option value="br" data-data='{"image": "./assets/images/flags/br.svg"}'>Brazil</option>
-                          <option value="cz" data-data='{"image": "./assets/images/flags/cz.svg"}'>Czech Republic</option>
+                          <option value="cz" data-data='{"image": "./assets/images/flags/cz.svg"}'>Czech Republic
+                          </option>
                           <option value="de" data-data='{"image": "./assets/images/flags/de.svg"}'>Germany</option>
-                          <option value="pl" data-data='{"image": "./assets/images/flags/pl.svg"}' selected>Poland</option>
+                          <option value="pl" data-data='{"image": "./assets/images/flags/pl.svg"}' selected>Poland
+                          </option>
                         </select>
                       </div>
                     </div>
@@ -1085,54 +935,54 @@
               </form>
               <script>
                 require(['jquery', 'selectize'], function ($, selectize) {
-                    $(document).ready(function () {
-                        $('#input-tags').selectize({
-                            delimiter: ',',
-                            persist: false,
-                            create: function (input) {
-                                return {
-                                    value: input,
-                                    text: input
-                                }
-                            }
-                        });
-                
-                        $('#select-beast').selectize({});
-                
-                        $('#select-users').selectize({
-                            render: {
-                                option: function (data, escape) {
-                                    return '<div>' +
-                                        '<span class="image"><img src="' + data.image + '" alt=""></span>' +
-                                        '<span class="title">' + escape(data.text) + '</span>' +
-                                        '</div>';
-                                },
-                                item: function (data, escape) {
-                                    return '<div>' +
-                                        '<span class="image"><img src="' + data.image + '" alt=""></span>' +
-                                        escape(data.text) +
-                                        '</div>';
-                                }
-                            }
-                        });
-                
-                        $('#select-countries').selectize({
-                            render: {
-                                option: function (data, escape) {
-                                    return '<div>' +
-                                        '<span class="image"><img src="' + data.image + '" alt=""></span>' +
-                                        '<span class="title">' + escape(data.text) + '</span>' +
-                                        '</div>';
-                                },
-                                item: function (data, escape) {
-                                    return '<div>' +
-                                        '<span class="image"><img src="' + data.image + '" alt=""></span>' +
-                                        escape(data.text) +
-                                        '</div>';
-                                }
-                            }
-                        });
+                  $(document).ready(function () {
+                    $('#input-tags').selectize({
+                      delimiter: ',',
+                      persist: false,
+                      create: function (input) {
+                        return {
+                          value: input,
+                          text: input
+                        }
+                      }
                     });
+
+                    $('#select-beast').selectize({});
+
+                    $('#select-users').selectize({
+                      render: {
+                        option: function (data, escape) {
+                          return '<div>' +
+                            '<span class="image"><img src="' + data.image + '" alt=""></span>' +
+                            '<span class="title">' + escape(data.text) + '</span>' +
+                            '</div>';
+                        },
+                        item: function (data, escape) {
+                          return '<div>' +
+                            '<span class="image"><img src="' + data.image + '" alt=""></span>' +
+                            escape(data.text) +
+                            '</div>';
+                        }
+                      }
+                    });
+
+                    $('#select-countries').selectize({
+                      render: {
+                        option: function (data, escape) {
+                          return '<div>' +
+                            '<span class="image"><img src="' + data.image + '" alt=""></span>' +
+                            '<span class="title">' + escape(data.text) + '</span>' +
+                            '</div>';
+                        },
+                        item: function (data, escape) {
+                          return '<div>' +
+                            '<span class="image"><img src="' + data.image + '" alt=""></span>' +
+                            escape(data.text) +
+                            '</div>';
+                        }
+                      }
+                    });
+                  });
                 });
               </script>
             </div>
@@ -1144,35 +994,43 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label class="form-label">Date</label>
-                    <input type="text" name="field-name" class="form-control" data-mask="00/00/0000" data-mask-clearifnotmatch="true" placeholder="00/00/0000" />
+                    <input type="text" name="field-name" class="form-control" data-mask="00/00/0000"
+                      data-mask-clearifnotmatch="true" placeholder="00/00/0000" />
                   </div>
                   <div class="form-group">
                     <label class="form-label">Hour</label>
-                    <input type="text" name="field-name" class="form-control" data-mask="00:00:00" data-mask-clearifnotmatch="true" placeholder="00:00:00" />
+                    <input type="text" name="field-name" class="form-control" data-mask="00:00:00"
+                      data-mask-clearifnotmatch="true" placeholder="00:00:00" />
                   </div>
                   <div class="form-group">
                     <label class="form-label">Date & Hour</label>
-                    <input type="text" name="field-name" class="form-control" data-mask="00/00/0000 00:00:00" data-mask-clearifnotmatch="true" placeholder="00/00/0000 00:00:00" />
+                    <input type="text" name="field-name" class="form-control" data-mask="00/00/0000 00:00:00"
+                      data-mask-clearifnotmatch="true" placeholder="00/00/0000 00:00:00" />
                   </div>
                   <div class="form-group">
                     <label class="form-label">ZIP Code</label>
-                    <input type="text" name="field-name" class="form-control" data-mask="00000-000" data-mask-clearifnotmatch="true" placeholder="00000-000" />
+                    <input type="text" name="field-name" class="form-control" data-mask="00000-000"
+                      data-mask-clearifnotmatch="true" placeholder="00000-000" />
                   </div>
                   <div class="form-group">
                     <label class="form-label">Money</label>
-                    <input type="text" name="field-name" class="form-control" data-mask="000.000.000.000.000,00" data-mask-reverse="true" />
+                    <input type="text" name="field-name" class="form-control" data-mask="000.000.000.000.000,00"
+                      data-mask-reverse="true" />
                   </div>
                   <div class="form-group">
                     <label class="form-label">Telephone</label>
-                    <input type="text" name="field-name" class="form-control" data-mask="0000-0000" data-mask-clearifnotmatch="true" placeholder="0000-0000" />
+                    <input type="text" name="field-name" class="form-control" data-mask="0000-0000"
+                      data-mask-clearifnotmatch="true" placeholder="0000-0000" />
                   </div>
                   <div class="form-group">
                     <label class="form-label">Telephone with Code Area</label>
-                    <input type="text" name="field-name" class="form-control" data-mask="(00) 0000-0000" data-mask-clearifnotmatch="true" />
+                    <input type="text" name="field-name" class="form-control" data-mask="(00) 0000-0000"
+                      data-mask-clearifnotmatch="true" />
                   </div>
                   <div class="form-group">
                     <label class="form-label">IP Address</label>
-                    <input type="text" name="field-name" class="form-control" data-mask="099.099.099.099" data-mask-clearifnotmatch="true" placeholder="000.000.000.000" />
+                    <input type="text" name="field-name" class="form-control" data-mask="099.099.099.099"
+                      data-mask-clearifnotmatch="true" placeholder="000.000.000.000" />
                   </div>
                 </div>
               </div>
@@ -1192,21 +1050,22 @@
                       <div class="col">
                         <div class="form-group">
                           <label class="form-label">Email-Address</label>
-                          <input class="form-control" placeholder="your-email@domain.com"/>
+                          <input class="form-control" placeholder="your-email@domain.com" />
                         </div>
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="form-label">Bio</label>
-                      <textarea class="form-control" rows="5">Big belly rude boy, million dollar hustler. Unemployed.</textarea>
+                      <textarea class="form-control"
+                        rows="5">Big belly rude boy, million dollar hustler. Unemployed.</textarea>
                     </div>
                     <div class="form-group">
                       <label class="form-label">Email-Address</label>
-                      <input class="form-control" placeholder="your-email@domain.com"/>
+                      <input class="form-control" placeholder="your-email@domain.com" />
                     </div>
                     <div class="form-group">
                       <label class="form-label">Password</label>
-                      <input type="password" class="form-control" value="password"/>
+                      <input type="password" class="form-control" value="password" />
                     </div>
                     <div class="form-footer">
                       <button class="btn btn-primary btn-block">Save</button>
@@ -1223,7 +1082,8 @@
                     <div class="col-md-5">
                       <div class="form-group">
                         <label class="form-label">Company</label>
-                        <input type="text" class="form-control" disabled="" placeholder="Company" value="Creative Code Inc.">
+                        <input type="text" class="form-control" disabled="" placeholder="Company"
+                          value="Creative Code Inc.">
                       </div>
                     </div>
                     <div class="col-sm-6 col-md-3">
@@ -1314,7 +1174,8 @@ But that's the difference in our opinions.</textarea>
                       <label class="form-label">
                         URL <span class="form-required">*</span>
                       </label>
-                      <input name="url" type="text" class="form-control" value="https://content.googleapis.com/discovery/v1/apis/surveys/v2/rest">
+                      <input name="url" type="text" class="form-control"
+                        value="https://content.googleapis.com/discovery/v1/apis/surveys/v2/rest">
                     </div>
                   </div>
                   <div class="form-label">Assertions</div>
@@ -1462,65 +1323,8 @@ But that's the difference in our opinions.</textarea>
         </div>
       </div>
     </div>
-    <div class="footer">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8">
-            <div class="row">
-              <div class="col-6 col-md-3">
-                <ul class="list-unstyled mb-0">
-                  <li><a href="#">First link</a></li>
-                  <li><a href="#">Second link</a></li>
-                </ul>
-              </div>
-              <div class="col-6 col-md-3">
-                <ul class="list-unstyled mb-0">
-                  <li><a href="#">Third link</a></li>
-                  <li><a href="#">Fourth link</a></li>
-                </ul>
-              </div>
-              <div class="col-6 col-md-3">
-                <ul class="list-unstyled mb-0">
-                  <li><a href="#">Fifth link</a></li>
-                  <li><a href="#">Sixth link</a></li>
-                </ul>
-              </div>
-              <div class="col-6 col-md-3">
-                <ul class="list-unstyled mb-0">
-                  <li><a href="#">Other link</a></li>
-                  <li><a href="#">Last link</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 mt-4 mt-lg-0">
-            Premium and Open Source dashboard template with responsive and high quality UI. For Free!
-          </div>
-        </div>
-      </div>
-    </div>
-    <footer class="footer">
-      <div class="container">
-        <div class="row align-items-center flex-row-reverse">
-          <div class="col-auto ml-lg-auto">
-            <div class="row align-items-center">
-              <div class="col-auto">
-                <ul class="list-inline list-inline-dots mb-0">
-                  <li class="list-inline-item"><a href="./docs/index.html">Documentation</a></li>
-                  <li class="list-inline-item"><a href="./faq.html">FAQ</a></li>
-                </ul>
-              </div>
-              <div class="col-auto">
-                <a href="https://github.com/tabler/tabler" class="btn btn-outline-primary btn-sm">Source code</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-lg-auto mt-3 mt-lg-0 text-center">
-            Copyright © 2019 <a href=".">Tabler</a>. Theme by <a href="https://codecalm.net" target="_blank">codecalm.net</a> All rights reserved.
-          </div>
-        </div>
-      </div>
-    </footer>
+
   </div>
 </body>
+
 </html>

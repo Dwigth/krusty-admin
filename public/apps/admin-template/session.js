@@ -5,6 +5,8 @@ class Session {
         localStorage.removeItem('user');
         // Lo enviamos al login
         window.location.href = '/';
+        //Quitamos el tema
+        darkTheme.RemoveTheme();
     }
     Watch() {
         // Obtenemos el objeto usuario

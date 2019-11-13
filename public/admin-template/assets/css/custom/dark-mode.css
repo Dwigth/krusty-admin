@@ -1,0 +1,50 @@
+:root{
+  --primary:#82D7EF;
+  --primaryVariant:#1A8DA8;
+  --secondary:#E6989C;
+  --gray:#616161;
+  --darker-gray:#424242;
+  --dark:#262833;
+  --darker:#212121;
+  --ligh:#FFFF;
+}
+hr{
+  background-color: var(--light) !important;
+}
+header,.header,body,footer,.footer{
+  background-color: var(--darker) !important;
+}
+.header,.footer{
+  border-top: 1px solid var(--darker-gray);
+}
+/* Elementos usados mayormente */
+.dropdown-menu,
+.dropdown-menu-arrow 
+.show,
+.dropdown-menu-arrow::after,
+.dropdown-menu-arrow::before {
+  background-color: var(--darker) !important;
+  border: 1px solid var(--darker-gray) !important;
+}
+.card,table,td,tr,th,label, input[type="search"]{
+  background-color: var(--darker-gray) !important;
+  color: var(--light) !important;
+}
+.card-body, .card-header,.card,title,.card-footer{
+  border: 1px solid var(--gray) !important;
+}
+
+.btn-secondary,.btn-secondary:hover{
+  background-color: var(--gray) !important;
+  color: var(--light) !important;
+}
+
+.form-control{
+  background-color: var(--darker) !important;
+  border: 1px solid var(--gray) !important;
+  color: var(--light) !important;
+}
+/* Especificamente en switch de configuración */
+.custom-switch-description{
+  color: var(--light) !important;
+}

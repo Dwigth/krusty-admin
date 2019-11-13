@@ -33,11 +33,6 @@ exports.MenuItems = [
             }
         ]
     },
-    {
-        name: 'Configuración',
-        route: '/settings',
-        icon: 'fe fe-settings'
-    }
 ];
 exports.ProfileMenuItems = [
     {
@@ -47,7 +42,7 @@ exports.ProfileMenuItems = [
     },
     {
         name: 'Configuración',
-        route: '/user-settings',
+        route: '/settings',
         icon: 'fe fe-settings'
     },
     {
