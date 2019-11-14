@@ -92,6 +92,14 @@ class Modal {
         }
     }
     /**
+     * Inserta en la ultima posición de la card body cualquier elemento dado.
+     * @param {HTMLElement} Element 
+     */
+    Append(Element) {
+        this.container.appendChild(Element);
+    }
+
+    /**
      * Retorna un valor `boolean` dependiendo de la decisión del usuario.
      * @param {*} [message,callback] param - Objeto que tiene como propiedades msg y un callback
      * @todo Implementar esta función de manera que no sea destructiva.

@@ -9,6 +9,7 @@ class Profile {
         this.HandleDropdown();
         if (location.pathname.includes('/profile')) {
             this.Update();
+            this.UploadImage();
         }
     }
     /**
@@ -21,7 +22,7 @@ class Profile {
         profileAnchor.href = `/profile/${this.profile.token}/${this.profile.usuario}`;
     }
     /**
-     * 
+     * Actualiza la información del usuario.
      */
     Update() {
         const updateBtn = document.getElementById('updateBtn');
@@ -68,6 +69,29 @@ class Profile {
             });
         });
 
+    }
+
+    /**
+     * Proceso para obtener imagen desde el navegador del cliente,
+     * subirla al backend y retornar la dirección de la imagen.
+     */
+    UploadImage() {
+        // Obtenemos los datos en Base64
+        const profile64 = this.ChangeProfileImage();
+        const cover64 = this.ChangeCoverImage();
+        // Preparamos los datos para subir al backend
+
+        // Obtenermos una respuesta y la retornamos
+    }
+    /**
+     * 
+     * @returns Imagen en Base64
+     */
+    ChangeProfileImage() {
+        const imgElem = document.getElementById('profile-img');
+    }
+    ChangeCoverImage() {
+        const imgElem = document.getElementById('cover-img');
     }
 }
 const profile = new Profile();
