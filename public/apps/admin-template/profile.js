@@ -6,9 +6,11 @@ class Profile {
     constructor() {
         const session = new Session();
         this.profile = session.Get();
+        this.canvas;
         this.HandleDropdown();
         if (location.pathname.includes('/profile')) {
             this.Update();
+            this.canvas = document.createElement('canvas');
             this.UploadImage();
         }
     }
@@ -76,9 +78,9 @@ class Profile {
      * subirla al backend y retornar la dirección de la imagen.
      */
     UploadImage() {
-        // Obtenemos los datos en Base64
-        const profile64 = this.ChangeProfileImage();
-        const cover64 = this.ChangeCoverImage();
+        // Obtenemos los datos con Base64
+        const profile64 = this.GetBase64('profile-img', 'updated_img');
+        const cover64 = this.GetBase64('cover-img', 'update_portada_img');
         // Preparamos los datos para subir al backend
 
         // Obtenermos una respuesta y la retornamos
@@ -86,12 +88,63 @@ class Profile {
     /**
      * 
      * @returns Imagen en Base64
+     * @param ID de elemento InputFile
+     * @param ID de elemento target
      */
-    ChangeProfileImage() {
-        const imgElem = document.getElementById('profile-img');
+    GetBase64(id, target) {
+        const inputFile = document.getElementById(id);
+        inputFile.addEventListener('change', async (evt) => {
+            document.getElementById(target).value = await this.HandleFileSelect(evt);
+        }, false);
     }
-    ChangeCoverImage() {
-        const imgElem = document.getElementById('cover-img');
+    /**
+     * 
+     * @param {*} canvas 
+     * @param {*} image 
+     */
+    RedrawImg(canvas, image) {
+        // Get Canvas2DContext
+        var ctx = canvas.getContext("2d");
+        // Your code here
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    }
+    /**
+     * 
+     * @param {*} evt 
+     */
+    async HandleFileSelect(evt) {
+        // var canvasWidth = 200;
+        // var canvasHeight = 200;
+
+        // const canvas = document.querySelector('canvas');
+        // this.canvas.width = canvasWidth; this.canvas.height = canvasHeight;
+
+        var file = evt.target.files[0];
+
+        var reader = new FileReader();
+
+        const GetBase64 = new Promise((resolve, reject) => {
+            reader.addEventListener('load', function (fileObject) {
+                var data = fileObject.target.result;
+
+                // Create an image object
+                var image = new Image();
+                image.onload = function () {
+                    window.imageSrc = this;
+                    // profile.RedrawImg(profile.canvas, this);
+                }
+                // Set image data to background image.
+                resolve(data);
+                image.src = data;
+                // console.log(fileObject.target.result);
+            });
+        });
+
+        reader.readAsDataURL(file)
+        return await GetBase64;
+        // const modal = new Modal();
+        // modal.Append(this.canvas);
+        // modal.Open();
     }
 }
 const profile = new Profile();
