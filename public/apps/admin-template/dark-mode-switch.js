@@ -3,6 +3,7 @@ class DarkTheme {
         this.InitTheme();
         window.addEventListener('DOMContentLoaded', () => {
             this.AddTheme();
+            this.ChangeLogo();
         })
     }
 
@@ -11,6 +12,17 @@ class DarkTheme {
         if (this.currentTheme === 'dark') {
             this.AttachCSSFile();
         }
+    }
+
+    ChangeLogo() {
+        let LogoSrc = '';
+        if (this.currentTheme === 'dark') {
+            LogoSrc = '/admin-template/krusty-lab/images/logo-krusty-dark-mode.png';
+        } else {
+            LogoSrc = '/admin-template/krusty-lab/images/logo-krusty.svg';
+        }
+        const logoElem = document.querySelector('.header-brand-img');
+        logoElem.src = LogoSrc;
     }
 
     AttachCSSFile() {
@@ -44,8 +56,10 @@ class DarkTheme {
 
                     if (this.currentTheme === 'dark') {
                         this.RemoveTheme();
+                        this.ChangeLogo();
                     } else {
                         this.AttachCSSFile();
+                        this.ChangeLogo();
                     }
                 });
             }

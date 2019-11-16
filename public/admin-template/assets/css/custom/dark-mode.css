@@ -48,3 +48,6 @@ header,.header,body,footer,.footer{
 .custom-switch-description{
   color: var(--light) !important;
 }
+.footer a{
+  color: var(--primaryVariant) !important;
+}

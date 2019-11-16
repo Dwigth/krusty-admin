@@ -57,6 +57,11 @@ export const ProfileMenuItems: IMenuItem[] = [
         }
     },
     {
+        name: 'Planeador',
+        route: '/planner',
+        icon: 'fe fe-calendar'
+    },
+    {
         name: 'Mensajes',
         route: '/messages',
         icon: 'fe fe-send'

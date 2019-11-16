@@ -81,6 +81,47 @@ CREATE TABLE `recuperacion_contra` (
   `activo` int
 );
 
+CREATE TABLE `proyecto` (
+  `id_creador` int,
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `fecha_inicio` date,
+  `fecha_termino` date,
+  `vista_actual` varchar(20)
+);
+
+CREATE TABLE `invitados_proyecto` (
+  `id_proyecto` int,
+  `id_invitado` int,
+  `permisos` varchar(255)
+);
+
+CREATE TABLE `proyecto_tarea` (
+  `id_proyecto` int,
+  `id_tarea` int
+);
+
+CREATE TABLE `tareas` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `nombre` varchar(125),
+  `descripcion` text,
+  `fecha_inicio` datetime,
+  `fecha_termino` datetime,
+  `progreso` int,
+  `dependencia` text,
+  `asignado` int
+);
+
+CREATE TABLE `comentarios_tareas` (
+  `id_tarea` int,
+  `id_comentario` int
+);
+
+CREATE TABLE `tareas_comentarios` (
+  `id_comentador` int,
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `comentario` text
+);
+
 ALTER TABLE `licencia` ADD CONSTRAINT `licencia_cliente` FOREIGN KEY (`id_usuario`) REFERENCES `cliente` (`id`);
 
 ALTER TABLE `encuesta_estimacion_riesgo` ADD CONSTRAINT `eer_cliente` FOREIGN KEY (`id_usuario`) REFERENCES `cliente` (`id`);
@@ -96,3 +137,19 @@ ALTER TABLE `admin_profile` ADD FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id
 ALTER TABLE `admin_recuperacion` ADD FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id_admin`);
 
 ALTER TABLE `admin_recuperacion` ADD FOREIGN KEY (`id_recuperacion`) REFERENCES `recuperacion_contra` (`id`);
+
+ALTER TABLE `proyecto` ADD FOREIGN KEY (`id_creador`) REFERENCES `admin` (`id_admin`);
+
+ALTER TABLE `invitados_proyecto` ADD FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto` (`id`);
+
+ALTER TABLE `proyecto_tarea` ADD FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto` (`id`);
+
+ALTER TABLE `tareas` ADD FOREIGN KEY (`id`) REFERENCES `proyecto_tarea` (`id_tarea`);
+
+ALTER TABLE `comentarios_tareas` ADD FOREIGN KEY (`id_tarea`) REFERENCES `tareas` (`id`);
+
+ALTER TABLE `tareas_comentarios` ADD FOREIGN KEY (`id`) REFERENCES `comentarios_tareas` (`id_comentario`);
+
+ALTER TABLE `invitados_proyecto` ADD FOREIGN KEY (`id_invitado`) REFERENCES `admin` (`id_admin`);
+
+ALTER TABLE `tareas_comentarios` ADD FOREIGN KEY (`id_comentador`) REFERENCES `admin` (`id_admin`);

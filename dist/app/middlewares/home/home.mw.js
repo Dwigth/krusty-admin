@@ -53,3 +53,12 @@ function Home(req, res) {
     });
 }
 exports.Home = Home;
+function Planner(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            res.render('planner');
+            return [2 /*return*/];
+        });
+    });
+}
+exports.Planner = Planner;
