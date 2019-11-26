@@ -223,30 +223,33 @@ class Planner {
                 orden: UltimoOrden
             };
 
-            this.CurrentProject.tareas.push(task);
-            this.TasksCount++;
-            // Se crea la tarea
-            await HTTP({
-                url: '/planner/tasks/create',
-                token: profile.profile.token,
-                data: { tareas: [task] },
-                method: 'POST',
-                success: async (data) => {
-                    const RecentlyCreatedTasks = await data.json();
-                    this.CurrentProject.tareas.pop();
-                    const Length = RecentlyCreatedTasks.tasks.length;
-                    this.CurrentProject.tareas.push(RecentlyCreatedTasks.tasks[Length - 1]);
-                    this.AssignPropertiesToLast();
-                    // // Agregar 
-                    const NewHeighh = parseInt(this.gantt.$svg.style.height.slice(0, -2)) + 38;
-                    this.gantt.$svg.style.height = NewHeighh;
+            if (task.fecha_inicio !== '') {
 
-                },
-                failed: (e) => { console.error(e) }
-            });
-            this.RenderTaskList();
-            this.gantt.refresh(this.CurrentProject.tareas)
 
+                this.CurrentProject.tareas.push(task);
+                this.TasksCount++;
+                // Se crea la tarea
+                await HTTP({
+                    url: '/planner/tasks/create',
+                    token: profile.profile.token,
+                    data: { tareas: [task] },
+                    method: 'POST',
+                    success: async (data) => {
+                        const RecentlyCreatedTasks = await data.json();
+                        this.CurrentProject.tareas.pop();
+                        const Length = RecentlyCreatedTasks.tasks.length;
+                        this.CurrentProject.tareas.push(RecentlyCreatedTasks.tasks[Length - 1]);
+                        this.AssignPropertiesToLast();
+                        // // Agregar 
+                        const NewHeighh = parseInt(this.gantt.$svg.style.height.slice(0, -2)) + 38;
+                        this.gantt.$svg.style.height = NewHeighh;
+
+                    },
+                    failed: (e) => { console.error(e) }
+                });
+                this.RenderTaskList();
+                this.gantt.refresh(this.CurrentProject.tareas)
+            }
         });
     }
 
