@@ -1,6 +1,8 @@
 /**
  * @author Dwigth Astacio
  * @description
+ * @requires util.js
+ * @requires modal.js
  * @todo Implementar obtención de datos por SELECT
  * @see https://frappe.io/gantt
  * @see https://github.com/frappe/gantt
@@ -11,16 +13,57 @@ class Planner {
     Moment = {};
 
     constructor() {
-        this.SelectProjectFromDOM();
         const initialWrapper = async () => {
             await this.GetProjects();
+            this.SelectProjectFromDOM();
+            this.CreateProject();
+
+            await this.GetAdmins();
             this.CurrentProject = this.projects[this.projects.length - 1];
+            if (this.CurrentProject == undefined) {
+                console.warn('No tiene proyectos');
+                this.BuildCreateAdvice();
+                return;
+            }
             this.InitAssignTaskProperties();
             this.InitGanttChart();
             this.UpdateTasks();
+            this.InviteAdmin();
         };
 
         initialWrapper();
+    }
+
+    /**
+     * @description se acciona cuando no hay proyectos en la base de datos
+     */
+    BuildCreateAdvice() {
+        const ProjectsBar = document.getElementById('project-bar');
+        const ProjectBody = document.getElementById('project-tasks');
+        const UpdateBtn = document.getElementById('update-tasks-button');
+
+        ProjectsBar.innerHTML = '';
+        ProjectBody.innerHTML = '';
+        UpdateBtn.style.display = 'none';
+
+        const ButtonWrapper = document.createElement('div');
+
+        ButtonWrapper.classList.add('btn-list', 'text-center');
+
+        const CreateBtn = document.createElement('button');
+
+        CreateBtn.classList.add('btn', 'btn-sm', 'btn-secondary');
+        CreateBtn.textContent = 'Nuevo proyecto';
+        CreateBtn.addEventListener('click', () => {
+            const modal = new Modal({ html: '' });
+            modal.InsertHTML();
+            modal.Append(this.BuildCreateProjectMenu());
+            modal.Open();
+        });
+
+        ButtonWrapper.appendChild(CreateBtn);
+        ProjectBody.appendChild(ButtonWrapper);
+
     }
 
     SetSortable(sortable) {
@@ -79,8 +122,12 @@ class Planner {
      */
     async SelectProjectFromDOM() {
         const SelectElement = document.getElementById('select-beast');
+
+        SelectElement.children.item(this.projects.length - 1).selected = true;
+
         SelectElement.addEventListener('change', (evt) => {
-            this.CurrentProject = SelectElement.value;
+            this.CurrentProject = this.projects.find(p => p.id == SelectElement.value);
+            this.InitAssignTaskProperties();
             this.InitGanttChart();
         });
     }
@@ -90,6 +137,9 @@ class Planner {
      */
     InitAssignTaskProperties() {
         this.TasksCount = this.CurrentProject.tareas.length;
+        if (this.TasksCount == 0) {
+            console.warn('No hay tareas');
+        }
         this.CurrentProject.tareas = this.CurrentProject.tareas.map(tarea => {
             tarea.id = tarea.id.toString()
             tarea.name = tarea.nombre;
@@ -139,9 +189,16 @@ class Planner {
 
             let FechaTerminoAnterior = '';
             let UltimoOrden;
-
+            /**
+             * Estas condiciones se agregan para posicionar las fechas de inicio y de termino de 
+             * las siguientes tareas
+             */
             if (UltimaTarea != undefined) {
-                FechaTerminoAnterior = UltimaTarea.end;
+                if (this.TasksCount == 1) {
+                    FechaTerminoAnterior = UltimaTarea.start;
+                } else {
+                    FechaTerminoAnterior = UltimaTarea.end;
+                }
                 UltimoOrden = UltimaTarea.orden + 1;
             } else {
                 FechaTerminoAnterior = this.Moment().format('YYYY-MM-DD');
@@ -194,6 +251,90 @@ class Planner {
     }
 
     /**
+     * @description Invitar a un administrador al proyecto
+     */
+    InviteAdmin() {
+        const InviteAdminBtn = document.getElementById('add-admin');
+        InviteAdminBtn.addEventListener('click', () => {
+            const modal = new Modal({ html: '' });
+            modal.InsertHTML();
+
+            const AdminList = document.createElement('div');
+            const ul = document.createElement('div');
+            const form = document.createElement('form');
+            form.style.height = '200px';
+            ul.classList.add('custom-controls-stacked')
+            this.Admins.forEach(admin => {
+                const li = document.createElement('div');
+
+                const Label = document.createElement('label');
+                Label.classList.add('custom-control', 'custom-checkbox')
+                const Checkbox = document.createElement('input');
+                Checkbox.type = 'checkbox';
+                Checkbox.classList.add('custom-control-input');
+                Checkbox.value = admin.id_admin;
+                Checkbox.name = admin.nombre;
+
+                if (this.CurrentProject.invitados.find(i => i.nombre == admin.nombre)) {
+                    Checkbox.checked = true;
+                }
+
+                Label.appendChild(Checkbox);
+                li.appendChild(Label);
+
+                const AdminWrapper = document.createElement('div');
+                AdminWrapper.classList.add('custom-control-label');
+                const AvatarTag = document.createElement('span');
+                const Avatar = document.createElement('span');
+
+                AvatarTag.classList.add('tag');
+
+                Avatar.classList.add('tag-avatar', 'avatar');
+                Avatar.style.backgroundImage = `url(${admin.img})`;
+                AvatarTag.appendChild(Avatar);
+                AvatarTag.dataset.content = admin.nombre;
+                AdminWrapper.appendChild(AvatarTag);
+
+                Label.appendChild(AdminWrapper);
+
+                // li.appendChild();
+                ul.appendChild(li);
+                form.appendChild(ul);
+            });
+
+            AdminList.appendChild(form);
+            const AddAdminListButton = document.createElement('button');
+            AddAdminListButton.classList.add('btn', 'btn-block', 'btn-secondary');
+            AddAdminListButton.textContent = 'Agregar al proyecto';
+            AdminList.appendChild(AddAdminListButton);
+            AddAdminListButton.addEventListener('click', async () => {
+                const SelectedAdmins = [];
+                Array.from(form.elements).forEach(elem => {
+                    if (elem.checked) {
+                        SelectedAdmins.push(elem.value)
+                    }
+                });
+
+                await HTTP({
+                    url: '/planner/invite',
+                    token: profile.profile.token,
+                    data: { invitados: SelectedAdmins, id_proyecto: this.CurrentProject.id },
+                    method: 'POST',
+                    success: async (data) => {
+                        const resp = await data.json();
+                        // console.log(resp);
+                    },
+                    failed: (e) => { console.error(e) }
+                })
+
+
+            });
+            modal.Append(AdminList);
+            modal.Open();
+        });
+    }
+
+    /**
      * Cambia la vista de la grafica de Gantt
      */
     ChangeGanttView() {
@@ -239,7 +380,7 @@ class Planner {
         const row = document.createElement('div');
         row.classList.add('row');
         const NameCol = document.createElement('div');
-        NameCol.classList.add('col-3');
+        NameCol.classList.add('col-5');
         const input = document.createElement('input');
         input.classList.add('btn', 'btn-block', 'btn-secondary', 'btn-sm');
         input.style.pointer = 'cursor';
@@ -256,29 +397,9 @@ class Planner {
         progress.defaultValue = task.progress;
         ProgressCol.appendChild(progress);
 
-        // Asignación
-        const AssignCol = document.createElement('div');
-        AssignCol.classList.add('col-3');
-        const SelectWrapper = document.createElement('div');
-        SelectWrapper.classList.add('form-group');
-        const UserSelect = document.createElement('select');
-        UserSelect.classList.add('form-control', 'custom-select', 'select-users');
-        UserSelect.name = "user"; UserSelect.id = "select-users"
-        SelectWrapper.appendChild(UserSelect);
-        AssignCol.appendChild(SelectWrapper);
-        // rellenamos de datos
-        this.CurrentProject.invitados.map(invitado => {
-            const option = document.createElement('option');
-            option.style.backgroundImage = `url(${invitado.img})`
-            option.value = invitado.id_admin;
-            option.dataset.data = `{"image":'${invitado.img}'}`;
-            option.textContent = invitado.nombre;
-            UserSelect.appendChild(option)
-        });
-
         // Dependencia
         const DependencyCol = document.createElement('div');
-        DependencyCol.classList.add('col-3');
+        DependencyCol.classList.add('col-4');
         const DependencySelect = document.createElement('select');
         DependencySelect.classList.add('form-control', 'custom-select');
         const DependencyDefaultOption = document.createElement('option');
@@ -303,11 +424,11 @@ class Planner {
         const DateBtn = document.createElement('div');
         DateBtn.classList.add('btn', 'btn-secondary', 'btn-sm');
         const icon = document.createElement('i');
-        icon.classList.add('fe', 'fe-calendar');
+        icon.classList.add('fe', 'fe-more-vertical');
         DateBtn.appendChild(icon);
         DateCol.appendChild(DateBtn);
 
-        row.append(NameCol, ProgressCol, AssignCol, DependencyCol, DateCol);
+        row.append(NameCol, ProgressCol, DependencyCol, DateCol);
         // Acciones
         input.addEventListener('keyup', (evt) => {
             task.name = input.value;
@@ -329,48 +450,122 @@ class Planner {
             task.dependencia = DependencySelect.value;
             this.gantt.refresh(this.CurrentProject.tareas);
             this.UpdateBtn.classList.remove('disabled');
-
         });
 
         DateBtn.addEventListener('click', (evt) => {
             this.UpdateBtn.classList.remove('disabled');
             const modal = new Modal({ html: '' });
             modal.InsertHTML();
-
-            const ModalActionsWrapper = document.createElement('div');
-            ModalActionsWrapper.innerHTML = '';
-
-            const StartDate = document.createElement('input');
-            StartDate.type = 'date';
-            StartDate.classList.add('btn', 'btn-secondary', 'btn-sm');
-            StartDate.value = task.start;
-
-            StartDate.addEventListener('change', () => {
-                task.start = StartDate.value;
-                task.fecha_inicio = StartDate.value;
-                this.gantt.refresh(this.CurrentProject.tareas);
-            });
-
-            const EndDate = document.createElement('input');
-            EndDate.type = 'date';
-            EndDate.classList.add('btn', 'btn-secondary', 'btn-sm');
-            EndDate.value = task.end;
-
-
-            EndDate.addEventListener('change', () => {
-                task.end = EndDate.value;
-                task.fecha_termino = EndDate.value;
-                this.gantt.refresh(this.CurrentProject.tareas);
-            });
-
-            ModalActionsWrapper.appendChild(StartDate);
-            ModalActionsWrapper.appendChild(EndDate);
-
-            modal.Append(ModalActionsWrapper);
+            modal.Append(this.RenderTaskOptionMenu(task));
             modal.Open();
         });
 
         return row;
+    }
+
+    /**
+     * @description Esta función crea un menú de opciones para cada tarea de la lista
+     */
+    RenderTaskOptionMenu(task) {
+        const menu = document.createElement('div');
+
+        // Fechas
+        const DatesWrapper = document.createElement('div');
+        DatesWrapper.classList.add('row');
+
+        const DateInputs = [
+            {
+                name: 'fecha inicio',
+                value: task.start,
+                property: ['fecha_inicio', 'start']
+            },
+            {
+                name: 'fecha termino',
+                value: task.end,
+                property: ['fecha_termino', 'end']
+            }
+        ];
+
+        DateInputs.map(dates => {
+
+            const DateContainer = document.createElement('div');
+            DateContainer.classList.add('col-6', 'form-group');
+
+            const Label = document.createElement('label');
+            Label.classList.add('form-label');
+            Label.textContent = Capitalize(dates.name);
+
+            const Input = document.createElement('input');
+            Input.type = 'date';
+            Input.classList.add('form-control');
+            Input.value = dates.value;
+
+            Input.addEventListener('change', () => {
+                task[dates.property[0]] = Input.value;
+                task[dates.property[1]] = Input.value;
+                this.gantt.refresh(this.CurrentProject.tareas);
+            });
+
+            DateContainer.append(Label, Input);
+            DatesWrapper.appendChild(DateContainer);
+        });
+
+        // Asignaciones de tareas a usuarios
+        const AssignsWrapper = document.createElement('div');
+
+        const SelectContainer = document.createElement('div');
+        const SelectLabel = document.createElement('label');
+        const AssignedAdminContainer = document.createElement('div');
+
+        SelectLabel.classList.add('form-label')
+        SelectContainer.classList.add('form-group');
+
+        const UserSelect = document.createElement('select');
+        UserSelect.classList.add('form-control', 'custom-select', 'select-users');
+        UserSelect.name = "user"; UserSelect.id = "select-users";
+        SelectLabel.textContent = 'Asignar tarea a:';
+        SelectLabel.htmlFor = UserSelect.id;
+
+        SelectContainer.append(SelectLabel, UserSelect, AssignedAdminContainer);
+
+        // rellenamos de datos los option del select
+        this.CurrentProject.invitados.map(invitado => {
+            const option = document.createElement('option');
+            option.style.backgroundImage = `url(${invitado.img})`
+            option.value = invitado.id_admin;
+            option.dataset.data = `{"image":'${invitado.img}'}`;
+            option.textContent = invitado.nombre;
+            UserSelect.appendChild(option);
+        });
+
+        const option = document.createElement('option');
+        option.textContent = "Escoge un invitado"; option.selected = true;
+        UserSelect.insertBefore(option, UserSelect.children[0]);
+
+        // Debemos sacar esta lista de las tareas
+        const CurrentlySelectedAdmins = [];
+
+        UserSelect.addEventListener('change', () => {
+            const SelectedAdmin = UserSelect.value;
+            const Admin = this.CurrentProject.invitados.find(i => i.id_admin == SelectedAdmin);
+
+            if (CurrentlySelectedAdmins.find(i => i.id_admin == SelectedAdmin) == undefined) {
+                CurrentlySelectedAdmins.push(Admin);
+                const AdminTag = CreateAvatarTag(Admin);
+                AssignedAdminContainer.appendChild(AdminTag);
+            }
+
+
+        });
+
+
+
+
+        AssignsWrapper.appendChild(SelectContainer);
+
+        menu.append(DatesWrapper, AssignsWrapper);
+
+        return menu;
     }
 
     /**
@@ -400,6 +595,123 @@ class Planner {
             }
         });
 
+    }
+
+    /**
+     * Boton de creación de proyecto
+     */
+    CreateProject() {
+        const CreatePrjctBtn = document.getElementById('prjct-btn');
+        CreatePrjctBtn.addEventListener('click', (evt) => {
+            const modal = new Modal({ html: '' });
+            modal.InsertHTML();
+            modal.Append(this.BuildCreateProjectMenu());
+            modal.Open();
+        });
+    }
+
+    BuildCreateProjectMenu() {
+        const wrapper = document.createElement('div');
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/planner/create/';
+        const inputs = [
+            {
+                name: 'id_creador',
+                type: 'hidden',
+                value: profile.profile.id_admin
+            },
+            {
+                name: 'vista_actual',
+                type: 'hidden',
+                value: 'Week'
+            },
+            {
+                name: 'nombre',
+                type: 'text',
+                value: ''
+            },
+            {
+                name: 'fecha_inicio',
+                type: 'date',
+                value: ''
+            },
+            {
+                name: 'fecha_termino',
+                type: 'date',
+                value: ''
+            }
+        ];
+
+        inputs.forEach(input => {
+
+            const FormGroup = document.createElement('div');
+            FormGroup.classList.add('form-group');
+            if (input.type != 'hidden') {
+                const Label = document.createElement('label');
+                Label.classList.add('form-label');
+                Label.textContent = Capitalize(input.name.replace('_', ' '));
+                FormGroup.appendChild(Label);
+            }
+            const InputElem = document.createElement('input');
+            InputElem.classList.add('form-control');
+            InputElem.name = input.name;
+            InputElem.type = input.type;
+
+            if (input.value != '') {
+                InputElem.value = input.value;
+            }
+
+            FormGroup.appendChild(InputElem);
+            form.appendChild(FormGroup);
+        });
+
+        wrapper.appendChild(form);
+
+
+        const CreateBtn = document.createElement('button');
+        CreateBtn.classList.add('btn', 'btn-block', 'btn-secondary');
+        CreateBtn.textContent = 'Crear proyecto';
+
+        CreateBtn.addEventListener('click', async (evt) => {
+            evt.preventDefault();
+            const requestObject = {};
+            Array.from(form.elements).forEach(elem => {
+                requestObject[elem.name] = elem.value;
+            });
+            await HTTP({
+                url: '/planner/create/',
+                token: profile.profile.token,
+                data: { proyecto: requestObject },
+                method: form.method,
+                success: async (data) => {
+                    location.reload();
+                },
+                failed: (e) => { console.error(e) }
+            });
+        });
+
+        wrapper.appendChild(CreateBtn);
+
+        return wrapper;
+    }
+
+    async GetAdmins() {
+        await HTTP({
+            url: '/admins/getAllExceptMe',
+            token: profile.profile.token,
+            data: {
+                id_admin: profile.profile.id_admin,
+                token: profile.profile.token
+            },
+            method: 'POST',
+            success: async (data) => {
+                const resp = await data.json();
+                this.Admins = resp.Admins;
+                console.log(this.Admins);
+            },
+            failed: (e) => { console.error(e) }
+        });
     }
 
 }

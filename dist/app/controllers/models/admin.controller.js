@@ -39,6 +39,23 @@ var Database_1 = require("../../db/Database");
 var AdminController = /** @class */ (function () {
     function AdminController() {
     }
+    AdminController.prototype.GetAdmins = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var query, resultado;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "SELECT A.id_admin, A.img, A.nombre FROM ADMIN A";
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 1:
+                        resultado = _a.sent();
+                        resultado = resultado.filter(function (r) { return r.id_admin != _this.id_admin; });
+                        return [2 /*return*/, resultado];
+                }
+            });
+        });
+    };
     /**
      *
      * @param id_admin

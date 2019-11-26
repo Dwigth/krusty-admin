@@ -7,3 +7,6 @@
     scroll-behavior: smooth;
     overflow-y: scroll;
 }
+.tag:after{
+    content: attr(data-content);
+}

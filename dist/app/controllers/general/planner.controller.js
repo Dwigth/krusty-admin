@@ -44,8 +44,14 @@ var PlannerController = /** @class */ (function () {
     function PlannerController(ins) {
         this.ProjectInstance = ins;
     }
-    PlannerController.prototype.SetProyecto = function (ins) {
+    PlannerController.prototype.SetProject = function (ins) {
         this.ProjectInstance = ins;
+    };
+    PlannerController.prototype.SetGuests = function (guests) {
+        this.Guests = guests;
+    };
+    PlannerController.prototype.GetProject = function () {
+        return this.ProjectInstance;
     };
     PlannerController.prototype.SetTask = function (task) {
         this.TaskInstance = task;
@@ -53,6 +59,10 @@ var PlannerController = /** @class */ (function () {
     PlannerController.prototype.SetCurrentUser = function (userid) {
         this.CurrentUser = userid;
     };
+    /**
+     * @description Obtiene a los usuarios invitados del proyecto
+     * @param id_proyecto
+     */
     PlannerController.prototype.GetProjectGuests = function (id_proyecto) {
         return __awaiter(this, void 0, void 0, function () {
             var sql;
@@ -61,6 +71,30 @@ var PlannerController = /** @class */ (function () {
                     case 0:
                         sql = "SELECT a.id_admin,a.nombre,a.img\n                FROM invitados_proyecto ip\n                INNER JOIN proyecto p\n                ON ip.id_proyecto = p.id\n                INNER JOIN admin a\n                ON ip.id_invitado = a.id_admin\n                WHERE p.id_creador = " + this.CurrentUser + " AND ip.id_proyecto = " + id_proyecto;
                         return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    PlannerController.prototype.InviteToProject = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var GuestsPromises;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        GuestsPromises = this.Guests.map(function (guest) { return __awaiter(_this, void 0, void 0, function () {
+                            var sql;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        sql = "INSERT INTO invitados_proyecto (id_proyecto, id_invitado, permisos) VALUES (" + this.ProjectInstance.id + ", " + guest + ", NULL)";
+                                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
+                                    case 1: return [2 /*return*/, _a.sent()];
+                                }
+                            });
+                        }); });
+                        return [4 /*yield*/, Promise.all(GuestsPromises)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -107,13 +141,29 @@ var PlannerController = /** @class */ (function () {
     };
     PlannerController.prototype.Create = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var sql;
+            var sql, ProjectCreated, PrimerTarea;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         sql = "INSERT INTO proyecto(id_creador, id, fecha_inicio, fecha_termino, vista_actual,nombre) \n        VALUES(\n             '" + this.ProjectInstance.id_creador + "',\n             NULL,\n             '" + this.ProjectInstance.fecha_inicio + "',\n             '" + this.ProjectInstance.fecha_termino + "',\n             '" + this.ProjectInstance.vista_actual + "',\n             '" + this.ProjectInstance.nombre + "'\n            )";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        ProjectCreated = _a.sent();
+                        // Se debe asociar una tarea inicial 
+                        this.TaskInstance = {
+                            dependencia: '',
+                            fecha_inicio: this.ProjectInstance.fecha_inicio,
+                            fecha_termino: this.ProjectInstance.fecha_termino,
+                            descripcion: 'Tarea inicial',
+                            nombre: "Proyecto: " + this.ProjectInstance.nombre,
+                            id_proyecto: ProjectCreated.insertId,
+                            orden: 1,
+                            progreso: 0
+                        };
+                        return [4 /*yield*/, this.CreateTask()];
+                    case 2:
+                        PrimerTarea = _a.sent();
+                        return [2 /*return*/, ProjectCreated];
                 }
             });
         });
@@ -145,7 +195,7 @@ var PlannerController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        sql = "SELECT * FROM TAREAS WHERE ID_PROYECTO = " + IdProject + " ORDER BY FECHA_INICIO ASC";
+                        sql = "SELECT * FROM TAREAS WHERE ID_PROYECTO = " + IdProject + " ORDER BY ORDEN ASC";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }

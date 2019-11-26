@@ -7,6 +7,7 @@ import { flattenDeep } from 'lodash'
 export async function CreateProject(req: Request, res: Response) {
     let IncomingPlanner = <IProyecto>req.body.proyecto;
     const plannerctl = new PlannerController(IncomingPlanner);
+    console.log('Project => ', plannerctl.GetProject());
     let project = await plannerctl.Create();
     console.log(project);
     res.json({ msg: 'ok' })
@@ -14,7 +15,6 @@ export async function CreateProject(req: Request, res: Response) {
 export async function CreateTask(req: Request, res: Response) {
     let IncomingTask = <ITareas[]>req.body.tareas;
     console.log(IncomingTask);
-
     const plannerctl = new PlannerController();
     plannerctl.SetTask(IncomingTask);
     let tasks = await plannerctl.CreateTask();
@@ -51,4 +51,16 @@ export async function GetProjects(req: Request, res: Response) {
     plannerctl.SetCurrentUser(id_admin);
     const projects = await plannerctl.GetProjectsByUser();
     res.json(projects)
+}
+
+export async function InviteToProject(req: Request, res: Response) {
+    const id_proyecto = +req.body.id_proyecto;
+    const guests = req.body.invitados;
+
+    const project = { id: id_proyecto };
+    const plannerctl = new PlannerController();
+    plannerctl.SetProject(<IProyecto>project);
+    plannerctl.SetGuests(guests);
+    let result = plannerctl.InviteToProject();
+    res.json({ msg: 'ok' });
 }

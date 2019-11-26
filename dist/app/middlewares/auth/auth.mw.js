@@ -220,3 +220,28 @@ function RestorePassword(req, res) {
     });
 }
 exports.RestorePassword = RestorePassword;
+/**
+ * @requires id_admin
+ * @param req
+ * @param res
+ */
+function GetAdministrators(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var token, id_admin, adminCtl, Admins;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    token = req.body.token;
+                    id_admin = req.body.id_admin;
+                    adminCtl = new admin_controller_1.AdminController();
+                    adminCtl.id_admin = +id_admin;
+                    return [4 /*yield*/, adminCtl.GetAdmins()];
+                case 1:
+                    Admins = _a.sent();
+                    res.json({ Admins: Admins });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.GetAdministrators = GetAdministrators;

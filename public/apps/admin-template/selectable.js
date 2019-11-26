@@ -17,10 +17,7 @@ class Selectable {
 
     Init() {
         this.Elements = Array.from(document.getElementsByClassName('select-users'));
-        console.log(this.Elements);
-
         if (this.Elements.length >= 1) {
-
             this.Elements.map((elem) => {
                 this.CreateSibling(elem);
             });

@@ -130,3 +130,17 @@ export async function RestorePassword(req: Request, res: Response) {
     // Reedirigirlo a una página de exito
     // res.redirect('change-passworld-successfully')
 }
+
+/**
+ * @requires id_admin
+ * @param req 
+ * @param res 
+ */
+export async function GetAdministrators(req: Request, res: Response) {
+    const token = req.body.token;
+    const id_admin = req.body.id_admin;
+    const adminCtl = new AdminController();
+    adminCtl.id_admin = +id_admin;
+    const Admins = await adminCtl.GetAdmins();
+    res.json({ Admins });
+}

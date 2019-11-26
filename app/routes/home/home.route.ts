@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { ShowKeys, CreateKeys } from '../../middlewares/home/keys-admin.mw';
 import { AdminUserProfile, AdminUpdateProfile } from '../../middlewares/home/profile.mw';
 import { Settings, Home } from '../../middlewares/home/home.mw';
+import { GetAdministrators } from '../../middlewares/auth/auth.mw';
 
 
 export const HomeRouter = express.Router();
@@ -17,3 +18,5 @@ HomeRouter.get('/settings', Settings)
 
 HomeRouter.put('/profile/update', AdminUpdateProfile)
 HomeRouter.post('/create-keys', CreateKeys);
+
+HomeRouter.post('/admins/getAllExceptMe', GetAdministrators)

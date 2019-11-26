@@ -8,14 +8,24 @@ export class PlannerController {
     private CurrentUser: number;
     private ProjectInstance: IProyecto;
     private TaskInstance: ITareas | Array<ITareas>;
+    private Guests: Array<number>;
 
     constructor(ins?: IProyecto) {
         this.ProjectInstance = ins;
     }
 
-    public SetProyecto(ins: IProyecto) {
+    public SetProject(ins: IProyecto) {
         this.ProjectInstance = ins;
     }
+
+    public SetGuests(guests: Array<number>) {
+        this.Guests = guests;
+    }
+
+    public GetProject() {
+        return this.ProjectInstance;
+    }
+
 
     public SetTask(task: ITareas | Array<ITareas>) {
         this.TaskInstance = task;
@@ -24,7 +34,10 @@ export class PlannerController {
     public SetCurrentUser(userid: number) {
         this.CurrentUser = userid;
     }
-
+    /**
+     * @description Obtiene a los usuarios invitados del proyecto
+     * @param id_proyecto 
+     */
     public async GetProjectGuests(id_proyecto: number) {
         let sql = `SELECT a.id_admin,a.nombre,a.img
                 FROM invitados_proyecto ip
@@ -34,6 +47,14 @@ export class PlannerController {
                 ON ip.id_invitado = a.id_admin
                 WHERE p.id_creador = ${this.CurrentUser} AND ip.id_proyecto = ${id_proyecto}`;
         return await Database.Instance.Query<{ id_admin: number, nombre: string, img: string }[]>(sql);
+    }
+
+    public async InviteToProject() {
+        const GuestsPromises = this.Guests.map(async guest => {
+            const sql = `INSERT INTO invitados_proyecto (id_proyecto, id_invitado, permisos) VALUES (${this.ProjectInstance.id}, ${guest}, NULL)`;
+            return await Database.Instance.Query<OkPacket>(sql);
+        });
+        return await Promise.all(GuestsPromises);
     }
 
     public async GetProjectsByUser() {
@@ -62,7 +83,20 @@ export class PlannerController {
              '${this.ProjectInstance.vista_actual}',
              '${this.ProjectInstance.nombre}'
             )`;
-        return await Database.Instance.Query<OkPacket>(sql);
+        const ProjectCreated = await Database.Instance.Query<OkPacket>(sql);
+        // Se debe asociar una tarea inicial 
+        this.TaskInstance = {
+            dependencia: '',
+            fecha_inicio: this.ProjectInstance.fecha_inicio,
+            fecha_termino: this.ProjectInstance.fecha_termino,
+            descripcion: 'Tarea inicial',
+            nombre: `Proyecto: ${this.ProjectInstance.nombre}`,
+            id_proyecto: ProjectCreated.insertId,
+            orden: 1,
+            progreso: 0
+        };
+        const PrimerTarea = await this.CreateTask();
+        return ProjectCreated;
     }
     public async Update() {
         let sql = `UPDATE proyecto SET
@@ -79,7 +113,7 @@ export class PlannerController {
     Delete() { }
 
     public async GetTasks(IdProject: number) {
-        let sql = `SELECT * FROM TAREAS WHERE ID_PROYECTO = ${IdProject} ORDER BY FECHA_INICIO ASC`;
+        let sql = `SELECT * FROM TAREAS WHERE ID_PROYECTO = ${IdProject} ORDER BY ORDEN ASC`;
         return await Database.Instance.Query<ITareas[]>(sql);
     }
 

@@ -58,3 +58,24 @@ async function HTTP(options) {
         method: options.method
     }).then(options.success).catch(options.failed);
 }
+
+function Capitalize(texto) {
+    let palabras = texto.split(' ');
+    palabras.forEach((palabra, i) => {
+        palabras[i] = palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
+    });
+    return palabras.join(' ');
+}
+
+function CreateAvatarTag(admin) {
+    const AvatarTag = document.createElement('span');
+    const Avatar = document.createElement('span');
+
+    AvatarTag.classList.add('tag', 'm-2');
+
+    Avatar.classList.add('tag-avatar', 'avatar');
+    Avatar.style.backgroundImage = `url(${admin.img})`;
+    AvatarTag.appendChild(Avatar);
+    AvatarTag.dataset.content = admin.nombre;
+    return AvatarTag;
+}

@@ -45,6 +45,7 @@ function CreateProject(req, res) {
                 case 0:
                     IncomingPlanner = req.body.proyecto;
                     plannerctl = new planner_controller_1.PlannerController(IncomingPlanner);
+                    console.log('Project => ', plannerctl.GetProject());
                     return [4 /*yield*/, plannerctl.Create()];
                 case 1:
                     project = _a.sent();
@@ -139,3 +140,20 @@ function GetProjects(req, res) {
     });
 }
 exports.GetProjects = GetProjects;
+function InviteToProject(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id_proyecto, guests, project, plannerctl, result;
+        return __generator(this, function (_a) {
+            id_proyecto = +req.body.id_proyecto;
+            guests = req.body.invitados;
+            project = { id: id_proyecto };
+            plannerctl = new planner_controller_1.PlannerController();
+            plannerctl.SetProject(project);
+            plannerctl.SetGuests(guests);
+            result = plannerctl.InviteToProject();
+            res.json({ msg: 'ok' });
+            return [2 /*return*/];
+        });
+    });
+}
+exports.InviteToProject = InviteToProject;
