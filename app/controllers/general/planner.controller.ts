@@ -45,7 +45,7 @@ export class PlannerController {
                 ON ip.id_proyecto = p.id
                 INNER JOIN admin a
                 ON ip.id_invitado = a.id_admin
-                WHERE p.id_creador = ${this.CurrentUser} AND ip.id_proyecto = ${id_proyecto}`;
+                WHERE ip.id_proyecto = ${id_proyecto}`;
         return await Database.Instance.Query<{ id_admin: number, nombre: string, img: string }[]>(sql);
     }
 
@@ -59,7 +59,10 @@ export class PlannerController {
 
     public async GetProjectsByUser() {
         let sql = `SELECT P.* FROM proyecto P WHERE P.id_creador = ${this.CurrentUser};`;
-        const projects = await Database.Instance.Query<IProyecto[]>(sql);
+        let projects = await Database.Instance.Query<IProyecto[]>(sql);
+        // Le agregamos los proyectos a los que está invitado
+        projects = projects.concat(await this.GetInvitedProjectsByUser());
+
         let ProjectsWithTasks = await Promise.all(projects.map(async p => {
             p.tareas = await this.GetTasks(p.id).then(ts => ts.map(t => {
                 t.fecha_inicio = moment(t.fecha_inicio).format('YYYY-MM-DD');
@@ -71,6 +74,14 @@ export class PlannerController {
         }
         ));
         return ProjectsWithTasks;
+    }
+
+    private async GetInvitedProjectsByUser() {
+        let sql = `SELECT P.* FROM proyecto P 
+        LEFT OUTER JOIN invitados_proyecto INVP
+        ON P.id = INVP.id_proyecto
+        WHERE INVP.id_invitado = ${this.CurrentUser}`;
+        return await Database.Instance.Query<IProyecto[]>(sql).then(r => r);
     }
 
     public async Create() {

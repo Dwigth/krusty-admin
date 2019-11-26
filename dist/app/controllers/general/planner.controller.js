@@ -69,7 +69,7 @@ var PlannerController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        sql = "SELECT a.id_admin,a.nombre,a.img\n                FROM invitados_proyecto ip\n                INNER JOIN proyecto p\n                ON ip.id_proyecto = p.id\n                INNER JOIN admin a\n                ON ip.id_invitado = a.id_admin\n                WHERE p.id_creador = " + this.CurrentUser + " AND ip.id_proyecto = " + id_proyecto;
+                        sql = "SELECT a.id_admin,a.nombre,a.img\n                FROM invitados_proyecto ip\n                INNER JOIN proyecto p\n                ON ip.id_proyecto = p.id\n                INNER JOIN admin a\n                ON ip.id_invitado = a.id_admin\n                WHERE ip.id_proyecto = " + id_proyecto;
                         return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
@@ -102,15 +102,20 @@ var PlannerController = /** @class */ (function () {
     };
     PlannerController.prototype.GetProjectsByUser = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, projects, ProjectsWithTasks;
+            var sql, projects, _a, _b, ProjectsWithTasks;
             var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         sql = "SELECT P.* FROM proyecto P WHERE P.id_creador = " + this.CurrentUser + ";";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
                     case 1:
-                        projects = _a.sent();
+                        projects = _c.sent();
+                        _b = (_a = projects).concat;
+                        return [4 /*yield*/, this.GetInvitedProjectsByUser()];
+                    case 2:
+                        // Le agregamos los proyectos a los que está invitado
+                        projects = _b.apply(_a, [_c.sent()]);
                         return [4 /*yield*/, Promise.all(projects.map(function (p) { return __awaiter(_this, void 0, void 0, function () {
                                 var _a, _b;
                                 return __generator(this, function (_c) {
@@ -132,9 +137,22 @@ var PlannerController = /** @class */ (function () {
                                     }
                                 });
                             }); }))];
-                    case 2:
-                        ProjectsWithTasks = _a.sent();
+                    case 3:
+                        ProjectsWithTasks = _c.sent();
                         return [2 /*return*/, ProjectsWithTasks];
+                }
+            });
+        });
+    };
+    PlannerController.prototype.GetInvitedProjectsByUser = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sql = "SELECT P.* FROM proyecto P \n        LEFT OUTER JOIN invitados_proyecto INVP\n        ON P.id = INVP.id_proyecto\n        WHERE INVP.id_invitado = " + this.CurrentUser;
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql).then(function (r) { return r; })];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
