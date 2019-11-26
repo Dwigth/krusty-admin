@@ -6,7 +6,3 @@ export async function Settings(req: Request, res: Response) {
 export async function Home(req: Request, res: Response) {
     res.render('home')
 }
-
-export async function Planner(req: Request, res: Response) {
-    res.render('planner')
-}

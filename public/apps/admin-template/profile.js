@@ -22,6 +22,10 @@ class Profile {
         // Obtenemos el primer elemento de la lista de dropdown
         const profileAnchor = dropdown.firstChild.nextSibling;
         profileAnchor.href = `/profile/${this.profile.token}/${this.profile.usuario}`;
+
+        // El planificador está en el hijo #4 -> índice 3
+        const plannerAnchor = dropdown.children.item(3);
+        plannerAnchor.href = `/planner/${this.profile.id_admin}`;
     }
     /**
      * Actualiza la información del usuario.

@@ -57,7 +57,7 @@ export const ProfileMenuItems: IMenuItem[] = [
         }
     },
     {
-        name: 'Planeador',
+        name: 'Planificador',
         route: '/planner',
         icon: 'fe fe-calendar'
     },

@@ -9,11 +9,12 @@
             {{>header }}
 
             <div class="my-3 my-md-5">
-                <div class="container">
+                <div class="">
+
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <div class="container">
-                                <div class="card">
+                                <div class="card" style="height: 490px;">
                                     <div class="card-header">
                                         <h3 class="card-title">Planificador</h3>
                                         <div class="card-options">
@@ -30,47 +31,99 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="container mt-4">
                                         <div class="row">
                                             <div class="col-2">
-                                                <button class="btn btn-icon btn-secondary btn-sm">
+                                                Agregar tarea
+                                            </div>
+                                            <div class="col-2">
+                                                Invitar usuario
+                                            </div>
+                                            <div class="col-4">
+                                                Proyecto
+                                            </div>
+                                            <div class="col-4">
+                                                Vista del cronograma
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <button id="add-task" class="btn btn-icon btn-secondary btn-sm">
                                                     <i class="fe fe-plus-square"></i>
                                                 </button>
                                             </div>
                                             <div class="col-2">
-                                                <button class="btn btn-icon btn-secondary btn-sm">
+                                                <button id="add-admin" class="btn btn-icon btn-secondary btn-sm">
                                                     <i class="fe fe-user-plus"></i>
                                                 </button>
                                             </div>
-                                            <div class="col-8">
+                                            <div class="col-4">
                                                 <div class="form-group">
-                                                    {{!-- <label class="form-label">Proyectos</label> --}}
                                                     <select name="beast" id="select-beast"
                                                         class="form-control form-control-sm custom-select">
-                                                        <option value="1" selected>Escoge un proyecto</option>
-                                                        <option value="1">Chuck Testa</option>
-                                                        <option value="4">Sage Cattabriga-Alosa</option>
-                                                        <option value="3">Nikola Tesla</option>
+                                                        {{!-- <option value="1" selected>Escoge un proyecto</option> --}}
+                                                        {{#each projects}}
+                                                        <option value="{{this.id}}">{{this.nombre}}</option>
+                                                        {{/each}}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <select id="view-modes"
+                                                        class="form-control form-control-sm custom-select">
+                                                        <option value="Quarter Day">Primer día del trimestre</option>
+                                                        <option value="Half Day">Medio día</option>
+                                                        <option value="Day">Diario</option>
+                                                        <option value="Week">Semanal</option>
+                                                        <option value="Month">Mensual</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="card-body" style="overflow-y: scroll;">
                                         <div class="content mt-4">
+                                            <label for="">Tareas</label>
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    <label for="">Nombre</label>
+                                                </div>
+                                                <div class="col-2">
+                                                    <label for="">Progreso</label>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label for="">Asignado a</label>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label for="">Tarea previa</label>
+                                                </div>
+                                                <div class="col-1">
+                                                    <label for="">
+                                                        <i class="fe fe-calendar"></i>
+                                                    </label>
 
-                                            <ul>
-                                                <li style="list-style: none;">
-                                                    Redesign Website
-                                                </li>
+                                                </div>
+                                            </div>
+                                            <ul id="task-list">
+
                                             </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="btn-list text-right">
+                                            <button id="update-tasks-button"
+                                                class="btn btn-primary disabled">Actualizar</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-8">
-                            <div class="container">
-                                <div style="border: 1px solid #ddd;border-radius: 3px;overflow: scroll;">
-                                    <svg id="gantt" height="314" class="gantt"></svg>
+                        <div class="col-lg-6">
+                            <div style="height:490px; overflow-y: scroll">
+
+                                <div style="border: 1px solid #ddd;border-radius: 3px;">
+                                    <svg id="gantt" class="gantt"></svg>
                                 </div>
                             </div>
                         </div>
@@ -79,8 +132,11 @@
 
             </div>
         </div>
-        <script src="/apps/admin-template/planner.js"></script>
         {{>footer}}
+        <script src="/apps/admin-template/planner.js"></script>
+        <script src="/apps/admin-template/modal.js"></script>
+        <script src="/apps/admin-template/selectable.js"></script>
+
     </div>
 </body>
 

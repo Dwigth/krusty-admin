@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { PDFRouter } from "./pdf.route";
+import { PlannerRouter } from "./planner.route";
 
 export const GeneralRoutes: Router[] = [
-    PDFRouter
-];
+    PlannerRouter
+];  

@@ -29,9 +29,32 @@ function AppendToHEAD(options) {
     if (options.type == 'link') {
         elem.rel = 'stylesheet';
         elem.type = 'text/css';
-        elem.href = '/admin-template/assets/css/custom/modal.css';
+        elem.href = options.url;
     } else if (options.type == 'script') {
         elem.src = options.url;
     }
     head.appendChild(elem);
+    return elem;
+}
+
+/**
+ * 
+ * @param {*} options 
+ *              -url: string
+ *              -token: string
+ *              -data: object
+ *              -method: string
+ *              -success: function
+ *              -failed: function
+ * 
+ */
+async function HTTP(options) {
+    await fetch(`${location.protocol}//${location.host}${options.url}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'token': options.token
+        },
+        body: JSON.stringify(options.data),
+        method: options.method
+    }).then(options.success).catch(options.failed);
 }

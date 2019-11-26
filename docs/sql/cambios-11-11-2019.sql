@@ -86,7 +86,8 @@ CREATE TABLE `proyecto` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `fecha_inicio` date,
   `fecha_termino` date,
-  `vista_actual` varchar(20)
+  `vista_actual` varchar(20),
+  `nombre` varchar(50)
 );
 
 CREATE TABLE `invitados_proyecto` (
@@ -95,20 +96,15 @@ CREATE TABLE `invitados_proyecto` (
   `permisos` varchar(255)
 );
 
-CREATE TABLE `proyecto_tarea` (
-  `id_proyecto` int,
-  `id_tarea` int
-);
-
 CREATE TABLE `tareas` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
+  `id_proyecto` int,
   `nombre` varchar(125),
   `descripcion` text,
   `fecha_inicio` datetime,
   `fecha_termino` datetime,
   `progreso` int,
-  `dependencia` text,
-  `asignado` int
+  `dependencia` text
 );
 
 CREATE TABLE `comentarios_tareas` (
@@ -142,10 +138,6 @@ ALTER TABLE `proyecto` ADD FOREIGN KEY (`id_creador`) REFERENCES `admin` (`id_ad
 
 ALTER TABLE `invitados_proyecto` ADD FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto` (`id`);
 
-ALTER TABLE `proyecto_tarea` ADD FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto` (`id`);
-
-ALTER TABLE `tareas` ADD FOREIGN KEY (`id`) REFERENCES `proyecto_tarea` (`id_tarea`);
-
 ALTER TABLE `comentarios_tareas` ADD FOREIGN KEY (`id_tarea`) REFERENCES `tareas` (`id`);
 
 ALTER TABLE `tareas_comentarios` ADD FOREIGN KEY (`id`) REFERENCES `comentarios_tareas` (`id_comentario`);
@@ -153,3 +145,5 @@ ALTER TABLE `tareas_comentarios` ADD FOREIGN KEY (`id`) REFERENCES `comentarios_
 ALTER TABLE `invitados_proyecto` ADD FOREIGN KEY (`id_invitado`) REFERENCES `admin` (`id_admin`);
 
 ALTER TABLE `tareas_comentarios` ADD FOREIGN KEY (`id_comentador`) REFERENCES `admin` (`id_admin`);
+
+ALTER TABLE `tareas` ADD FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto` (`id`);

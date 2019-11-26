@@ -98,14 +98,18 @@ var Database = /** @class */ (function () {
      * ====================================================
      * @param query
      */
-    Database.prototype.Query = function (query) {
+    Database.prototype.Query = function (query, replacements) {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) {
-                        _this.Pool.query(query, function (error, results, fields) {
+                        console.log(query, replacements);
+                        var QUERY = _this.Pool.query(query, replacements, function (error, results, fields) {
                             if (error)
                                 reject(error);
+                            if (enviroment_1.environments.logging) {
+                                console.log(QUERY.sql);
+                            }
                             resolve(results);
                         });
                     })];

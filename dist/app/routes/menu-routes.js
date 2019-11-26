@@ -55,7 +55,7 @@ exports.ProfileMenuItems = [
         }
     },
     {
-        name: 'Planeador',
+        name: 'Planificador',
         route: '/planner',
         icon: 'fe fe-calendar'
     },

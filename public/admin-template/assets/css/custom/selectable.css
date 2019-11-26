@@ -1,0 +1,9 @@
+.selectable-pane {
+    height:150px;
+    background-color: #ffffff;
+    display: none;
+    position: absolute;
+    z-index: 1;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+}

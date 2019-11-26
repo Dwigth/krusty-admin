@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var pdf_route_1 = require("./pdf.route");
+var planner_route_1 = require("./planner.route");
 exports.GeneralRoutes = [
-    pdf_route_1.PDFRouter
+    planner_route_1.PlannerRouter
 ];

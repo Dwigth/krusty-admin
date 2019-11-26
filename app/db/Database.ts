@@ -61,11 +61,16 @@ export class Database implements IDatabase {
      * ====================================================
      * @param query 
      */
-    public async Query<T>(query: string): Promise<T> {
+    public async Query<T>(query: string, replacements?: any): Promise<T> {
         return new Promise((resolve, reject) => {
+            console.log(query, replacements);
 
-            this.Pool.query(query, function (error, results, fields) {
+            const QUERY = this.Pool.query(query, replacements, function (error, results, fields) {
                 if (error) reject(error);
+                if (environments.logging) {
+                    console.log(QUERY.sql);
+
+                }
                 resolve(results);
             });
         });
