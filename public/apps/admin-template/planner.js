@@ -82,10 +82,14 @@ class Planner {
                 // console.log(task);
             },
             on_date_change: function (task, start, end) {
-                // console.log(task, start, end);
+                task.start = task.PlannerInstance.Moment(start).format('YYYY-MM-DD');
+                task.fecha_inicio = task.PlannerInstance.Moment(start).format('YYYY-MM-DD');
+                task.end = task.PlannerInstance.Moment(end).format('YYYY-MM-DD');
+                task.fecha_termino = task.PlannerInstance.Moment(end).format('YYYY-MM-DD');
             },
             on_progress_change: function (task, progress) {
-                // console.log(task, progress);
+                task.progress = progress;
+                task.progreso = progress;
             },
             on_view_change: function (mode) {
                 // console.log(mode);
@@ -134,6 +138,7 @@ class Planner {
 
     /**
      * @description Esto debido a que la base de datos está en español pero las propiedades se toman en ingles :/
+     * Tambien se toma para agregar alguna otra propiedad necesaria
      */
     InitAssignTaskProperties() {
         this.TasksCount = this.CurrentProject.tareas.length;
@@ -148,6 +153,7 @@ class Planner {
             tarea.progress = tarea.progreso;
             tarea.dependencies = tarea.dependencia;
             tarea.custom_class = 'bar-milestone'; // optional
+            tarea.PlannerInstance = this;
             return tarea;
         });
     }
@@ -165,6 +171,7 @@ class Planner {
         tarea.progress = tarea.progreso;
         tarea.dependencies = tarea.dependencia;
         tarea.custom_class = 'bar-milestone'; // optional
+        tarea.PlannerInstance = this;
         return tarea;
     }
 
