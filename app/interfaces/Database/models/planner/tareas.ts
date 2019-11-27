@@ -9,4 +9,5 @@ export interface ITareas {
     progreso: number;
     dependencia: string;
     orden: number;
+    asignados?: { id_admin: number, img: string, nombre: string }[];
 }

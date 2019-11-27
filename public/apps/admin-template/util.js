@@ -67,7 +67,12 @@ function Capitalize(texto) {
     return palabras.join(' ');
 }
 
-function CreateAvatarTag(admin) {
+/**
+ * 
+ * @param {*} admin Objeto de tipo <id_admin,img,nombre> 
+ * @param {Function} Callback
+ */
+function CreateAvatarTag(admin, Callback) {
     const AvatarTag = document.createElement('span');
     const Avatar = document.createElement('span');
 
@@ -77,5 +82,8 @@ function CreateAvatarTag(admin) {
     Avatar.style.backgroundImage = `url(${admin.img})`;
     AvatarTag.appendChild(Avatar);
     AvatarTag.dataset.content = admin.nombre;
+
+    AvatarTag.addEventListener('click', Callback);
+
     return AvatarTag;
 }

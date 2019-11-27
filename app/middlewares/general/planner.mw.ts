@@ -12,6 +12,16 @@ export async function CreateProject(req: Request, res: Response) {
     console.log(project);
     res.json({ msg: 'ok' })
 }
+
+export async function UpdateProject(req: Request, res: Response) {
+    let IncomingPlanner = <IProyecto>req.body.proyecto;
+    const plannerctl = new PlannerController(IncomingPlanner);
+    let project = await plannerctl.Update();
+    console.log(project);
+
+    res.json({ msg: 'ok' })
+}
+
 export async function CreateTask(req: Request, res: Response) {
     let IncomingTask = <ITareas[]>req.body.tareas;
     console.log(IncomingTask);
@@ -62,5 +72,25 @@ export async function InviteToProject(req: Request, res: Response) {
     plannerctl.SetProject(<IProyecto>project);
     plannerctl.SetGuests(guests);
     let result = plannerctl.InviteToProject();
+    res.json({ msg: 'ok' });
+}
+export async function AssingTask(req: Request, res: Response) {
+    const guests = req.body.invitados;
+    const id_tarea = +req.body.id_tarea;
+
+    const plannerctl = new PlannerController();
+    plannerctl.SetTask(<ITareas>{ id: id_tarea });
+    plannerctl.SetGuests(guests);
+    const resp = await plannerctl.AssignAdminTask();
+    res.json({ msg: 'ok' });
+}
+export async function UnassingTask(req: Request, res: Response) {
+    const guests = req.body.invitados;
+    const id_tarea = +req.body.id_tarea;
+
+    const plannerctl = new PlannerController();
+    plannerctl.SetTask(<ITareas>{ id: id_tarea });
+    plannerctl.SetGuests(guests);
+    const resp = await plannerctl.AssignAdminTask();
     res.json({ msg: 'ok' });
 }

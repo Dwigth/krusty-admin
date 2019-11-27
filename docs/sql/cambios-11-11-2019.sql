@@ -104,7 +104,8 @@ CREATE TABLE `tareas` (
   `fecha_inicio` datetime,
   `fecha_termino` datetime,
   `progreso` int,
-  `dependencia` text
+  `dependencia` text,
+  `orden` int
 );
 
 CREATE TABLE `comentarios_tareas` (
@@ -116,6 +117,12 @@ CREATE TABLE `tareas_comentarios` (
   `id_comentador` int,
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `comentario` text
+);
+
+CREATE TABLE `usuario_tarea` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `id_admin` int,
+  `id_tarea` int
 );
 
 ALTER TABLE `licencia` ADD CONSTRAINT `licencia_cliente` FOREIGN KEY (`id_usuario`) REFERENCES `cliente` (`id`);
@@ -147,3 +154,7 @@ ALTER TABLE `invitados_proyecto` ADD FOREIGN KEY (`id_invitado`) REFERENCES `adm
 ALTER TABLE `tareas_comentarios` ADD FOREIGN KEY (`id_comentador`) REFERENCES `admin` (`id_admin`);
 
 ALTER TABLE `tareas` ADD FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto` (`id`);
+
+ALTER TABLE `usuario_tarea` ADD FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id_admin`);
+
+ALTER TABLE `usuario_tarea` ADD FOREIGN KEY (`id_tarea`) REFERENCES `tareas` (`id`);

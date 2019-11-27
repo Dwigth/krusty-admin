@@ -64,16 +64,21 @@ export class PlannerController {
         projects = projects.concat(await this.GetInvitedProjectsByUser());
 
         let ProjectsWithTasks = await Promise.all(projects.map(async p => {
-            p.tareas = await this.GetTasks(p.id).then(ts => ts.map(t => {
-                t.fecha_inicio = moment(t.fecha_inicio).format('YYYY-MM-DD');
-                t.fecha_termino = moment(t.fecha_termino).format('YYYY-MM-DD');
-                return t;
-            }));
+            p.tareas = await this.GetTasks(p.id);
             p.invitados = await this.GetProjectGuests(p.id);
             return p
         }
         ));
         return ProjectsWithTasks;
+    }
+
+    private async GetAssignedUsers(id_tarea: number) {
+        let sql = `SELECT A.id_admin,A.img,A.nombre
+        FROM usuario_tarea UST
+        INNER JOIN admin A
+        ON UST.id_admin = A.id_admin
+        WHERE UST.id_tarea = ${id_tarea}`;
+        return await Database.Instance.Query<{ id_admin: number, img: string, nombre: string }[]>(sql)
     }
 
     private async GetInvitedProjectsByUser() {
@@ -117,15 +122,23 @@ export class PlannerController {
         WHERE id = '${this.ProjectInstance.id}'`;
         return await Database.Instance.Query<OkPacket>(sql);
     }
-    public async GetProjects() {
-
-    }
 
     Delete() { }
 
     public async GetTasks(IdProject: number) {
         let sql = `SELECT * FROM TAREAS WHERE ID_PROYECTO = ${IdProject} ORDER BY ORDEN ASC`;
-        return await Database.Instance.Query<ITareas[]>(sql);
+        let tasks = await Database.Instance.Query<ITareas[]>(sql);
+
+        let TasksPromises = tasks.map(async task => {
+            task.fecha_inicio = moment(task.fecha_inicio).format('YYYY-MM-DD');
+            task.fecha_termino = moment(task.fecha_termino).format('YYYY-MM-DD');
+            task.asignados = await this.GetAssignedUsers(task.id);
+            return task;
+        });
+
+        let FinalTasks = await Promise.all(TasksPromises);
+
+        return FinalTasks;
     }
 
     public async GetTask(idTask: number) {
@@ -201,6 +214,26 @@ export class PlannerController {
             const Task = await this.GetTask(this.TaskInstance.id);
             return Task;
         }
+    }
+
+    public async AssignAdminTask() {
+        const AssingTasksPromises = this.Guests.map(async guest => {
+            if (!Array.isArray(this.TaskInstance)) {
+                const sql = `INSERT INTO usuario_tarea (id, id_admin, id_tarea) VALUES (NULL, ${guest}, ${this.TaskInstance.id})`;
+                return await Database.Instance.Query<OkPacket>(sql);
+            }
+        });
+        return await Promise.all(AssingTasksPromises);
+    }
+
+    public async UnassingAdminTask() {
+        const UnassingTasksPromises = this.Guests.map(async guest => {
+            if (!Array.isArray(this.TaskInstance)) {
+                const sql = `DELETE FROM usuario_tarea WHERE usuario_tarea.id_admin = ${guest} AND usuario_tarea.id_tarea = ${this.TaskInstance.id}`;
+                return await Database.Instance.Query<OkPacket>(sql);
+            }
+        });
+        return await Promise.all(UnassingTasksPromises);
     }
 
 }

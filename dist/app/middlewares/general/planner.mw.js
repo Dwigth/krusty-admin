@@ -57,6 +57,25 @@ function CreateProject(req, res) {
     });
 }
 exports.CreateProject = CreateProject;
+function UpdateProject(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var IncomingPlanner, plannerctl, project;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    IncomingPlanner = req.body.proyecto;
+                    plannerctl = new planner_controller_1.PlannerController(IncomingPlanner);
+                    return [4 /*yield*/, plannerctl.Update()];
+                case 1:
+                    project = _a.sent();
+                    console.log(project);
+                    res.json({ msg: 'ok' });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.UpdateProject = UpdateProject;
 function CreateTask(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var IncomingTask, plannerctl, tasks;
@@ -157,3 +176,45 @@ function InviteToProject(req, res) {
     });
 }
 exports.InviteToProject = InviteToProject;
+function AssingTask(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var guests, id_tarea, plannerctl, resp;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    guests = req.body.invitados;
+                    id_tarea = +req.body.id_tarea;
+                    plannerctl = new planner_controller_1.PlannerController();
+                    plannerctl.SetTask({ id: id_tarea });
+                    plannerctl.SetGuests(guests);
+                    return [4 /*yield*/, plannerctl.AssignAdminTask()];
+                case 1:
+                    resp = _a.sent();
+                    res.json({ msg: 'ok' });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.AssingTask = AssingTask;
+function UnassingTask(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var guests, id_tarea, plannerctl, resp;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    guests = req.body.invitados;
+                    id_tarea = +req.body.id_tarea;
+                    plannerctl = new planner_controller_1.PlannerController();
+                    plannerctl.SetTask({ id: id_tarea });
+                    plannerctl.SetGuests(guests);
+                    return [4 /*yield*/, plannerctl.AssignAdminTask()];
+                case 1:
+                    resp = _a.sent();
+                    res.json({ msg: 'ok' });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.UnassingTask = UnassingTask;

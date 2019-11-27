@@ -122,11 +122,7 @@ var PlannerController = /** @class */ (function () {
                                     switch (_c.label) {
                                         case 0:
                                             _a = p;
-                                            return [4 /*yield*/, this.GetTasks(p.id).then(function (ts) { return ts.map(function (t) {
-                                                    t.fecha_inicio = moment_1.default(t.fecha_inicio).format('YYYY-MM-DD');
-                                                    t.fecha_termino = moment_1.default(t.fecha_termino).format('YYYY-MM-DD');
-                                                    return t;
-                                                }); })];
+                                            return [4 /*yield*/, this.GetTasks(p.id)];
                                         case 1:
                                             _a.tareas = _c.sent();
                                             _b = p;
@@ -140,6 +136,19 @@ var PlannerController = /** @class */ (function () {
                     case 3:
                         ProjectsWithTasks = _c.sent();
                         return [2 /*return*/, ProjectsWithTasks];
+                }
+            });
+        });
+    };
+    PlannerController.prototype.GetAssignedUsers = function (id_tarea) {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sql = "SELECT A.id_admin,A.img,A.nombre\n        FROM usuario_tarea UST\n        INNER JOIN admin A\n        ON UST.id_admin = A.id_admin\n        WHERE UST.id_tarea = " + id_tarea;
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
@@ -199,23 +208,37 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
-    PlannerController.prototype.GetProjects = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
-    };
     PlannerController.prototype.Delete = function () { };
     PlannerController.prototype.GetTasks = function (IdProject) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql;
+            var sql, tasks, TasksPromises, FinalTasks;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         sql = "SELECT * FROM TAREAS WHERE ID_PROYECTO = " + IdProject + " ORDER BY ORDEN ASC";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        tasks = _a.sent();
+                        TasksPromises = tasks.map(function (task) { return __awaiter(_this, void 0, void 0, function () {
+                            var _a;
+                            return __generator(this, function (_b) {
+                                switch (_b.label) {
+                                    case 0:
+                                        task.fecha_inicio = moment_1.default(task.fecha_inicio).format('YYYY-MM-DD');
+                                        task.fecha_termino = moment_1.default(task.fecha_termino).format('YYYY-MM-DD');
+                                        _a = task;
+                                        return [4 /*yield*/, this.GetAssignedUsers(task.id)];
+                                    case 1:
+                                        _a.asignados = _b.sent();
+                                        return [2 /*return*/, task];
+                                }
+                            });
+                        }); });
+                        return [4 /*yield*/, Promise.all(TasksPromises)];
+                    case 2:
+                        FinalTasks = _a.sent();
+                        return [2 /*return*/, FinalTasks];
                 }
             });
         });
@@ -315,6 +338,58 @@ var PlannerController = /** @class */ (function () {
                     case 4:
                         Task = _a.sent();
                         return [2 /*return*/, Task];
+                }
+            });
+        });
+    };
+    PlannerController.prototype.AssignAdminTask = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var AssingTasksPromises;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        AssingTasksPromises = this.Guests.map(function (guest) { return __awaiter(_this, void 0, void 0, function () {
+                            var sql;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        if (!!Array.isArray(this.TaskInstance)) return [3 /*break*/, 2];
+                                        sql = "INSERT INTO usuario_tarea (id, id_admin, id_tarea) VALUES (NULL, " + guest + ", " + this.TaskInstance.id + ")";
+                                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
+                                    case 1: return [2 /*return*/, _a.sent()];
+                                    case 2: return [2 /*return*/];
+                                }
+                            });
+                        }); });
+                        return [4 /*yield*/, Promise.all(AssingTasksPromises)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    PlannerController.prototype.UnassingAdminTask = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var UnassingTasksPromises;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        UnassingTasksPromises = this.Guests.map(function (guest) { return __awaiter(_this, void 0, void 0, function () {
+                            var sql;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        if (!!Array.isArray(this.TaskInstance)) return [3 /*break*/, 2];
+                                        sql = "DELETE FROM usuario_tarea WHERE usuario_tarea.id_admin = " + guest + " AND usuario_tarea.id_tarea = " + this.TaskInstance.id;
+                                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
+                                    case 1: return [2 /*return*/, _a.sent()];
+                                    case 2: return [2 /*return*/];
+                                }
+                            });
+                        }); });
+                        return [4 /*yield*/, Promise.all(UnassingTasksPromises)];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });

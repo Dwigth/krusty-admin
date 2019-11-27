@@ -92,7 +92,7 @@ class Planner {
                 task.progress = progress;
                 task.progreso = progress;
                 task.PlannerInstance.UpdateBtn.classList.remove('disabled');
-
+                task.ProgressInput.value = progress;
             },
             on_view_change: function (mode) {
                 // console.log(mode);
@@ -353,9 +353,29 @@ class Planner {
     ChangeGanttView() {
         const ChangeViewSelect = document.getElementById('view-modes');
         ChangeViewSelect.value = this.CurrentProject.vista_actual;
-        ChangeViewSelect.addEventListener('change', (evt) => {
+        ChangeViewSelect.addEventListener('change', async (evt) => {
             this.CurrentProject.vista_actual = ChangeViewSelect.value;
             this.gantt.change_view_mode(this.CurrentProject.vista_actual);
+
+            //Copia del proyecto actual
+            const CurrentProjectCopy = {
+                id_creador: this.CurrentProject.id_creador,
+                id: this.CurrentProject.id,
+                fecha_inicio: this.CurrentProject.fecha_inicio,
+                fecha_termino: this.CurrentProject.fecha_termino,
+                vista_actual: this.CurrentProject.vista_actual,
+                nombre: this.CurrentProject.nombre
+            };
+
+            HTTP({
+                url: '/planner/update/',
+                token: profile.profile.token,
+                data: { proyecto: CurrentProjectCopy },
+                method: 'PATCH',
+                failed: (e) => {
+                    console.error(e);
+                }
+            })
         });
     }
     /**
@@ -408,6 +428,7 @@ class Planner {
         progress.classList.add('form-control');
         progress.step = 1; progress.min = 0; progress.max = 100;
         progress.defaultValue = task.progress;
+        task.ProgressInput = progress;
         ProgressCol.appendChild(progress);
 
         // Dependencia
@@ -556,18 +577,24 @@ class Planner {
         UserSelect.insertBefore(option, UserSelect.children[0]);
 
         // Debemos sacar esta lista de las tareas
-        const CurrentlySelectedAdmins = [];
+        // const CurrentlySelectedAdmins = [];
 
-        UserSelect.addEventListener('change', () => {
+        task.asignados.forEach(Admin => {
+            const AdminTag = CreateAvatarTag(Admin);
+            AssignedAdminContainer.appendChild(AdminTag);
+        });
+
+        UserSelect.addEventListener('change', async () => {
             const SelectedAdmin = UserSelect.value;
             const Admin = this.CurrentProject.invitados.find(i => i.id_admin == SelectedAdmin);
 
-            if (CurrentlySelectedAdmins.find(i => i.id_admin == SelectedAdmin) == undefined) {
-                CurrentlySelectedAdmins.push(Admin);
+            if (task.asignados.find(i => i.id_admin == SelectedAdmin) == undefined) {
+                task.asignados.push(Admin);
                 const AdminTag = CreateAvatarTag(Admin);
                 AssignedAdminContainer.appendChild(AdminTag);
             }
 
+            await this.AssignTask(task);
 
         });
 
@@ -724,6 +751,28 @@ class Planner {
             },
             failed: (e) => { console.error(e) }
         });
+    }
+
+    async AssignTask(task) {
+        const guests = task.asignados.map(t => t.id_admin);
+        await HTTP({
+            url: '/planner/tasks/assing',
+            token: profile.profile.token,
+            data: {
+                invitados: guests,
+                id_tarea: task.id
+            },
+            method: 'POST',
+            success: async (data) => {
+                const resp = await data.json();
+                console.log(resp);
+            },
+            failed: (e) => { console.error(e) }
+        });
+    }
+
+    async UnassignTask() {
+
     }
 
 }
