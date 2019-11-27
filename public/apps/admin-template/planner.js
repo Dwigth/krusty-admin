@@ -86,10 +86,13 @@ class Planner {
                 task.fecha_inicio = task.PlannerInstance.Moment(start).format('YYYY-MM-DD');
                 task.end = task.PlannerInstance.Moment(end).format('YYYY-MM-DD');
                 task.fecha_termino = task.PlannerInstance.Moment(end).format('YYYY-MM-DD');
+                task.PlannerInstance.UpdateBtn.classList.remove('disabled');
             },
             on_progress_change: function (task, progress) {
                 task.progress = progress;
                 task.progreso = progress;
+                task.PlannerInstance.UpdateBtn.classList.remove('disabled');
+
             },
             on_view_change: function (mode) {
                 // console.log(mode);
@@ -585,6 +588,7 @@ class Planner {
         const UpdateBtn = document.getElementById('update-tasks-button');
         this.UpdateBtn = UpdateBtn;
         UpdateBtn.addEventListener('click', async () => {
+            this.CurrentProject.tareas = this.CurrentProject.tareas.map(t => { delete t.PlannerInstance; return t; })
             if (!UpdateBtn.classList.contains('disabled')) {
                 await HTTP({
                     url: '/planner/tasks/update',
@@ -593,8 +597,6 @@ class Planner {
                     method: 'PATCH',
                     success: async (data) => {
                         const RecentlyCreatedTasks = await data.json();
-                        // this.CurrentProject.tareas.pop();
-                        // this.CurrentProject.tareas.push(RecentlyCreatedTasks.tasks[0]);
                         this.CurrentProject.tareas = RecentlyCreatedTasks.tasks;
                         this.InitAssignTaskProperties();
                         this.gantt.refresh(this.CurrentProject.tareas)
