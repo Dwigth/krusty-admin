@@ -325,8 +325,12 @@ class Planner {
                 Array.from(form.elements).forEach(elem => {
                     if (elem.checked) {
                         SelectedAdmins.push(elem.value)
+                        //Agregarlos al arreglo de invitados
+                        this.CurrentProject.invitados.push(this.Admins.find(adm => adm.id_admin == elem.value));
                     }
                 });
+
+
 
                 await HTTP({
                     url: '/planner/invite',
@@ -580,7 +584,7 @@ class Planner {
         // const CurrentlySelectedAdmins = [];
 
         task.asignados.forEach(Admin => {
-            const AdminTag = CreateAvatarTag(Admin);
+            const AdminTag = CreateAvatarTag(Admin, this.UnassignTask, { idust: Admin.id });
             AssignedAdminContainer.appendChild(AdminTag);
         });
 
@@ -590,9 +594,10 @@ class Planner {
 
             if (task.asignados.find(i => i.id_admin == SelectedAdmin) == undefined) {
                 task.asignados.push(Admin);
-                const AdminTag = CreateAvatarTag(Admin);
+                const AdminTag = CreateAvatarTag(Admin, this.UnassignTask, { idust: Admin.id });
                 AssignedAdminContainer.appendChild(AdminTag);
             }
+            console.log(task.asignados);
 
             await this.AssignTask(task);
 
@@ -771,8 +776,21 @@ class Planner {
         });
     }
 
-    async UnassignTask() {
-
+    async UnassignTask(elem) {
+        const idust = elem.dataset.idust;
+        await HTTP({
+            url: '/planner/tasks/unassing',
+            token: profile.profile.token,
+            data: {
+                id_ust: idust
+            },
+            method: 'POST',
+            success: async (data) => {
+                const resp = await data.json();
+                console.log(resp);
+            },
+            failed: (e) => { console.error(e) }
+        });
     }
 
 }

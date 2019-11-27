@@ -85,12 +85,9 @@ export async function AssingTask(req: Request, res: Response) {
     res.json({ msg: 'ok' });
 }
 export async function UnassingTask(req: Request, res: Response) {
-    const guests = req.body.invitados;
-    const id_tarea = +req.body.id_tarea;
+    const id = req.body.id_ust;
 
     const plannerctl = new PlannerController();
-    plannerctl.SetTask(<ITareas>{ id: id_tarea });
-    plannerctl.SetGuests(guests);
-    const resp = await plannerctl.AssignAdminTask();
+    const resp = await plannerctl.UnassingAdminTask(id);
     res.json({ msg: 'ok' });
 }

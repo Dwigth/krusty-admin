@@ -199,16 +199,13 @@ function AssingTask(req, res) {
 exports.AssingTask = AssingTask;
 function UnassingTask(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var guests, id_tarea, plannerctl, resp;
+        var id, plannerctl, resp;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    guests = req.body.invitados;
-                    id_tarea = +req.body.id_tarea;
+                    id = req.body.id_ust;
                     plannerctl = new planner_controller_1.PlannerController();
-                    plannerctl.SetTask({ id: id_tarea });
-                    plannerctl.SetGuests(guests);
-                    return [4 /*yield*/, plannerctl.AssignAdminTask()];
+                    return [4 /*yield*/, plannerctl.UnassingAdminTask(id)];
                 case 1:
                     resp = _a.sent();
                     res.json({ msg: 'ok' });

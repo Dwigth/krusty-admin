@@ -73,12 +73,12 @@ export class PlannerController {
     }
 
     private async GetAssignedUsers(id_tarea: number) {
-        let sql = `SELECT A.id_admin,A.img,A.nombre
+        let sql = `SELECT UST.id,A.id_admin,A.img,A.nombre
         FROM usuario_tarea UST
         INNER JOIN admin A
         ON UST.id_admin = A.id_admin
         WHERE UST.id_tarea = ${id_tarea}`;
-        return await Database.Instance.Query<{ id_admin: number, img: string, nombre: string }[]>(sql)
+        return await Database.Instance.Query<{ id: number, id_admin: number, img: string, nombre: string }[]>(sql)
     }
 
     private async GetInvitedProjectsByUser() {
@@ -226,14 +226,9 @@ export class PlannerController {
         return await Promise.all(AssingTasksPromises);
     }
 
-    public async UnassingAdminTask() {
-        const UnassingTasksPromises = this.Guests.map(async guest => {
-            if (!Array.isArray(this.TaskInstance)) {
-                const sql = `DELETE FROM usuario_tarea WHERE usuario_tarea.id_admin = ${guest} AND usuario_tarea.id_tarea = ${this.TaskInstance.id}`;
-                return await Database.Instance.Query<OkPacket>(sql);
-            }
-        });
-        return await Promise.all(UnassingTasksPromises);
+    public async UnassingAdminTask(id: number) {
+        const sql = `DELETE FROM usuario_tarea WHERE usuario_tarea.id = ${id}`;
+        return await Database.Instance.Query<OkPacket>(sql);
     }
 
 }

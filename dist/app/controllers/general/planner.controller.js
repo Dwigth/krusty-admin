@@ -146,7 +146,7 @@ var PlannerController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        sql = "SELECT A.id_admin,A.img,A.nombre\n        FROM usuario_tarea UST\n        INNER JOIN admin A\n        ON UST.id_admin = A.id_admin\n        WHERE UST.id_tarea = " + id_tarea;
+                        sql = "SELECT UST.id,A.id_admin,A.img,A.nombre\n        FROM usuario_tarea UST\n        INNER JOIN admin A\n        ON UST.id_admin = A.id_admin\n        WHERE UST.id_tarea = " + id_tarea;
                         return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
@@ -368,27 +368,14 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
-    PlannerController.prototype.UnassingAdminTask = function () {
+    PlannerController.prototype.UnassingAdminTask = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var UnassingTasksPromises;
-            var _this = this;
+            var sql;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        UnassingTasksPromises = this.Guests.map(function (guest) { return __awaiter(_this, void 0, void 0, function () {
-                            var sql;
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0:
-                                        if (!!Array.isArray(this.TaskInstance)) return [3 /*break*/, 2];
-                                        sql = "DELETE FROM usuario_tarea WHERE usuario_tarea.id_admin = " + guest + " AND usuario_tarea.id_tarea = " + this.TaskInstance.id;
-                                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
-                                    case 1: return [2 /*return*/, _a.sent()];
-                                    case 2: return [2 /*return*/];
-                                }
-                            });
-                        }); });
-                        return [4 /*yield*/, Promise.all(UnassingTasksPromises)];
+                        sql = "DELETE FROM usuario_tarea WHERE usuario_tarea.id = " + id;
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
