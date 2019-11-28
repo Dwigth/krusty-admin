@@ -107,3 +107,46 @@ function AdminUpdateProfile(req, res) {
     });
 }
 exports.AdminUpdateProfile = AdminUpdateProfile;
+function UploadProfilePic(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var file, id_admin, pathfile, adminCtl;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    file = req.file;
+                    id_admin = req.body.id_admin;
+                    pathfile = "/uploads/" + file.filename;
+                    adminCtl = new admin_controller_1.AdminController();
+                    adminCtl.id_admin = id_admin;
+                    adminCtl.img = pathfile;
+                    return [4 /*yield*/, adminCtl.UpdateAdminImg()];
+                case 1:
+                    _a.sent();
+                    res.redirect('back');
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.UploadProfilePic = UploadProfilePic;
+function UploadCoverPic(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var file, id_admin, pathfile, incomingData, adminProfileCtl;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    file = req.file;
+                    id_admin = req.body.id_admin;
+                    pathfile = "/uploads/" + file.filename;
+                    incomingData = { id_admin: id_admin, portada_img: pathfile };
+                    adminProfileCtl = new admin_profile_controller_1.AdminProfileController(incomingData);
+                    return [4 /*yield*/, adminProfileCtl.UpdateCoverImg()];
+                case 1:
+                    _a.sent();
+                    res.redirect('back');
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.UploadCoverPic = UploadCoverPic;

@@ -56,4 +56,9 @@ export class AdminController implements IAdminModel {
         let resultado = await Database.Instance.Query<Query>(query);
         return resultado;
     }
+    public async UpdateAdminImg() {
+        let query = `UPDATE admin SET img = '${this.img}' WHERE admin.id_admin = '${this.id_admin}'`;
+        let resultado = await Database.Instance.Query<Query>(query);
+        return resultado;
+    }
 }

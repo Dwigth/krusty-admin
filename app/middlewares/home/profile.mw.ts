@@ -58,3 +58,26 @@ export async function AdminUpdateProfile(req: Request, res: Response) {
     await adminProfileCtl.Update();
     res.json({ msg: 'Su perfil ha sido actualizado' })
 }
+
+export async function UploadProfilePic(req: Request, res: Response) {
+    // console.log(req.file);
+    const file = req.file;
+    const id_admin = req.body.id_admin;
+    const pathfile = `/uploads/${file.filename}`;
+    const adminCtl = new AdminController();
+    adminCtl.id_admin = id_admin;
+    adminCtl.img = pathfile;
+    await adminCtl.UpdateAdminImg();
+    res.redirect('back');
+}
+export async function UploadCoverPic(req: Request, res: Response) {
+    const file = req.file;
+    const id_admin = req.body.id_admin;
+    const pathfile = `/uploads/${file.filename}`;
+
+    const incomingData = <AdminProfile>{ id_admin: id_admin, portada_img: pathfile };
+    const adminProfileCtl = new AdminProfileController(incomingData);
+    await adminProfileCtl.UpdateCoverImg();
+
+    res.redirect('back');
+}

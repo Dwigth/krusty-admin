@@ -30,6 +30,12 @@ export class AdminProfileController {
         return resp;
     }
 
+    public async UpdateCoverImg() {
+        let sql = `UPDATE admin_profile SET portada_img = '${this.instance.portada_img}' WHERE id_admin = ${this.instance.id_admin}`;
+        let resp = await Database.Instance.Query<Query>(sql);
+        return resp;
+    }
+
     public async GetByAdminId() {
         let query = `SELECT * FROM admin_profile WHERE id_admin = ${this.instance.id_admin}`;
         let resp = await Database.Instance.Query<AdminProfile[]>(query).then(res => res[0]);

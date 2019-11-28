@@ -59,6 +59,21 @@ var AdminProfileController = /** @class */ (function () {
             });
         });
     };
+    AdminProfileController.prototype.UpdateCoverImg = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql, resp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sql = "UPDATE admin_profile SET portada_img = '" + this.instance.portada_img + "' WHERE id_admin = " + this.instance.id_admin;
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
+                    case 1:
+                        resp = _a.sent();
+                        return [2 /*return*/, resp];
+                }
+            });
+        });
+    };
     AdminProfileController.prototype.GetByAdminId = function () {
         return __awaiter(this, void 0, void 0, function () {
             var query, resp;

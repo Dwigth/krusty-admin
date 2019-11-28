@@ -139,6 +139,21 @@ var AdminController = /** @class */ (function () {
             });
         });
     };
+    AdminController.prototype.UpdateAdminImg = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var query, resultado;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "UPDATE admin SET img = '" + this.img + "' WHERE admin.id_admin = '" + this.id_admin + "'";
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 1:
+                        resultado = _a.sent();
+                        return [2 /*return*/, resultado];
+                }
+            });
+        });
+    };
     return AdminController;
 }());
 exports.AdminController = AdminController;
