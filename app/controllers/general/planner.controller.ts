@@ -4,6 +4,7 @@ import { ITareas } from "../../interfaces/Database/models/planner/tareas";
 import { OkPacket } from "../../interfaces/Database/IDatabase";
 import moment from 'moment';
 import { environments } from "../../../environments/enviroment";
+import { Query } from "mysql";
 
 export class PlannerController {
     private CurrentUser: number;
@@ -234,6 +235,11 @@ export class PlannerController {
     public async UnassingAdminTask(id: number) {
         const sql = `DELETE FROM usuario_tarea WHERE usuario_tarea.id = ${id}`;
         return await Database.Instance.Query<OkPacket>(sql);
+    }
+
+    public async ProjectsCount() {
+        let sql = `SELECT COUNT(*) AS TOTAL FROM proyecto`;
+        return await Database.Instance.Query<{ TOTAL: number }[]>(sql);
     }
 
 }

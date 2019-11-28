@@ -393,6 +393,19 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    PlannerController.prototype.ProjectsCount = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sql = "SELECT COUNT(*) AS TOTAL FROM proyecto";
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     return PlannerController;
 }());
 exports.PlannerController = PlannerController;

@@ -35,6 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var planner_controller_1 = require("../../controllers/general/planner.controller");
 function Settings(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -46,9 +47,19 @@ function Settings(req, res) {
 exports.Settings = Settings;
 function Home(req, res) {
     return __awaiter(this, void 0, void 0, function () {
+        var Planner, ProjectsCount;
         return __generator(this, function (_a) {
-            res.render('home');
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    Planner = new planner_controller_1.PlannerController();
+                    return [4 /*yield*/, Planner.ProjectsCount()];
+                case 1:
+                    ProjectsCount = _a.sent();
+                    res.render('home', {
+                        ProjectsCount: ProjectsCount[0].TOTAL
+                    });
+                    return [2 /*return*/];
+            }
         });
     });
 }
