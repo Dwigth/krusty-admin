@@ -17,7 +17,7 @@ exports.HomeRouter.get('/', function (req, res) {
     });
 });
 exports.HomeRouter.get('/home', home_mw_1.Home);
-exports.HomeRouter.get('/profile/:token/:username', profile_mw_1.AdminUserProfile);
+exports.HomeRouter.get('/profile/:token/', profile_mw_1.AdminUserProfile);
 exports.HomeRouter.get('/settings', home_mw_1.Settings);
 exports.HomeRouter.put('/profile/update', profile_mw_1.AdminUpdateProfile);
 exports.HomeRouter.post('/create-keys', keys_admin_mw_1.CreateKeys);

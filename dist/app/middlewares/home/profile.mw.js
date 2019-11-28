@@ -43,14 +43,13 @@ var admin_profile_controller_1 = require("../../controllers/models/admin_profile
  */
 function AdminUserProfile(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var username, token, adminCtl, adminUser, adminProfileObj, adminProfileCtl, AdminProfileData;
+        var token, adminCtl, adminUser, adminProfileObj, adminProfileCtl, AdminProfileData;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    username = req.params.username;
                     token = req.params.token;
                     adminCtl = new admin_controller_1.AdminController();
-                    return [4 /*yield*/, adminCtl.SearchAdminByParam('usuario', username).then(function (resp) { return resp[0]; })];
+                    return [4 /*yield*/, adminCtl.SearchAdminByParam('token', token).then(function (resp) { return resp[0]; })];
                 case 1:
                     adminUser = _a.sent();
                     adminUser.guest = false;

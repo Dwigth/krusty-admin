@@ -11,12 +11,11 @@ import { AdminProfile } from "../../interfaces/Database/models/admin_profile";
  * @todo Pendiente documentación
  */
 export async function AdminUserProfile(req: Request, res: Response) {
-    const username = req.params.username;
     const token = req.params.token;
 
     const adminCtl = new AdminController();
     // Obtener sus datos de sesión
-    const adminUser = await adminCtl.SearchAdminByParam('usuario', username).then(resp => resp[0]);
+    const adminUser = await adminCtl.SearchAdminByParam('token', token).then(resp => resp[0]);
     adminUser.guest = false;
 
     if (token !== adminUser.token) {

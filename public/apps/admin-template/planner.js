@@ -101,7 +101,6 @@ class Planner {
         });
         // Problema con el espacio vacío que deja el diagrama
         const NewHeigth = this.gantt.$svg.getAttribute('height') - 128;
-
         // this.gantt.$svg.setAttribute('height', NewHeighh);
         this.gantt.$svg.style.height = NewHeigth;
         // this.gantt.$svg.style.overflowY = 'scroll';

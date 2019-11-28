@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environments = {
+    /**
+     * Información de la base de datos
+    */
     database: {
         connectionLimit: 10,
         host: 'localhost',
@@ -9,6 +12,9 @@ exports.environments = {
         database: 'tscbit_matilde',
         timezone: 'utc'
     },
+    /**
+     *
+     */
     logging: true,
     enableSSL: false,
     SSLConfig: {

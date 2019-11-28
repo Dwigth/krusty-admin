@@ -15,7 +15,7 @@ HomeRouter.get('/', (req: Request, res: Response) => {
     });
 });
 HomeRouter.get('/home', Home);
-HomeRouter.get('/profile/:token/:username', AdminUserProfile)
+HomeRouter.get('/profile/:token/', AdminUserProfile)
 HomeRouter.get('/settings', Settings)
 
 HomeRouter.put('/profile/update', AdminUpdateProfile)

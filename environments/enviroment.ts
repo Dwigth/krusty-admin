@@ -1,4 +1,7 @@
 export const environments = {
+    /** 
+     * Información de la base de datos 
+    */
     database: {
         connectionLimit: 10,
         host: 'localhost',
@@ -7,6 +10,9 @@ export const environments = {
         database: 'tscbit_matilde',
         timezone: 'utc'
     },
+    /**
+     * 
+     */
     logging: true,
     enableSSL: false,
     SSLConfig: {
