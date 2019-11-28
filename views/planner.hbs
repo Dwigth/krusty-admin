@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" dir="ltr">
 
-{{>head title='Planeador'}}
+{{>head title='Planificador'}}
 
 <body class="">
     <div class="page">
@@ -41,8 +41,11 @@
                                             <div class="col-4">
                                                 Proyecto
                                             </div>
-                                            <div class="col-4">
+                                            <div class="col-3">
                                                 Vista del cronograma
+                                            </div>
+                                            <div class="col-1">
+
                                             </div>
                                         </div>
                                         <div class="row">
@@ -67,7 +70,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-4">
+                                            <div class="col-3">
                                                 <div class="form-group">
                                                     <select id="view-modes"
                                                         class="form-control form-control-sm custom-select">
@@ -78,6 +81,11 @@
                                                         <option value="Month">Mensual</option>
                                                     </select>
                                                 </div>
+                                            </div>
+                                            <div class="col-1">
+                                                <button id="delete-btn" class="btn btn-secondary btn-sm">
+                                                    <i class="fe fe-trash-2"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

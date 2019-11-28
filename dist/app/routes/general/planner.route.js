@@ -7,6 +7,7 @@ exports.PlannerRouter.get('/planner/:admin', planner_mw_1.Planner);
 exports.PlannerRouter.get('/planner/:admin/projects', planner_mw_1.GetProjects);
 exports.PlannerRouter.post('/planner/create/', planner_mw_1.CreateProject);
 exports.PlannerRouter.patch('/planner/update/', planner_mw_1.UpdateProject);
+exports.PlannerRouter.delete('/planner/delete', planner_mw_1.DeleteProject);
 exports.PlannerRouter.post('/planner/tasks/create', planner_mw_1.CreateTask);
 exports.PlannerRouter.post('/planner/invite', planner_mw_1.InviteToProject);
 exports.PlannerRouter.patch('/planner/tasks/update', planner_mw_1.UpdateTask);

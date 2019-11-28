@@ -208,7 +208,19 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
-    PlannerController.prototype.Delete = function () { };
+    PlannerController.prototype.Delete = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sql = "CALL DeleteProject(" + this.ProjectInstance.id + ")";
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     PlannerController.prototype.GetTasks = function (IdProject) {
         return __awaiter(this, void 0, void 0, function () {
             var sql, tasks, TasksPromises, FinalTasks;

@@ -76,6 +76,25 @@ function UpdateProject(req, res) {
     });
 }
 exports.UpdateProject = UpdateProject;
+function DeleteProject(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var IncomingPlanner, plannerctl, project;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    IncomingPlanner = req.body.proyecto;
+                    plannerctl = new planner_controller_1.PlannerController(IncomingPlanner);
+                    return [4 /*yield*/, plannerctl.Delete()];
+                case 1:
+                    project = _a.sent();
+                    console.log(project);
+                    res.json({ msg: 'ok' });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.DeleteProject = DeleteProject;
 function CreateTask(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var IncomingTask, plannerctl, tasks;

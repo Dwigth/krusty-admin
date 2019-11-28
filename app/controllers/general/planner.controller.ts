@@ -3,6 +3,7 @@ import { Database } from "../../db/Database";
 import { ITareas } from "../../interfaces/Database/models/planner/tareas";
 import { OkPacket } from "../../interfaces/Database/IDatabase";
 import moment from 'moment';
+import { environments } from "../../../environments/enviroment";
 
 export class PlannerController {
     private CurrentUser: number;
@@ -123,7 +124,11 @@ export class PlannerController {
         return await Database.Instance.Query<OkPacket>(sql);
     }
 
-    Delete() { }
+    async Delete() {
+
+        let sql = `CALL DeleteProject(${this.ProjectInstance.id})`;
+        return await Database.Instance.Query<OkPacket>(sql);
+    }
 
     public async GetTasks(IdProject: number) {
         let sql = `SELECT * FROM TAREAS WHERE ID_PROYECTO = ${IdProject} ORDER BY ORDEN ASC`;

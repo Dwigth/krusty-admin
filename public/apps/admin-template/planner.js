@@ -29,6 +29,7 @@ class Planner {
             this.InitGanttChart();
             this.UpdateTasks();
             this.InviteAdmin();
+            this.DeleteProject();
         };
 
         initialWrapper();
@@ -136,6 +137,7 @@ class Planner {
             this.CurrentProject = this.projects.find(p => p.id == SelectElement.value);
             this.InitAssignTaskProperties();
             this.InitGanttChart();
+            this.DeleteProject();
         });
     }
 
@@ -791,6 +793,50 @@ class Planner {
             },
             failed: (e) => { console.error(e) }
         });
+    }
+
+    DeleteProject() {
+        const DeleteProjectBtn = document.getElementById('delete-btn');
+
+        const EventListenerAction = () => {
+            if (this.CurrentProject.id_creador == profile.profile.id_admin) {
+                const modal = new Modal({ html: '' });
+                modal.InsertHTML();
+                modal.Confirm({
+                    message: '¿Está seguro que deseas eliminar este proyecto?',
+                    callback: async () => {
+                        console.warn('Me borraste UnU');
+                        modal.Loader();
+                        await HTTP({
+                            url: '/planner/delete',
+                            token: profile.profile.token,
+                            data: {
+                                proyecto: {
+                                    id_creador: this.CurrentProject.id_creador,
+                                    id: this.CurrentProject.id,
+                                    fecha_inicio: this.CurrentProject.fecha_inicio,
+                                    fecha_termino: this.CurrentProject.fecha_termino,
+                                    vista_actual: this.CurrentProject.vista_actual,
+                                    nombre: this.CurrentProject.nombre
+                                }
+                            },
+                            method: 'DELETE',
+                            success: () => {
+                                location.reload();
+                            },
+                            failed: () => { },
+                        });
+                    }
+                });
+            }
+        }
+
+        if (this.CurrentProject.id_creador == profile.profile.id_admin) {
+            DeleteProjectBtn.classList.remove('disabled');
+            DeleteProjectBtn.addEventListener('click', EventListenerAction);
+        } else {
+            DeleteProjectBtn.classList.add('disabled')
+        }
     }
 
 }

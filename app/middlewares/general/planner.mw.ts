@@ -22,6 +22,14 @@ export async function UpdateProject(req: Request, res: Response) {
     res.json({ msg: 'ok' })
 }
 
+export async function DeleteProject(req: Request, res: Response) {
+    let IncomingPlanner = <IProyecto>req.body.proyecto;
+    const plannerctl = new PlannerController(IncomingPlanner);
+    let project = await plannerctl.Delete();
+    console.log(project);
+    res.json({ msg: 'ok' })
+}
+
 export async function CreateTask(req: Request, res: Response) {
     let IncomingTask = <ITareas[]>req.body.tareas;
     console.log(IncomingTask);
