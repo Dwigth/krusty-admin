@@ -76,6 +76,9 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Invita a un administrador al proyecto.
+     */
     PlannerController.prototype.InviteToProject = function () {
         return __awaiter(this, void 0, void 0, function () {
             var GuestsPromises;
@@ -100,6 +103,9 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Retorna todos los proyectos del usuario
+     */
     PlannerController.prototype.GetProjectsByUser = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql, projects, _a, _b, ProjectsWithTasks;
@@ -140,6 +146,10 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Retorna a los usuarios asignados de cierta tarea en específico.
+     * @param id_tarea id de la tarea
+     */
     PlannerController.prototype.GetAssignedUsers = function (id_tarea) {
         return __awaiter(this, void 0, void 0, function () {
             var sql;
@@ -153,6 +163,9 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Obtiene los proyectos a los cuales está invitado
+     */
     PlannerController.prototype.GetInvitedProjectsByUser = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql;
@@ -166,6 +179,9 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Crea un proyecto
+     */
     PlannerController.prototype.Create = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql, ProjectCreated, PrimerTarea;
@@ -195,6 +211,9 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Actualiza un proyecto
+     */
     PlannerController.prototype.Update = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql;
@@ -208,6 +227,9 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Elimina un proyecto, hace un llamado a un procedimiento almacenado.
+     */
     PlannerController.prototype.Delete = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql;
@@ -221,6 +243,10 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Obtiene todas las tareas de un proyecto
+     * @param IdProject Id Proyecto
+     */
     PlannerController.prototype.GetTasks = function (IdProject) {
         return __awaiter(this, void 0, void 0, function () {
             var sql, tasks, TasksPromises, FinalTasks;
@@ -255,6 +281,10 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Obtiene una tarea por id
+     * @param idTask Id de tarea
+     */
     PlannerController.prototype.GetTask = function (idTask) {
         return __awaiter(this, void 0, void 0, function () {
             var sql;
@@ -268,6 +298,9 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Crea una tarea
+     */
     PlannerController.prototype.CreateTask = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql, taskPromises, res;
@@ -313,6 +346,9 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Actualiza una tarea
+     */
     PlannerController.prototype.UpdateTask = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql, taskPromises, res, Task;
@@ -354,6 +390,9 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Asigna una tarea a varios administradores
+     */
     PlannerController.prototype.AssignAdminTask = function () {
         return __awaiter(this, void 0, void 0, function () {
             var AssingTasksPromises;
@@ -380,6 +419,10 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Remueve la asignación de la tarea al administador
+     * @param id Id del administrador
+     */
     PlannerController.prototype.UnassingAdminTask = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var sql;
@@ -393,6 +436,9 @@ var PlannerController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Cuenta el total de proyectos creados
+     */
     PlannerController.prototype.ProjectsCount = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql;

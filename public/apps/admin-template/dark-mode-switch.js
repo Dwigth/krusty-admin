@@ -47,7 +47,6 @@ class DarkTheme {
     AddTheme() {
         if (location.pathname.includes('/settings')) {
             const darkSwitch = document.getElementById('darkSwitch');
-            console.log(darkSwitch);
 
             if (darkSwitch) {
                 darkSwitch.checked = (this.currentTheme == 'dark') ? true : false;

@@ -3,8 +3,6 @@ import { Database } from "../../db/Database";
 import { ITareas } from "../../interfaces/Database/models/planner/tareas";
 import { OkPacket } from "../../interfaces/Database/IDatabase";
 import moment from 'moment';
-import { environments } from "../../../environments/enviroment";
-import { Query } from "mysql";
 
 export class PlannerController {
     private CurrentUser: number;
@@ -50,7 +48,9 @@ export class PlannerController {
                 WHERE ip.id_proyecto = ${id_proyecto}`;
         return await Database.Instance.Query<{ id_admin: number, nombre: string, img: string }[]>(sql);
     }
-
+    /**
+     * @description Invita a un administrador al proyecto.
+     */
     public async InviteToProject() {
         const GuestsPromises = this.Guests.map(async guest => {
             const sql = `INSERT INTO invitados_proyecto (id_proyecto, id_invitado, permisos) VALUES (${this.ProjectInstance.id}, ${guest}, NULL)`;
@@ -58,7 +58,9 @@ export class PlannerController {
         });
         return await Promise.all(GuestsPromises);
     }
-
+    /**
+     * @description Retorna todos los proyectos del usuario 
+     */
     public async GetProjectsByUser() {
         let sql = `SELECT P.* FROM proyecto P WHERE P.id_creador = ${this.CurrentUser};`;
         let projects = await Database.Instance.Query<IProyecto[]>(sql);
@@ -73,7 +75,10 @@ export class PlannerController {
         ));
         return ProjectsWithTasks;
     }
-
+    /**
+     * @description Retorna a los usuarios asignados de cierta tarea en específico.
+     * @param id_tarea id de la tarea
+     */
     private async GetAssignedUsers(id_tarea: number) {
         let sql = `SELECT UST.id,A.id_admin,A.img,A.nombre
         FROM usuario_tarea UST
@@ -83,6 +88,9 @@ export class PlannerController {
         return await Database.Instance.Query<{ id: number, id_admin: number, img: string, nombre: string }[]>(sql)
     }
 
+    /**
+     * @description Obtiene los proyectos a los cuales está invitado
+     */
     private async GetInvitedProjectsByUser() {
         let sql = `SELECT P.* FROM proyecto P 
         LEFT OUTER JOIN invitados_proyecto INVP
@@ -91,6 +99,9 @@ export class PlannerController {
         return await Database.Instance.Query<IProyecto[]>(sql).then(r => r);
     }
 
+    /**
+     * @description Crea un proyecto
+     */
     public async Create() {
         let sql = `INSERT INTO proyecto(id_creador, id, fecha_inicio, fecha_termino, vista_actual,nombre) 
         VALUES(
@@ -116,6 +127,10 @@ export class PlannerController {
         const PrimerTarea = await this.CreateTask();
         return ProjectCreated;
     }
+
+    /**
+     * @description Actualiza un proyecto
+     */
     public async Update() {
         let sql = `UPDATE proyecto SET
         fecha_inicio = '${this.ProjectInstance.fecha_inicio}',
@@ -125,12 +140,19 @@ export class PlannerController {
         return await Database.Instance.Query<OkPacket>(sql);
     }
 
+    /**
+     * @description Elimina un proyecto, hace un llamado a un procedimiento almacenado.
+     */
     async Delete() {
 
         let sql = `CALL DeleteProject(${this.ProjectInstance.id})`;
         return await Database.Instance.Query<OkPacket>(sql);
     }
 
+    /**
+     * @description Obtiene todas las tareas de un proyecto
+     * @param IdProject Id Proyecto
+     */
     public async GetTasks(IdProject: number) {
         let sql = `SELECT * FROM TAREAS WHERE ID_PROYECTO = ${IdProject} ORDER BY ORDEN ASC`;
         let tasks = await Database.Instance.Query<ITareas[]>(sql);
@@ -147,11 +169,18 @@ export class PlannerController {
         return FinalTasks;
     }
 
+    /**
+     * @description Obtiene una tarea por id
+     * @param idTask Id de tarea
+     */
     public async GetTask(idTask: number) {
         let sql = `SELECT * FROM TAREAS WHERE ID = ${idTask}`;
         return await Database.Instance.Query<ITareas>(sql);
     }
 
+    /**
+     * @description Crea una tarea
+     */
     public async CreateTask() {
         // Sentencia precia
         let sql = `INSERT INTO tareas(id_proyecto,nombre, descripcion, fecha_inicio, fecha_termino, progreso, dependencia)`;
@@ -188,6 +217,9 @@ export class PlannerController {
 
     }
 
+    /**
+     * @description Actualiza una tarea
+     */
     public async UpdateTask() {
         let sql = `UPDATE tareas SET`;
 
@@ -222,6 +254,9 @@ export class PlannerController {
         }
     }
 
+    /**
+     * @description Asigna una tarea a varios administradores
+     */
     public async AssignAdminTask() {
         const AssingTasksPromises = this.Guests.map(async guest => {
             if (!Array.isArray(this.TaskInstance)) {
@@ -231,12 +266,18 @@ export class PlannerController {
         });
         return await Promise.all(AssingTasksPromises);
     }
-
+    /**
+     * @description Remueve la asignación de la tarea al administador
+     * @param id Id del administrador
+     */
     public async UnassingAdminTask(id: number) {
         const sql = `DELETE FROM usuario_tarea WHERE usuario_tarea.id = ${id}`;
         return await Database.Instance.Query<OkPacket>(sql);
     }
 
+    /**
+     * Cuenta el total de proyectos creados
+     */
     public async ProjectsCount() {
         let sql = `SELECT COUNT(*) AS TOTAL FROM proyecto`;
         return await Database.Instance.Query<{ TOTAL: number }[]>(sql);
