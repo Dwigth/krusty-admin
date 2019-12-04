@@ -62,6 +62,11 @@ export const ProfileMenuItems: IMenuItem[] = [
         icon: 'fe fe-calendar'
     },
     {
+        name: 'Cambiar contraseña',
+        route: '/change-password',
+        icon: 'fe fe-lock'
+    },
+    {
         name: 'Mensajes',
         route: '/messages',
         icon: 'fe fe-send'

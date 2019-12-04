@@ -51,6 +51,9 @@ var AuthController = /** @class */ (function () {
     AuthController.prototype.SetCredential = function (credential) {
         this.credentials = credential;
     };
+    /**
+     * @description Obtiene los datos del usuario si al comparar su contraseña con el hash retorna un resultado válido.
+     */
     AuthController.prototype.login = function () {
         return __awaiter(this, void 0, void 0, function () {
             var adminctl;
@@ -61,7 +64,7 @@ var AuthController = /** @class */ (function () {
                         adminctl = new admin_controller_1.AdminController();
                         return [4 /*yield*/, adminctl.SearchAdminByParam('nombre', this.credentials.username)
                                 .then(function (admins) { return __awaiter(_this, void 0, void 0, function () {
-                                var admin, valid;
+                                var admin, valid, TokenUpdated;
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
@@ -69,7 +72,16 @@ var AuthController = /** @class */ (function () {
                                             return [4 /*yield*/, bcrypt_1.compare(this.credentials.password, admin.contrasena)];
                                         case 1:
                                             valid = _a.sent();
-                                            return [2 /*return*/, { valid: valid, user: admin }];
+                                            if (!valid) return [3 /*break*/, 3];
+                                            TokenUpdated = this.hash.update(Date.now().toString()).digest('hex');
+                                            adminctl.token = TokenUpdated;
+                                            admin.token = TokenUpdated;
+                                            adminctl.id_admin = admin.id_admin;
+                                            return [4 /*yield*/, adminctl.UpdateToken()];
+                                        case 2:
+                                            _a.sent();
+                                            _a.label = 3;
+                                        case 3: return [2 /*return*/, { valid: valid, user: admin }];
                                     }
                                 });
                             }); })
@@ -133,6 +145,20 @@ var AuthController = /** @class */ (function () {
                         ticketRecuperacion = _a.sent();
                         recupctl.CreateAdminRelation({ id_admin: adminUser[0].id_admin, id_recuperacion: ticketRecuperacion.id });
                         return [2 /*return*/, ticketRecuperacion.token_acceso];
+                }
+            });
+        });
+    };
+    /**
+     *
+     * @param password Hash de la contraseña del usuario
+     */
+    AuthController.prototype.ValidatePassword = function (password) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, bcrypt_1.compare(this.credentials.password, password)];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });

@@ -144,3 +144,26 @@ export async function GetAdministrators(req: Request, res: Response) {
     const Admins = await adminCtl.GetAdmins();
     res.json({ Admins });
 }
+
+export async function changePasswordPage(req: Request, res: Response) {
+    res.render('change-password');
+}
+
+export async function changePassword(req: Request, res: Response) {
+    let passwords = req.body;
+    const credentials = <ICredentials>{ password: passwords["previous-password"] };
+    const authctl = new AuthController(credentials);
+    const adminctl = new AdminController();
+    const admin = await adminctl.SearchAdminByParam('token', passwords.token).then(r => r[0]);
+    let msg = 'Exito al cambiar la contraseña';
+    let response = 'success';
+    if (await authctl.ValidatePassword(admin.contrasena)) {
+        authctl.SetCredential(<ICredentials>{ username: admin.nombre, password: passwords["new-password"] });
+        await authctl.changePassword();
+    } else {
+        msg = 'La contraseña previa no coincide'
+        response = 'danger'
+    }
+
+    res.render('change-password', { msg: { text: msg, response } });
+}

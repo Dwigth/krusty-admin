@@ -45,11 +45,9 @@ function CreateProject(req, res) {
                 case 0:
                     IncomingPlanner = req.body.proyecto;
                     plannerctl = new planner_controller_1.PlannerController(IncomingPlanner);
-                    console.log('Project => ', plannerctl.GetProject());
                     return [4 /*yield*/, plannerctl.Create()];
                 case 1:
                     project = _a.sent();
-                    console.log(project);
                     res.json({ msg: 'ok' });
                     return [2 /*return*/];
             }
@@ -68,7 +66,6 @@ function UpdateProject(req, res) {
                     return [4 /*yield*/, plannerctl.Update()];
                 case 1:
                     project = _a.sent();
-                    console.log(project);
                     res.json({ msg: 'ok' });
                     return [2 /*return*/];
             }
@@ -87,7 +84,6 @@ function DeleteProject(req, res) {
                     return [4 /*yield*/, plannerctl.Delete()];
                 case 1:
                     project = _a.sent();
-                    console.log(project);
                     res.json({ msg: 'ok' });
                     return [2 /*return*/];
             }
@@ -102,7 +98,6 @@ function CreateTask(req, res) {
             switch (_a.label) {
                 case 0:
                     IncomingTask = req.body.tareas;
-                    console.log(IncomingTask);
                     plannerctl = new planner_controller_1.PlannerController();
                     plannerctl.SetTask(IncomingTask);
                     return [4 /*yield*/, plannerctl.CreateTask()];
@@ -152,7 +147,7 @@ function Planner(req, res) {
                     return [4 /*yield*/, plannerctl.GetProjectsByUser()];
                 case 1:
                     projects = _a.sent();
-                    res.render('planner', { projects: projects });
+                    res.render('project-management', { projects: projects });
                     return [2 /*return*/];
             }
         });

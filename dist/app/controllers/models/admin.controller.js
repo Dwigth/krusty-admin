@@ -39,6 +39,26 @@ var Database_1 = require("../../db/Database");
 var AdminController = /** @class */ (function () {
     function AdminController() {
     }
+    Object.defineProperty(AdminController.prototype, "Instance", {
+        set: function (ins) {
+            this.Admin = ins;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    AdminController.prototype.Update = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sql = "UPDATE admin SET ? WHERE id_admin = " + this.Admin.id_admin;
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql, this.Admin)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     AdminController.prototype.GetAdmins = function () {
         return __awaiter(this, void 0, void 0, function () {
             var query, resultado;
@@ -85,7 +105,7 @@ var AdminController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "SELECT * FROM admin WHERE " + param + " LIKE '%" + value + "%'";
+                        query = "SELECT * FROM admin WHERE " + param + " = '" + value + "'";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
                     case 1:
                         resultado = _a.sent();
@@ -101,6 +121,21 @@ var AdminController = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         query = "UPDATE admin SET contrasena = '" + this.contrasena + "' WHERE admin.nombre = '" + this.nombre + "'";
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
+                    case 1:
+                        resultado = _a.sent();
+                        return [2 /*return*/, resultado];
+                }
+            });
+        });
+    };
+    AdminController.prototype.UpdateToken = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var query, resultado;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = "UPDATE admin SET token = '" + this.token + "' WHERE admin.id_admin = '" + this.id_admin + "'";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
                     case 1:
                         resultado = _a.sent();

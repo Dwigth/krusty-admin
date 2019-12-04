@@ -1,5 +1,5 @@
 export interface IKeys {
-    fecha: number,
+    fecha: string,
     cantidad: number,
     llaves: Array<string>,
     nombre: string

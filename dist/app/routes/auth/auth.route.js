@@ -14,3 +14,5 @@ exports.AuthRouter.post('/forgot-password', auth_mw_1.ForgotPasswordProcess);
 exports.AuthRouter.get('/new-password/:token', auth_mw_1.RestorePasswordPage);
 exports.AuthRouter.post('/new-password/', auth_mw_1.RestorePassword);
 exports.AuthRouter.get('/redirect', auth_mw_1.Redirect);
+exports.AuthRouter.get('/change-password', auth_mw_1.changePasswordPage);
+exports.AuthRouter.post('/change-password', auth_mw_1.changePassword);

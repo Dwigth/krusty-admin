@@ -43,7 +43,7 @@ var enviroment_1 = require("../../../environments/enviroment");
 var https_1 = __importDefault(require("https"));
 function ShowKeys(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var intance, resp;
+        var intance, resp, RawKeys;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -55,7 +55,11 @@ function ShowKeys(req, res) {
                     return [4 /*yield*/, intance.post(enviroment_1.environments.MatildeAPIURL + '/actions', { comando: 'listar' })];
                 case 1:
                     resp = _a.sent();
-                    res.render('admin-llaves', { keys: resp.data.data });
+                    RawKeys = JSON.parse(JSON.stringify(resp.data.data));
+                    RawKeys = RawKeys.sort(function (a, b) {
+                        return +new Date(b.fecha) - +new Date(a.fecha);
+                    });
+                    res.render('admin-llaves', { keys: RawKeys });
                     return [2 /*return*/];
             }
         });
@@ -81,7 +85,7 @@ function CreateKeys(req, res) {
                     resp = _a.sent();
                     _a.label = 2;
                 case 2:
-                    res.redirect('/home');
+                    res.redirect('back');
                     return [2 /*return*/];
             }
         });

@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import axios from 'axios';
 import { environments } from '../../../environments/enviroment';
 import https from 'https';
-import { ICreationKey } from "../../interfaces/Database/IKeys";
+import { ICreationKey, IKeys } from "../../interfaces/Database/IKeys";
+import moment from 'moment';
 
 export async function ShowKeys(req: Request, res: Response) {
     const intance = axios.create({
@@ -11,7 +12,13 @@ export async function ShowKeys(req: Request, res: Response) {
         })
     })
     const resp = await intance.post(environments.MatildeAPIURL + '/actions', { comando: 'listar' });
-    res.render('admin-llaves', { keys: resp.data.data });
+
+    let RawKeys = <IKeys[]>JSON.parse(JSON.stringify(resp.data.data));
+
+    RawKeys = RawKeys.sort((a: IKeys, b: IKeys) => {
+        return +new Date(b.fecha) - +new Date(a.fecha);
+    });
+    res.render('admin-llaves', { keys: RawKeys });
 }
 
 export async function CreateKeys(req: Request, res: Response) {
@@ -27,5 +34,5 @@ export async function CreateKeys(req: Request, res: Response) {
         const resp = await intance.post(environments.MatildeAPIURL + '/actions', { comando: 'crear', cantidad: ck.cantidad, tipo: ck.tipo });
     }
 
-    res.redirect('/home')
+    res.redirect('back')
 }

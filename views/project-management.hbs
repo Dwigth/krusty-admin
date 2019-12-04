@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+
+{{>head title='Planificador'}}
+
+<body class="">
+    <div class="page">
+        <div class="flex-fill">
+            {{>header }}
+
+            <div class="my-3 my-md-5">
+                <div class="container">
+                    <div class="page-header">
+                        <h1 class="page-title">
+                            Gestor de proyectos
+                        </h1>
+                        <div class="page-subtitle"></div>
+                        <div class="page-options d-flex">
+                            <select name="beast" id="select-beast" class="form-control custom-select w-auto">
+                                {{!-- <option value="1" selected>Escoge un proyecto</option> --}}
+                                {{#each projects}}
+                                <option value="{{this.id}}">{{this.nombre}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+                <form class="gantt_control">
+                    <input type="button" id="zoom-in" value="Zoom +">
+                    <input type="button" id="zoom-out" value="Zoom -">
+
+                    <input type="radio" id="scale1" class="gantt_radio" name="scale" value="day">
+                    <label for="scale1">Día</label>
+
+                    <input type="radio" id="scale2" class="gantt_radio" name="scale" value="week">
+                    <label for="scale2">Semanal</label>
+
+                    <input type="radio" id="scale3" class="gantt_radio" name="scale" value="month">
+                    <label for="scale3">Mensual</label>
+
+                    <input type="radio" id="scale4" class="gantt_radio" name="scale" value="quarter">
+                    <label for="scale4">Trimestral</label>
+
+                    <input type="radio" id="scale5" class="gantt_radio" name="scale" value="year" checked>
+                    <label for="scale5">Anual</label>
+
+                </form>
+                <div id="gantt_here" style='width:100%; height:500px;'></div>
+
+            </div>
+        </div>
+        {{>footer}}
+        <script src="/apps/admin-template/modal.js"></script>
+        <script src="/apps/admin-template/project-management.js"></script>
+
+    </div>
+</body>
+
+</html>

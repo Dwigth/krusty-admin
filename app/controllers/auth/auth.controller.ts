@@ -18,13 +18,24 @@ export class AuthController implements IAuthController {
     SetCredential(credential: ICredentials) {
         this.credentials = credential;
     }
-
+    /**
+     * @description Obtiene los datos del usuario si al comparar su contraseña con el hash retorna un resultado válido.
+     */
     async login() {
         const adminctl = new AdminController();
         return await adminctl.SearchAdminByParam('nombre', this.credentials.username)
             .then(async admins => {
                 let admin = admins[0];
                 let valid = await compare(this.credentials.password, admin.contrasena);
+
+                if (valid) {
+                    let TokenUpdated = this.hash.update(Date.now().toString()).digest('hex');
+                    adminctl.token = TokenUpdated;
+                    admin.token = TokenUpdated;
+                    adminctl.id_admin = admin.id_admin;
+                    await adminctl.UpdateToken();
+                }
+
                 return { valid: valid, user: admin };
             })
             .catch(e => e)
@@ -74,6 +85,14 @@ export class AuthController implements IAuthController {
         let ticketRecuperacion = await recupctl.CreateAdminTicket();
         recupctl.CreateAdminRelation({ id_admin: adminUser[0].id_admin, id_recuperacion: ticketRecuperacion.id });
         return ticketRecuperacion.token_acceso;
+    }
+
+    /**
+     * 
+     * @param password Hash de la contraseña del usuario
+     */
+    public async ValidatePassword(password: string): Promise<boolean> {
+        return await compare(this.credentials.password, password);
     }
 
 }
