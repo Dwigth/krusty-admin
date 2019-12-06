@@ -1,26 +1,33 @@
 CREATE TABLE `cliente` (
-  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `ID_USUARIO` varchar(50) PRIMARY KEY,
   `nombre` varchar(50),
   `apellidos` varchar(100),
   `correo` varchar(100),
-  `contrasena` varchar(100)
+  `contrasena` varchar(100),
+  `createdAt` datetime,
+  `updatedAt` datetime
 );
 
 CREATE TABLE `licencia` (
-  `id` int PRIMARY KEY,
+  `ID_LICENCIA` varchar(50) PRIMARY KEY,
+  `fecha` datetime,
   `key` varchar(10),
-  `id_usuario` int
+  `ID_USUARIO` varchar(50),
+  `createdAt` datetime,
+  `updatedAt` datetime
 );
 
 CREATE TABLE `encuesta_estimacion_riesgo` (
   `id` int PRIMARY KEY,
   `respuestas` varchar(4),
   `FUM` date,
-  `id_usuario` int
+  `id_usuario` varchar(50)
 );
 
 CREATE TABLE `admin` (
   `id_admin` int PRIMARY KEY AUTO_INCREMENT,
+  `usuario` varchar(50),
+  `contrasena` varchar(200),
   `token` varchar(200),
   `activo` int,
   `nombre` varchar(45),
@@ -29,7 +36,7 @@ CREATE TABLE `admin` (
 );
 
 CREATE TABLE `producto` (
-  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `id_producto` int PRIMARY KEY AUTO_INCREMENT,
   `imagen` varchar(100),
   `nombre` varchar(45),
   `precio` varchar(10),
@@ -40,19 +47,19 @@ CREATE TABLE `producto` (
 );
 
 CREATE TABLE `tienda` (
-  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `id_tienda` int PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(45),
   `direccion` text
 );
 
 CREATE TABLE `principio` (
-  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `id_principio` int PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(45),
   `id_metodo` int
 );
 
 CREATE TABLE `metodo` (
-  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `id_metodo` int PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(45)
 );
 
@@ -108,6 +115,14 @@ CREATE TABLE `tareas` (
   `orden` int
 );
 
+CREATE TABLE `tareas_relaciones` (
+  `id_proyecto` int,
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `source` int,
+  `target` int,
+  `type` char
+);
+
 CREATE TABLE `comentarios_tareas` (
   `id_tarea` int,
   `id_comentario` int
@@ -125,15 +140,51 @@ CREATE TABLE `usuario_tarea` (
   `id_tarea` int
 );
 
-ALTER TABLE `licencia` ADD CONSTRAINT `licencia_cliente` FOREIGN KEY (`id_usuario`) REFERENCES `cliente` (`id`);
+CREATE INDEX `PK_licencia_id_usuario` ON `licencia` (`ID_USUARIO`);
 
-ALTER TABLE `encuesta_estimacion_riesgo` ADD CONSTRAINT `eer_cliente` FOREIGN KEY (`id_usuario`) REFERENCES `cliente` (`id`);
+CREATE INDEX `PK_encuesta_id_usuario` ON `encuesta_estimacion_riesgo` (`id_usuario`);
 
-ALTER TABLE `producto` ADD FOREIGN KEY (`id_tienda`) REFERENCES `tienda` (`id`);
+CREATE INDEX `PK_producto_metodo` ON `producto` (`id_metodo`);
 
-ALTER TABLE `principio` ADD FOREIGN KEY (`id`) REFERENCES `producto` (`id_principio`);
+CREATE INDEX `PK_producto_principio` ON `producto` (`id_principio`);
 
-ALTER TABLE `metodo` ADD FOREIGN KEY (`id`) REFERENCES `producto` (`id_metodo`);
+CREATE INDEX `PK_producto_tienda` ON `producto` (`id_tienda`);
+
+CREATE INDEX `PK_principio_metodo` ON `principio` (`id_metodo`);
+
+CREATE INDEX `PK_recuperacion_id_recuperacion` ON `admin_recuperacion` (`id_recuperacion`);
+
+CREATE INDEX `PK_recuperacion_id_admin` ON `admin_recuperacion` (`id_admin`);
+
+CREATE INDEX `PK_proyecto_creador` ON `proyecto` (`id_creador`);
+
+CREATE INDEX `PK_invitado_proyecto` ON `invitados_proyecto` (`id_proyecto`);
+
+CREATE INDEX `PK_invitado_id` ON `invitados_proyecto` (`id_invitado`);
+
+CREATE INDEX `PK_tarea_proyecto` ON `tareas` (`id_proyecto`);
+
+CREATE INDEX `PK_tarea_relaciones_proyecto` ON `tareas_relaciones` (`id_proyecto`);
+
+CREATE INDEX `PK_comentario_id_tarea` ON `comentarios_tareas` (`id_tarea`);
+
+CREATE INDEX `PK_comentario_id_comentario` ON `comentarios_tareas` (`id_comentario`);
+
+CREATE INDEX `PK_comentador` ON `tareas_comentarios` (`id_comentador`);
+
+CREATE INDEX `PK_usuario_tarea_admin` ON `usuario_tarea` (`id_admin`);
+
+CREATE INDEX `PK_usuario_tarea_tarea` ON `usuario_tarea` (`id_tarea`);
+
+ALTER TABLE `licencia` ADD CONSTRAINT `licencia_cliente` FOREIGN KEY (`ID_USUARIO`) REFERENCES `cliente` (`ID_USUARIO`);
+
+ALTER TABLE `encuesta_estimacion_riesgo` ADD CONSTRAINT `eer_cliente` FOREIGN KEY (`id_usuario`) REFERENCES `cliente` (`ID_USUARIO`);
+
+ALTER TABLE `producto` ADD FOREIGN KEY (`id_tienda`) REFERENCES `tienda` (`id_tienda`);
+
+ALTER TABLE `producto` ADD FOREIGN KEY (`id_principio`) REFERENCES `principio` (`id_principio`);
+
+ALTER TABLE `producto` ADD FOREIGN KEY (`id_metodo`) REFERENCES `metodo` (`id_metodo`);
 
 ALTER TABLE `admin_profile` ADD FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id_admin`);
 
@@ -158,3 +209,6 @@ ALTER TABLE `tareas` ADD FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto` (`id`
 ALTER TABLE `usuario_tarea` ADD FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id_admin`);
 
 ALTER TABLE `usuario_tarea` ADD FOREIGN KEY (`id_tarea`) REFERENCES `tareas` (`id`);
+
+ALTER TABLE `tareas_relaciones` ADD FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto` (`id`);
+

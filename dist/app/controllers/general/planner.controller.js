@@ -123,18 +123,22 @@ var PlannerController = /** @class */ (function () {
                         // Le agregamos los proyectos a los que está invitado
                         projects = _b.apply(_a, [_c.sent()]);
                         return [4 /*yield*/, Promise.all(projects.map(function (p) { return __awaiter(_this, void 0, void 0, function () {
-                                var _a, _b;
-                                return __generator(this, function (_c) {
-                                    switch (_c.label) {
+                                var _a, _b, _c;
+                                return __generator(this, function (_d) {
+                                    switch (_d.label) {
                                         case 0:
                                             _a = p;
                                             return [4 /*yield*/, this.GetTasks(p.id)];
                                         case 1:
-                                            _a.tareas = _c.sent();
+                                            _a.tareas = _d.sent();
                                             _b = p;
                                             return [4 /*yield*/, this.GetProjectGuests(p.id)];
                                         case 2:
-                                            _b.invitados = _c.sent();
+                                            _b.invitados = _d.sent();
+                                            _c = p;
+                                            return [4 /*yield*/, this.GetTasksRelationByProject(p.id)];
+                                        case 3:
+                                            _c.links = _d.sent();
                                             return [2 /*return*/, p];
                                     }
                                 });
@@ -145,6 +149,43 @@ var PlannerController = /** @class */ (function () {
                 }
             });
         });
+    };
+    /**
+     * @description Obtiene las relaciones de las tareas por proyecto en especifico
+     * @param id_proyecto
+     */
+    PlannerController.prototype.GetTasksRelationByProject = function (id_proyecto) {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sql = "SELECT tr.id,tr.source,tr.target,tr.type FROM tareas_relaciones tr WHERE tr.id_proyecto = " + id_proyecto;
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    /**
+     * @description Crea una relación para un tarea
+     * @requires Instancia de proyecto
+     * @requires Instancia de tarea
+     */
+    PlannerController.prototype.CreateTaskRelation = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/];
+            });
+        });
+    };
+    /**
+     *
+     */
+    PlannerController.prototype.DeleteTaskRelation = function () {
+        return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/];
+        }); });
     };
     /**
      * @description Retorna a los usuarios asignados de cierta tarea en específico.
@@ -311,18 +352,11 @@ var PlannerController = /** @class */ (function () {
                         sql = "INSERT INTO tareas(id_proyecto,nombre, descripcion, fecha_inicio, fecha_termino, progreso, dependencia)";
                         if (!Array.isArray(this.TaskInstance)) return [3 /*break*/, 2];
                         taskPromises = this.TaskInstance.map(function (task) { return __awaiter(_this, void 0, void 0, function () {
-                            var instanceSql, DiaAgregado, res, Task;
+                            var instanceSql, res, Task;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
                                         instanceSql = "INSERT INTO tareas SET ?";
-                                        delete task['name'];
-                                        delete task['start'];
-                                        delete task['end'];
-                                        delete task['progress'];
-                                        delete task['custom_class'];
-                                        DiaAgregado = moment_1.default(task.fecha_inicio).add(1, 'day');
-                                        task.fecha_termino = DiaAgregado.format('YYYY-MM-DD');
                                         return [4 /*yield*/, Database_1.Database.Instance.Query(instanceSql, task)];
                                     case 1:
                                         res = _a.sent();

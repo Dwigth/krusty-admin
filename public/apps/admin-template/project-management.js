@@ -16,13 +16,13 @@ class ProjectManagement {
             this.CurrentProject = this.projects[this.projects.length - 1];
             if (this.CurrentProject == undefined) {
                 console.warn('No tiene proyectos');
-                this.BuildCreateAdvice();
+                // this.BuildCreateAdvice();
                 return;
             }
             this.InitAssignTaskProperties();
             this.InitGanttChart();
             this.GanttConfiguration();
-
+            this.GanttEvents();
         }
 
         initialWrapper();
@@ -54,18 +54,19 @@ class ProjectManagement {
             //     }
             // ],
             data: this.CurrentProject.tareas,
-            links: [
-                // { id: 1, source: 1, target: 2, type: "1" },
-                // { id: 2, source: 2, target: 3, type: "0" }
-            ]
-            // links: this.CurrentProject.links
+            // links: [
+            // { id: 1, source: 1, target: 2, type: "1" }, 
+            // { id: 2, source: 2, target: 3, type: "0" }
+            // ]
+            links: this.CurrentProject.links
         };
 
         this.Gantt.init("gantt_here");
         this.Gantt.parse(tasks);
     }
+
     /**
-     * Confirugaciones extras para la gráfica
+     * @description Configuraciones extras para la gráfica
      */
     GanttConfiguration() {
         var zoomConfig = {
@@ -130,16 +131,18 @@ class ProjectManagement {
         };
 
         this.Gantt.ext.zoom.init(zoomConfig);
-        this.Gantt.ext.zoom.setLevel("year");
+        this.Gantt.ext.zoom.setLevel(this.CurrentProject.vista_actual);
         this.Gantt.ext.zoom.attachEvent("onAfterZoom", function (level, config) {
             document.querySelector(".gantt_radio[value='" + config.name + "']").checked = true;
         })
 
         document.getElementById('zoom-in').addEventListener('click', (evt) => {
             this.Gantt.ext.zoom.zoomIn();
+            this.CurrentProject.vista_actual = zoomConfig.levels[gantt.ext.zoom.getCurrentLevel()].name;
         });
         document.getElementById('zoom-out').addEventListener('click', (evt) => {
             this.Gantt.ext.zoom.zoomOut()
+            this.CurrentProject.vista_actual = zoomConfig.levels[gantt.ext.zoom.getCurrentLevel()].name;
         });
 
         const radios = document.getElementsByName("scale");
@@ -148,7 +151,147 @@ class ProjectManagement {
                 // Global 
                 gantt.ext.zoom.setLevel(event.target.value);
             };
+            if (radios[i].value == this.CurrentProject.vista_actual) {
+                radios[i].checked = true
+            }
         }
+    }
+
+    /**
+     * @description Eventos para la grafica de gantt
+     */
+    GanttEvents() {
+        const self = this;
+        gantt.attachEvent("onAfterTaskAdd", async function (id, item) {
+
+            let UltimaPosicion;
+            if (self.TasksCount >= 1) {
+                UltimaPosicion = self.TasksCount - 1
+            } else {
+                UltimaPosicion = self.TasksCount;
+            }
+
+            let UltimaTarea = self.CurrentProject.tareas[UltimaPosicion];
+
+            let FechaTerminoAnterior = '';
+            let UltimoOrden;
+
+            // Estas condiciones se agregan para posicionar las fechas de inicio y de termino de 
+            // las siguientes tareas
+
+
+            if (UltimaTarea != undefined) {
+                if (self.TasksCount == 1) {
+                    FechaTerminoAnterior = UltimaTarea.fecha_inicio;
+                } else {
+                    FechaTerminoAnterior = UltimaTarea.fecha_termino;
+                }
+                UltimoOrden = UltimaTarea.orden + 1;
+            } else {
+                FechaTerminoAnterior = self.Moment().format('YYYY-MM-DD');
+                UltimoOrden = 1;
+                console.log(FechaTerminoAnterior);
+            }
+
+            const task = {
+                id: "",
+                id_proyecto: self.CurrentProject.id,
+                nombre: item.text,
+                // text: item.text,
+                descripcion: "",
+                fecha_inicio: FechaTerminoAnterior,
+                // start_date: FechaTerminoAnterior,
+                fecha_termino: self.moment(FechaTerminoAnterior).add(item.duration, 'd').format('YYYY-MM-DD'),
+                progreso: item.progress,
+                dependencia: item.parent,
+                // progress: item.progress,
+                // duration: item.duration,
+                orden: UltimoOrden
+            };
+
+            console.log(task);
+
+            if (task.fecha_inicio !== '') {
+
+
+                self.CurrentProject.tareas.push(task);
+                self.TasksCount++;
+
+                // Se crea la tarea
+                await HTTP({
+                    url: '/planner/tasks/create',
+                    token: profile.profile.token,
+                    data: { tareas: [task] },
+                    method: 'POST',
+                    success: async (data) => {
+                        const RecentlyCreatedTasks = await data.json();
+                        self.CurrentProject.tareas.pop();
+                        const Length = RecentlyCreatedTasks.tasks.length;
+                        self.CurrentProject.tareas.push(RecentlyCreatedTasks.tasks[Length - 1]);
+                    },
+                    failed: (e) => { console.error(e) }
+                });
+
+            }
+
+
+            gantt.message('Agregando una tarea!');
+        });
+
+        gantt.attachEvent("onAfterLinkAdd", function (id, item) {
+            //any custom logic here
+            gantt.message('Agregamos un link');
+            console.log(item);
+
+
+        });
+
+        gantt.attachEvent("onAfterLinkDelete", function (id, item) {
+            //any custom logic here
+            gantt.message('Eliminamos un link');
+            console.log(item);
+
+        });
+
+        gantt.attachEvent("onAfterTaskDrag", function (id, mode) {
+            var task = gantt.getTask(id);
+            console.log(task.nombre)
+            if (mode == gantt.config.drag_mode.progress) {
+                var pr = Math.floor(task.progress * 100 * 10) / 10;
+                gantt.message(task.text + " is now " + pr + "% completed!");
+            } else {
+                var convert = gantt.date.date_to_str("%H:%i, %F %j");
+                var s = convert(task.start_date);
+                var e = convert(task.end_date);
+                gantt.message(task.text + " starts at " + s + " and ends at " + e);
+            }
+        });
+
+        gantt.attachEvent("onBeforeTaskDrag", function (id, mode) {
+            var task = gantt.getTask(id);
+            var message = task.text + " ";
+
+            if (mode == gantt.config.drag_mode.progress) {
+                message += "progress is being updated";
+            } else {
+                message += "is being ";
+                if (mode == gantt.config.drag_mode.move)
+                    message += "moved";
+                else if (mode == gantt.config.drag_mode.resize)
+                    message += "resized";
+            }
+
+            gantt.message(message);
+            return true;
+        });
+
+        gantt.attachEvent("onLightboxSave", function (id, task, is_new) {
+            //any custom logic here
+            let message = "Guardar!!";
+            gantt.message(message);
+            return true;
+        })
+
     }
 
     /**
@@ -217,7 +360,6 @@ class ProjectManagement {
             tarea.parent = tarea.dependencia;
             return tarea;
         });
-        console.log(this.CurrentProject);
     }
 
 }

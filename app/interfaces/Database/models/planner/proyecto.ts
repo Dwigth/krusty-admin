@@ -12,4 +12,6 @@ export interface IProyecto {
     tareas?: ITareas[];
     // Invitados
     invitados?: { id_admin: number, nombre: string, img: string }[];
+    // Relaciones 
+    links?: { id: number, source: number, target: number, type: string }[];
 }
