@@ -18,7 +18,7 @@ export class MailController {
 
         html += `
             <div>
-                <img src="../../../../public/admin-template/krusty-lab/images/logo-krusty.svg">
+                <img src="${environments.mailConfig.FORGOT_PASSWORD_URL}/admin-template/krusty-lab/images/logo-krusty.svg">
             </div>
             <div>
                 Por favor haga click al siguiente <a href="${environments.mailConfig.FORGOT_PASSWORD_URL}/new-password/${token}">link</a> para reestaurar tu contraseña. <br>
