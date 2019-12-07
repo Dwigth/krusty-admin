@@ -5,8 +5,8 @@ export const environments = {
     database: {
         connectionLimit: 10,
         host: 'localhost',
-        user: 'root',
-        password: 'rootroot',
+        user: process.env.DBUSER || 'root',
+        password: process.env.DBPASS || 'rootroot',
         database: 'tscbit_matilde',
         timezone: 'utc'
     },
@@ -24,8 +24,9 @@ export const environments = {
         Secret: 'asbn2',
         expires: 3600000
     },
-    PORT: 3000,
+    PORT: process.env.PORT || 3000,
     mailConfig: {
+        FORGOT_PASSWORD_URL: process.env.FORGOT_PASSWORD_URL || 'http://localhost:3000',
         nodemailer: {
             host: "tscbit.com",
             port: 465,

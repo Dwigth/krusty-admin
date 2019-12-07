@@ -6,6 +6,7 @@ import { MailController } from "../../controllers/general/mail.controller";
 import { AdminController } from "../../controllers/models/admin.controller";
 import { RecuperacionController } from "../../controllers/models/recuperacion.controller";
 import moment from "moment";
+import { isString } from "util";
 
 
 export async function Login(req: Request, res: Response) {
@@ -53,12 +54,20 @@ export async function ForgotPasswordProcess(req: Request, res: Response) {
     let authCtl = new AuthController();
     // // Proceso de creación de tickets
     let token = await authCtl.forgotPassword(options.receiver);
+
     // // Enviar correo
-    let info = await nmi.SendResetPasswordEmail(token, options.receiver);
-    res.render('forgot-password', {
-        title: 'Recuperar contraseña',
-        msg: '¡Listo! Se te ha enviado un correo a tu dirección.'
-    });
+    if (isString(token)) {
+        let info = await nmi.SendResetPasswordEmail(token, options.receiver);
+        res.render('forgot-password', {
+            title: 'Recuperar contraseña',
+            msg: '¡Listo! Se te ha enviado un correo a tu dirección.'
+        });
+    } else {
+        res.render('forgot-password', {
+            title: 'Recuperar contraseña',
+            msg: 'Esta dirección de correo electrónico no se encuentra registrada.'
+        });
+    }
 }
 
 /**

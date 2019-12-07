@@ -43,6 +43,7 @@ var mail_controller_1 = require("../../controllers/general/mail.controller");
 var admin_controller_1 = require("../../controllers/models/admin.controller");
 var recuperacion_controller_1 = require("../../controllers/models/recuperacion.controller");
 var moment_1 = __importDefault(require("moment"));
+var util_1 = require("util");
 function Login(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var credentials, authctl, login;
@@ -116,6 +117,7 @@ function ForgotPasswordProcess(req, res) {
                     return [4 /*yield*/, authCtl.forgotPassword(options.receiver)];
                 case 1:
                     token = _a.sent();
+                    if (!util_1.isString(token)) return [3 /*break*/, 3];
                     return [4 /*yield*/, nmi.SendResetPasswordEmail(token, options.receiver)];
                 case 2:
                     info = _a.sent();
@@ -123,7 +125,14 @@ function ForgotPasswordProcess(req, res) {
                         title: 'Recuperar contraseña',
                         msg: '¡Listo! Se te ha enviado un correo a tu dirección.'
                     });
-                    return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 3:
+                    res.render('forgot-password', {
+                        title: 'Recuperar contraseña',
+                        msg: 'Esta dirección de correo electrónico no se encuentra registrada.'
+                    });
+                    _a.label = 4;
+                case 4: return [2 /*return*/];
             }
         });
     });

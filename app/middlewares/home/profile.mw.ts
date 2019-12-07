@@ -12,27 +12,29 @@ import { AdminProfile } from "../../interfaces/Database/models/admin_profile";
  */
 export async function AdminUserProfile(req: Request, res: Response) {
     const token = req.params.token;
+    if (token != undefined) {
+        const adminCtl = new AdminController();
+        // Obtener sus datos de sesión
+        const adminUser = await adminCtl.SearchAdminByParam('token', token).then(resp => resp[0]);
+        console.log(token.blue, adminUser);
 
-    const adminCtl = new AdminController();
-    // Obtener sus datos de sesión
-    const adminUser = await adminCtl.SearchAdminByParam('token', token).then(resp => resp[0]);
-    adminUser.guest = false;
+        if (token !== adminUser.token) {
+            console.log('Solo carga la vista');
+        }
 
-    if (token !== adminUser.token) {
-        adminUser.guest = true;
-        console.log('Solo carga la vista');
+        delete adminUser.contrasena;
+        const adminProfileObj = { id_admin: adminUser.id_admin };
+
+        const adminProfileCtl = new AdminProfileController(<AdminProfile>adminProfileObj);
+        // Obtener sus datos
+        const AdminProfileData = await adminProfileCtl.GetByAdminId();
+
+        adminUser.data = AdminProfileData;
+
+        res.render('profile', { adminUser: adminUser });
+    } else {
+        res.destroy()
     }
-
-    delete adminUser.contrasena;
-    const adminProfileObj = { id_admin: adminUser.id_admin };
-
-    const adminProfileCtl = new AdminProfileController(<AdminProfile>adminProfileObj);
-    // Obtener sus datos
-    const AdminProfileData = await adminProfileCtl.GetByAdminId();
-
-    adminUser.data = AdminProfileData;
-
-    res.render('profile', { adminUser: adminUser });
 }
 
 /**

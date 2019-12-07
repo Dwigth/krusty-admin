@@ -295,7 +295,7 @@ var PlannerController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        sql = "SELECT * FROM TAREAS WHERE ID_PROYECTO = " + IdProject + " ORDER BY ORDEN ASC";
+                        sql = "SELECT * FROM tareas WHERE id_proyecto = " + IdProject + " ORDER BY orden ASC";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
                     case 1:
                         tasks = _a.sent();
@@ -332,7 +332,7 @@ var PlannerController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        sql = "SELECT * FROM TAREAS WHERE ID = " + idTask;
+                        sql = "SELECT * FROM tareas WHERE id = " + idTask;
                         return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }

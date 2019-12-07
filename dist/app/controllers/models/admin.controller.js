@@ -66,7 +66,7 @@ var AdminController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "SELECT A.id_admin, A.img, A.nombre FROM ADMIN A";
+                        query = "SELECT A.id_admin, A.img, A.nombre FROM admin A";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
                     case 1:
                         resultado = _a.sent();

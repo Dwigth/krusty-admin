@@ -45,7 +45,7 @@ var ClienteController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "SELECT C.ID_USUARIO, C.nombre, C.apellidos, C.correo, l.key, l.ID_LICENCIA, l.createdAt FROM cliente C\n                        INNER JOIN licencia l ON c.ID_USUARIO = l.ID_USUARIO";
+                        query = "SELECT C.ID_USUARIO, C.nombre, C.apellidos, C.correo, l.key, l.ID_LICENCIA, l.createdAt FROM cliente C\n                        INNER JOIN licencia l ON C.ID_USUARIO = l.ID_USUARIO";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
                     case 1:
                         resultado = _a.sent();

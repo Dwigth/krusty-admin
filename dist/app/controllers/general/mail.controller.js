@@ -55,7 +55,7 @@ var MailController = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         html = '';
-                        html += "\n            <div>\n                <img src=\"../../../../public/admin-template/krusty-lab/images/logo-krusty.svg\">\n            </div>\n            <div>\n                Por favor haga click al siguiente <a href=\"http://localhost:3000/new-password/" + token + "\">link</a> para reestaurar tu contrase\u00F1a. <br>\n                <small>Si usted no ha solicitado este proceso por favor ignore este correo.</small>\n            </div>\n        ";
+                        html += "\n            <div>\n                <img src=\"../../../../public/admin-template/krusty-lab/images/logo-krusty.svg\">\n            </div>\n            <div>\n                Por favor haga click al siguiente <a href=\"" + enviroment_1.environments.mailConfig.FORGOT_PASSWORD_URL + "/new-password/" + token + "\">link</a> para reestaurar tu contrase\u00F1a. <br>\n                <small>Si usted no ha solicitado este proceso por favor ignore este correo.</small>\n            </div>\n        ";
                         return [4 /*yield*/, this.NodemailerTransporter.sendMail({
                                 from: "\"[TSCBiT] Recuperaci\u00F3n de contrase\u00F1a\" <" + enviroment_1.environments.mailConfig.nodemailer.auth.user + ">",
                                 to: userMail,

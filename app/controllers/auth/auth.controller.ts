@@ -61,30 +61,35 @@ export class AuthController implements IAuthController {
      * estableciendo los puntos de partida para hacer la accion de restauración y su limite de tiempo.
      * @returns {string} token
      */
-    async forgotPassword(email: string): Promise<string> {
+    async forgotPassword(email: string): Promise<string | boolean> {
         const adminCtl = new AdminController();
         let adminUser = await adminCtl.SearchAdminByParam('email', email);
 
-        const initialDate = new Date();
-        const limiteDate = new Date(
-            initialDate.getFullYear(),
-            initialDate.getMonth(),
-            initialDate.getDate(),
-            initialDate.getHours(),
-            initialDate.getMinutes(),
-            initialDate.getSeconds() + 300
-        );
-        let recuperacion: IRecuperacionContra = {
-            activo: 1,
-            fecha_peticion: initialDate.toISOString(),
-            fecha_limite: limiteDate.toISOString(),
-            token_acceso: this.hash.update(Date.now().toString()).digest('hex')
-        };
-        const recupctl = new RecuperacionController();
-        recupctl.SetAdminTicket(recuperacion);
-        let ticketRecuperacion = await recupctl.CreateAdminTicket();
-        recupctl.CreateAdminRelation({ id_admin: adminUser[0].id_admin, id_recuperacion: ticketRecuperacion.id });
-        return ticketRecuperacion.token_acceso;
+        if (adminUser.length !== 0) {
+
+            const initialDate = new Date();
+            const limiteDate = new Date(
+                initialDate.getFullYear(),
+                initialDate.getMonth(),
+                initialDate.getDate(),
+                initialDate.getHours(),
+                initialDate.getMinutes(),
+                initialDate.getSeconds() + 300
+            );
+            let recuperacion: IRecuperacionContra = {
+                activo: 1,
+                fecha_peticion: initialDate.toISOString(),
+                fecha_limite: limiteDate.toISOString(),
+                token_acceso: this.hash.update(Date.now().toString()).digest('hex')
+            };
+            const recupctl = new RecuperacionController();
+            recupctl.SetAdminTicket(recuperacion);
+            let ticketRecuperacion = await recupctl.CreateAdminTicket().catch();
+            recupctl.CreateAdminRelation({ id_admin: adminUser[0].id_admin, id_recuperacion: ticketRecuperacion.id }).catch();
+            return ticketRecuperacion.token_acceso;
+        } else {
+            return false;
+        }
     }
 
     /**

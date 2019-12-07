@@ -48,13 +48,13 @@ function AdminUserProfile(req, res) {
             switch (_a.label) {
                 case 0:
                     token = req.params.token;
+                    if (!(token != undefined)) return [3 /*break*/, 3];
                     adminCtl = new admin_controller_1.AdminController();
                     return [4 /*yield*/, adminCtl.SearchAdminByParam('token', token).then(function (resp) { return resp[0]; })];
                 case 1:
                     adminUser = _a.sent();
-                    adminUser.guest = false;
+                    console.log(token.blue, adminUser);
                     if (token !== adminUser.token) {
-                        adminUser.guest = true;
                         console.log('Solo carga la vista');
                     }
                     delete adminUser.contrasena;
@@ -65,7 +65,11 @@ function AdminUserProfile(req, res) {
                     AdminProfileData = _a.sent();
                     adminUser.data = AdminProfileData;
                     res.render('profile', { adminUser: adminUser });
-                    return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 3:
+                    res.destroy();
+                    _a.label = 4;
+                case 4: return [2 /*return*/];
             }
         });
     });

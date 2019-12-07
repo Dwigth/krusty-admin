@@ -130,6 +130,7 @@ var AuthController = /** @class */ (function () {
                         return [4 /*yield*/, adminCtl.SearchAdminByParam('email', email)];
                     case 1:
                         adminUser = _a.sent();
+                        if (!(adminUser.length !== 0)) return [3 /*break*/, 3];
                         initialDate = new Date();
                         limiteDate = new Date(initialDate.getFullYear(), initialDate.getMonth(), initialDate.getDate(), initialDate.getHours(), initialDate.getMinutes(), initialDate.getSeconds() + 300);
                         recuperacion = {
@@ -140,11 +141,12 @@ var AuthController = /** @class */ (function () {
                         };
                         recupctl = new recuperacion_controller_1.RecuperacionController();
                         recupctl.SetAdminTicket(recuperacion);
-                        return [4 /*yield*/, recupctl.CreateAdminTicket()];
+                        return [4 /*yield*/, recupctl.CreateAdminTicket().catch()];
                     case 2:
                         ticketRecuperacion = _a.sent();
-                        recupctl.CreateAdminRelation({ id_admin: adminUser[0].id_admin, id_recuperacion: ticketRecuperacion.id });
+                        recupctl.CreateAdminRelation({ id_admin: adminUser[0].id_admin, id_recuperacion: ticketRecuperacion.id }).catch();
                         return [2 /*return*/, ticketRecuperacion.token_acceso];
+                    case 3: return [2 /*return*/, false];
                 }
             });
         });

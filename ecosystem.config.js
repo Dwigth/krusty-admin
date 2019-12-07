@@ -6,7 +6,8 @@ module.exports = {
         env: {
             "NODE_ENV": "production",
             "SECRET": 123456789,
-            "PORT": 3004
+            "PORT": 3004,
+            "FORGOT_PASSWORD_URL": "http://166.62.103.25:3004"
         }
     }
     ]
