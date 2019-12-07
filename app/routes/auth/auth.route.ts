@@ -1,5 +1,14 @@
 import { Router, Request, Response } from "express";
-import { Login, Redirect, ForgotPassword, ForgotPasswordProcess, RestorePassword, RestorePasswordPage } from "../../middlewares/auth/auth.mw";
+import {
+    Login,
+    Redirect,
+    ForgotPassword,
+    ForgotPasswordProcess,
+    RestorePassword,
+    RestorePasswordPage,
+    changePasswordPage,
+    changePassword
+} from "../../middlewares/auth/auth.mw";
 
 export const AuthRouter = Router();
 
@@ -14,3 +23,5 @@ AuthRouter.post('/forgot-password', ForgotPasswordProcess);
 AuthRouter.get('/new-password/:token', RestorePasswordPage);
 AuthRouter.post('/new-password/', RestorePassword);
 AuthRouter.get('/redirect', Redirect)
+AuthRouter.get('/change-password', changePasswordPage)
+AuthRouter.post('/change-password', changePassword)

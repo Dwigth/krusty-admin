@@ -245,3 +245,47 @@ function GetAdministrators(req, res) {
     });
 }
 exports.GetAdministrators = GetAdministrators;
+function changePasswordPage(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            res.render('change-password');
+            return [2 /*return*/];
+        });
+    });
+}
+exports.changePasswordPage = changePasswordPage;
+function changePassword(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var passwords, credentials, authctl, adminctl, admin, msg, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    passwords = req.body;
+                    credentials = { password: passwords["previous-password"] };
+                    authctl = new auth_controller_1.AuthController(credentials);
+                    adminctl = new admin_controller_1.AdminController();
+                    return [4 /*yield*/, adminctl.SearchAdminByParam('token', passwords.token).then(function (r) { return r[0]; })];
+                case 1:
+                    admin = _a.sent();
+                    msg = 'Exito al cambiar la contraseña';
+                    response = 'success';
+                    return [4 /*yield*/, authctl.ValidatePassword(admin.contrasena)];
+                case 2:
+                    if (!_a.sent()) return [3 /*break*/, 4];
+                    authctl.SetCredential({ username: admin.nombre, password: passwords["new-password"] });
+                    return [4 /*yield*/, authctl.changePassword()];
+                case 3:
+                    _a.sent();
+                    return [3 /*break*/, 5];
+                case 4:
+                    msg = 'La contraseña previa no coincide';
+                    response = 'danger';
+                    _a.label = 5;
+                case 5:
+                    res.render('change-password', { msg: { text: msg, response: response } });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.changePassword = changePassword;

@@ -70,11 +70,37 @@ export class PlannerController {
         let ProjectsWithTasks = await Promise.all(projects.map(async p => {
             p.tareas = await this.GetTasks(p.id);
             p.invitados = await this.GetProjectGuests(p.id);
+            p.links = await this.GetTasksRelationByProject(p.id);
             return p
         }
         ));
         return ProjectsWithTasks;
     }
+
+    /**
+     * @description Obtiene las relaciones de las tareas por proyecto en especifico
+     * @param id_proyecto 
+     */
+    private async GetTasksRelationByProject(id_proyecto: number) {
+        let sql = `SELECT tr.id,tr.source,tr.target,tr.type FROM tareas_relaciones tr WHERE tr.id_proyecto = ${id_proyecto}`;
+        return await Database.Instance.Query<{ id: number, source: number, target: number, type: string }[]>(sql)
+    }
+
+    /**
+     * @description Crea una relación para un tarea
+     * @requires Instancia de proyecto
+     * @requires Instancia de tarea
+     */
+    public async CreateTaskRelation() {
+
+    }
+
+    /**
+     * 
+     */
+    public async DeleteTaskRelation() { }
+
+
     /**
      * @description Retorna a los usuarios asignados de cierta tarea en específico.
      * @param id_tarea id de la tarea
@@ -188,14 +214,6 @@ export class PlannerController {
         if (Array.isArray(this.TaskInstance)) {
             const taskPromises = this.TaskInstance.map(async (task: ITareas) => {
                 let instanceSql = `INSERT INTO tareas SET ?`;
-                delete task['name']
-                delete task['start']
-                delete task['end']
-                delete task['progress']
-                delete task['custom_class']
-                // Agregamos un dia por defecto a la fecha de termino 
-                let DiaAgregado = moment(task.fecha_inicio).add(1, 'day');
-                task.fecha_termino = DiaAgregado.format('YYYY-MM-DD');
                 let res = await Database.Instance.Query<OkPacket>(instanceSql, task);
                 const Task = await this.GetTask(res.insertId);
                 return Task;

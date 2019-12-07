@@ -14,4 +14,5 @@ export interface IAdmin {
     activo: number;
     img: string;
     nombre: string;
+    email: string;
 }

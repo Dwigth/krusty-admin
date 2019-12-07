@@ -7,9 +7,7 @@ import { flattenDeep } from 'lodash'
 export async function CreateProject(req: Request, res: Response) {
     let IncomingPlanner = <IProyecto>req.body.proyecto;
     const plannerctl = new PlannerController(IncomingPlanner);
-    console.log('Project => ', plannerctl.GetProject());
     let project = await plannerctl.Create();
-    console.log(project);
     res.json({ msg: 'ok' })
 }
 
@@ -17,8 +15,6 @@ export async function UpdateProject(req: Request, res: Response) {
     let IncomingPlanner = <IProyecto>req.body.proyecto;
     const plannerctl = new PlannerController(IncomingPlanner);
     let project = await plannerctl.Update();
-    console.log(project);
-
     res.json({ msg: 'ok' })
 }
 
@@ -26,13 +22,11 @@ export async function DeleteProject(req: Request, res: Response) {
     let IncomingPlanner = <IProyecto>req.body.proyecto;
     const plannerctl = new PlannerController(IncomingPlanner);
     let project = await plannerctl.Delete();
-    console.log(project);
     res.json({ msg: 'ok' })
 }
 
 export async function CreateTask(req: Request, res: Response) {
     let IncomingTask = <ITareas[]>req.body.tareas;
-    console.log(IncomingTask);
     const plannerctl = new PlannerController();
     plannerctl.SetTask(IncomingTask);
     let tasks = await plannerctl.CreateTask();
@@ -60,7 +54,7 @@ export async function Planner(req: Request, res: Response) {
     const plannerctl = new PlannerController();
     plannerctl.SetCurrentUser(id_admin);
     const projects = await plannerctl.GetProjectsByUser();
-    res.render('planner', { projects })
+    res.render('project-management', { projects })
 }
 
 export async function GetProjects(req: Request, res: Response) {
