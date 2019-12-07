@@ -154,7 +154,7 @@ export class PlannerController {
      * @param IdProject Id Proyecto
      */
     public async GetTasks(IdProject: number) {
-        let sql = `SELECT * FROM TAREAS WHERE ID_PROYECTO = ${IdProject} ORDER BY ORDEN ASC`;
+        let sql = `SELECT * FROM tareas WHERE id_proyecto = ${IdProject} ORDER BY orden ASC`;
         let tasks = await Database.Instance.Query<ITareas[]>(sql);
 
         let TasksPromises = tasks.map(async task => {
@@ -174,7 +174,7 @@ export class PlannerController {
      * @param idTask Id de tarea
      */
     public async GetTask(idTask: number) {
-        let sql = `SELECT * FROM TAREAS WHERE ID = ${idTask}`;
+        let sql = `SELECT * FROM tareas WHERE id = ${idTask}`;
         return await Database.Instance.Query<ITareas>(sql);
     }
 

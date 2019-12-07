@@ -14,7 +14,7 @@ export class ClienteController implements IClienteModel {
 
     async GetClientsWithLicences() {
         const query = `SELECT C.ID_USUARIO, C.nombre, C.apellidos, C.correo, l.key, l.ID_LICENCIA, l.createdAt FROM cliente C
-                        INNER JOIN licencia l ON c.ID_USUARIO = l.ID_USUARIO`;
+                        INNER JOIN licencia l ON C.ID_USUARIO = l.ID_USUARIO`;
         let resultado = await Database.Instance.Query<IClienteModel[]>(query);
         return resultado;
     }

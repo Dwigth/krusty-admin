@@ -16,7 +16,7 @@ export class AdminController implements IAdminModel {
     }
 
     public async GetAdmins() {
-        let query = `SELECT A.id_admin, A.img, A.nombre FROM ADMIN A`;
+        let query = `SELECT A.id_admin, A.img, A.nombre FROM admin A`;
         let resultado = await Database.Instance.Query<IAdmin[]>(query);
         resultado = resultado.filter(r => r.id_admin != this.id_admin);
         return resultado;
