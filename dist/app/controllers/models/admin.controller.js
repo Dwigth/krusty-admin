@@ -46,6 +46,13 @@ var AdminController = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(AdminController.prototype, "ProfileInstance", {
+        set: function (pins) {
+            this.Profile = pins;
+        },
+        enumerable: true,
+        configurable: true
+    });
     AdminController.prototype.Update = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql;
@@ -62,15 +69,13 @@ var AdminController = /** @class */ (function () {
     AdminController.prototype.GetAdmins = function () {
         return __awaiter(this, void 0, void 0, function () {
             var query, resultado;
-            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "SELECT A.id_admin, A.img, A.nombre FROM admin A";
+                        query = "SELECT A.id_admin, A.usuario, A.img, A.nombre FROM admin A WHERE A.id_admin != " + this.id_admin + " AND A.activo = 1";
                         return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
                     case 1:
                         resultado = _a.sent();
-                        resultado = resultado.filter(function (r) { return r.id_admin != _this.id_admin; });
                         return [2 /*return*/, resultado];
                 }
             });
@@ -185,6 +190,41 @@ var AdminController = /** @class */ (function () {
                     case 1:
                         resultado = _a.sent();
                         return [2 /*return*/, resultado];
+                }
+            });
+        });
+    };
+    AdminController.prototype.DisableAdmin = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql, query;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sql = "UPDATE admin SET activo = 0 WHERE id_admin = " + this.Admin.id_admin;
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
+                    case 1:
+                        query = _a.sent();
+                        return [2 /*return*/, query];
+                }
+            });
+        });
+    };
+    AdminController.prototype.CreateAdmin = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql, query, sql2, query2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sql = "INSERT INTO admin SET ?";
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql, this.Admin)];
+                    case 1:
+                        query = _a.sent();
+                        sql2 = "INSERT INTO admin_profile SET ?";
+                        this.Profile.id_admin = query.insertId;
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql2, this.Profile)];
+                    case 2:
+                        query2 = _a.sent();
+                        return [2 /*return*/, [query, query2]];
                 }
             });
         });

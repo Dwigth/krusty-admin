@@ -9,7 +9,9 @@ import {
     UpdateProject,
     AssingTask,
     UnassingTask,
-    DeleteProject
+    DeleteProject,
+    LinkTask,
+    UnlinkTask
 } from "../../middlewares/general/planner.mw";
 
 export const PlannerRouter = Router();
@@ -25,3 +27,5 @@ PlannerRouter.post('/planner/invite', InviteToProject)
 PlannerRouter.patch('/planner/tasks/update', UpdateTask)
 PlannerRouter.post('/planner/tasks/assing', AssingTask)
 PlannerRouter.post('/planner/tasks/unassing', UnassingTask)
+PlannerRouter.post('/planner/task/link', LinkTask)
+PlannerRouter.delete('/planner/task/unlink', UnlinkTask)

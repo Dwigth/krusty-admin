@@ -5,6 +5,7 @@ import { compare, hash } from 'bcrypt';
 import { IRecuperacionContra } from "../../interfaces/Database/models/recuperacion_contra";
 import { RecuperacionController } from "../models/recuperacion.controller";
 import crypto from 'crypto';
+import { IAdmin } from "../../interfaces/Database/models/admin";
 export class AuthController implements IAuthController {
 
     private credentials: ICredentials;
@@ -98,6 +99,23 @@ export class AuthController implements IAuthController {
      */
     public async ValidatePassword(password: string): Promise<boolean> {
         return await compare(this.credentials.password, password);
+    }
+
+    /**
+     * @description Cambia el estado del usuario a desactivado
+     */
+    public async DisableUser(id_admin: number) {
+        const adminctl = new AdminController();
+        adminctl.Instance = <IAdmin>{ id_admin: id_admin, activo: 0 };
+        return await adminctl.DisableAdmin();
+    }
+
+    /**
+     * Contraseña por default
+     */
+    public async DefaultPassword() {
+        const phrase = '1234a';
+        return await hash(phrase, this.saltRounds);
     }
 
 }

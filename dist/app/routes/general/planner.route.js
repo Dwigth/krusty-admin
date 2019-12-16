@@ -13,3 +13,5 @@ exports.PlannerRouter.post('/planner/invite', planner_mw_1.InviteToProject);
 exports.PlannerRouter.patch('/planner/tasks/update', planner_mw_1.UpdateTask);
 exports.PlannerRouter.post('/planner/tasks/assing', planner_mw_1.AssingTask);
 exports.PlannerRouter.post('/planner/tasks/unassing', planner_mw_1.UnassingTask);
+exports.PlannerRouter.post('/planner/task/link', planner_mw_1.LinkTask);
+exports.PlannerRouter.delete('/planner/task/unlink', planner_mw_1.UnlinkTask);

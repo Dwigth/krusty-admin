@@ -11,3 +11,10 @@ export interface ITareas {
     orden: number;
     asignados?: { id_admin: number, img: string, nombre: string }[];
 }
+export interface ILink {
+    id_proyecto: number,
+    id: number,
+    source: number,
+    target: number,
+    type: string
+}

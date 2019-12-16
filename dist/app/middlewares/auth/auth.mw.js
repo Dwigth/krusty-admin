@@ -44,6 +44,8 @@ var admin_controller_1 = require("../../controllers/models/admin.controller");
 var recuperacion_controller_1 = require("../../controllers/models/recuperacion.controller");
 var moment_1 = __importDefault(require("moment"));
 var util_1 = require("util");
+var AuthCtl = new auth_controller_1.AuthController();
+var AdminCtl = new admin_controller_1.AdminController();
 function Login(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var credentials, authctl, login;
@@ -56,7 +58,15 @@ function Login(req, res) {
                 case 1:
                     login = _a.sent();
                     if (login.valid) {
+                        res.cookie('id_admin', login.user.id_admin);
                         delete login.user.contrasena;
+                        if (login.user.usuario == 'super_administrador') {
+                            console.log('<==============>');
+                            res.cookie('isAdmin', true);
+                        }
+                        else {
+                            res.cookie('isAdmin', false);
+                        }
                         // Render redireccionamiento
                         res.render('redireccion', { user: JSON.stringify(login.user) });
                         // Redireccionar a home
@@ -298,3 +308,66 @@ function changePassword(req, res) {
     });
 }
 exports.changePassword = changePassword;
+function DisableUser(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id_admin, user, action;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log(req.body);
+                    id_admin = req.body.id_admin;
+                    return [4 /*yield*/, AdminCtl.SearchAdminById(id_admin).then(function (r) { return r[0]; })];
+                case 1:
+                    user = _a.sent();
+                    if (user.usuario == 'super_administrador') {
+                        res.json({ msg: 'No puedes borrar a este usuario.' });
+                        return [2 /*return*/];
+                    }
+                    return [4 /*yield*/, AuthCtl.DisableUser(id_admin)];
+                case 2:
+                    action = _a.sent();
+                    res.json({ msg: 'Se ha borrado al usuario.' });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.DisableUser = DisableUser;
+function CreateUser(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var Admin, _a, profile, resps;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    Admin = req.body;
+                    Admin.activo = 1;
+                    _a = Admin;
+                    return [4 /*yield*/, AuthCtl.DefaultPassword()];
+                case 1:
+                    _a.contrasena = _b.sent();
+                    Admin.token = '';
+                    Admin.img = '/admin-template/krusty-lab/images/matilde-logo.png';
+                    profile = {
+                        apellidos: '',
+                        bio: '',
+                        direccion: '',
+                        fb_profile: '',
+                        id_admin: 0,
+                        nombre: '',
+                        number: '',
+                        portada_img: '',
+                        twt_profile: ''
+                    };
+                    AdminCtl.Instance = Admin;
+                    AdminCtl.ProfileInstance = profile;
+                    return [4 /*yield*/, AdminCtl.CreateAdmin()];
+                case 2:
+                    resps = _b.sent();
+                    console.log(resps);
+                    res.redirect('back');
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.CreateUser = CreateUser;

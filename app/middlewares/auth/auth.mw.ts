@@ -7,15 +7,26 @@ import { AdminController } from "../../controllers/models/admin.controller";
 import { RecuperacionController } from "../../controllers/models/recuperacion.controller";
 import moment from "moment";
 import { isString } from "util";
+import { IAdmin } from "../../interfaces/Database/models/admin";
+import { AdminProfile } from "../../interfaces/Database/models/admin_profile";
 
+const AuthCtl = new AuthController();
+const AdminCtl = new AdminController();
 
 export async function Login(req: Request, res: Response) {
     let credentials: ICredentials = req.body;
     const authctl = new AuthController(credentials);
     let login = await authctl.login();
     if (login.valid) {
-
+        res.cookie('id_admin', login.user.id_admin)
         delete login.user.contrasena;
+        if (login.user.usuario == 'super_administrador') {
+            console.log('<==============>');
+
+            res.cookie('isAdmin', true);
+        } else {
+            res.cookie('isAdmin', false);
+        }
         // Render redireccionamiento
         res.render('redireccion', { user: JSON.stringify(login.user) })
         // Redireccionar a home
@@ -175,4 +186,47 @@ export async function changePassword(req: Request, res: Response) {
     }
 
     res.render('change-password', { msg: { text: msg, response } });
+}
+
+export async function DisableUser(req: Request, res: Response) {
+    console.log(req.body);
+    const id_admin = req.body.id_admin;
+    const user = await AdminCtl.SearchAdminById(id_admin).then(r => r[0]);
+    if (user.usuario == 'super_administrador') {
+        res.json({ msg: 'No puedes borrar a este usuario.' })
+        return;
+    }
+    const action = await AuthCtl.DisableUser(id_admin);
+    res.json({ msg: 'Se ha borrado al usuario.' })
+}
+
+export async function CreateUser(req: Request, res: Response) {
+    const Admin: IAdmin = req.body;
+
+    Admin.activo = 1;
+    Admin.contrasena = await AuthCtl.DefaultPassword();
+    Admin.token = '';
+    Admin.img = '/admin-template/krusty-lab/images/matilde-logo.png';
+
+    const profile: AdminProfile = {
+        apellidos: '',
+        bio: '',
+        direccion: '',
+        fb_profile: '',
+        id_admin: 0,
+        nombre: '',
+        number: '',
+        portada_img: '',
+        twt_profile: ''
+    }
+
+    AdminCtl.Instance = Admin;
+    AdminCtl.ProfileInstance = profile;
+
+    const resps = await AdminCtl.CreateAdmin();
+
+    console.log(resps);
+
+
+    res.redirect('back');
 }

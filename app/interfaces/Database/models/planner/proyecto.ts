@@ -1,4 +1,4 @@
-import { ITareas } from "./tareas";
+import { ITareas, ILink } from "./tareas";
 
 export interface IProyecto {
     // Tiene que ser el id de algún administrador
@@ -13,5 +13,5 @@ export interface IProyecto {
     // Invitados
     invitados?: { id_admin: number, nombre: string, img: string }[];
     // Relaciones 
-    links?: { id: number, source: number, target: number, type: string }[];
+    links?: ILink[];
 }

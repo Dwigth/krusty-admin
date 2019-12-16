@@ -165,6 +165,39 @@ var AuthController = /** @class */ (function () {
             });
         });
     };
+    /**
+     * @description Cambia el estado del usuario a desactivado
+     */
+    AuthController.prototype.DisableUser = function (id_admin) {
+        return __awaiter(this, void 0, void 0, function () {
+            var adminctl;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        adminctl = new admin_controller_1.AdminController();
+                        adminctl.Instance = { id_admin: id_admin, activo: 0 };
+                        return [4 /*yield*/, adminctl.DisableAdmin()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    /**
+     * Contraseña por default
+     */
+    AuthController.prototype.DefaultPassword = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var phrase;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        phrase = '1234a';
+                        return [4 /*yield*/, bcrypt_1.hash(phrase, this.saltRounds)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     return AuthController;
 }());
 exports.AuthController = AuthController;

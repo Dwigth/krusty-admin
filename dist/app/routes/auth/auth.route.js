@@ -16,3 +16,4 @@ exports.AuthRouter.post('/new-password/', auth_mw_1.RestorePassword);
 exports.AuthRouter.get('/redirect', auth_mw_1.Redirect);
 exports.AuthRouter.get('/change-password', auth_mw_1.changePasswordPage);
 exports.AuthRouter.post('/change-password', auth_mw_1.changePassword);
+exports.AuthRouter.post('/disable-user', auth_mw_1.DisableUser);

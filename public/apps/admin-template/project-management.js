@@ -148,6 +148,8 @@ class ProjectManagement {
      */
     GanttEvents() {
         const self = this;
+
+        //Agregar tarea
         gantt.attachEvent("onAfterTaskAdd", async function (id, item) {
 
             let UltimaPosicion;
@@ -224,22 +226,60 @@ class ProjectManagement {
             gantt.message('Agregando una tarea!');
         });
 
-        gantt.attachEvent("onAfterLinkAdd", function (id, item) {
+        // Agregar link de la tarea
+        gantt.attachEvent("onAfterLinkAdd", async function (id, item) {
             //any custom logic here
             gantt.message('Agregamos un link');
             console.log(item);
-
-
+            await HTTP({
+                url: '/planner/task/link',
+                token: profile.profile.token,
+                data: {
+                    link: {
+                        id_proyecto: self.CurrentProject.id,
+                        id: 'NULL',
+                        source: item.source,
+                        target: item.target,
+                        type: item.type
+                    }
+                },
+                method: 'POST',
+                success: async (data) => {
+                    const respnse = await data.json();
+                    console.log(respnse);
+                },
+                failed: (e) => { console.error(e) }
+            });
         });
 
-        gantt.attachEvent("onAfterLinkDelete", function (id, item) {
+        // Borrar el link de la tarea
+        gantt.attachEvent("onAfterLinkDelete", async function (id, item) {
             //any custom logic here
             gantt.message('Eliminamos un link');
-            console.log(item);
-
+            console.log(id, self);
+            await HTTP({
+                url: '/planner/task/unlink',
+                token: profile.profile.token,
+                data: {
+                    link: {
+                        id_proyecto: self.CurrentProject.id,
+                        id: id,
+                        source: item.source,
+                        target: item.target,
+                        type: item.type
+                    }
+                },
+                method: 'DELETE',
+                success: async (data) => {
+                    const respnse = await data.json();
+                    console.log(respnse);
+                },
+                failed: (e) => { console.error(e) }
+            });
         });
 
-        gantt.attachEvent("onAfterTaskDrag", function (id, mode) {
+        // Editar la fecha de la tarea
+        gantt.attachEvent("onAfterTaskDrag", async function (id, mode) {
             var task = gantt.getTask(id);
             console.log(task.nombre)
             if (mode == gantt.config.drag_mode.progress) {
@@ -251,30 +291,42 @@ class ProjectManagement {
                 var e = convert(task.end_date);
                 gantt.message(task.text + " starts at " + s + " and ends at " + e);
             }
+
+            const TaskObject = {
+                id: task.id,
+                id_proyecto: task.id_proyecto,
+                nombre: task.text,
+                fecha_inicio: self.moment(task.start_date).format('YYYY-MM-DD'),
+                fecha_termino: self.moment(task.end_date).format('YYYY-MM-DD'),
+                progreso: task.progress,
+                orden: task.order,
+                dependencia: task.parent,
+                descripcion: ''
+            };
+
+            // Se actualiza la tarea
+            await HTTP({
+                url: '/planner/tasks/update',
+                token: profile.profile.token,
+                data: { tareas: [TaskObject] },
+                method: 'PATCH',
+                success: async (data) => {
+                    const RecentlyUpdatedTasks = await data.json();
+                    console.log(RecentlyUpdatedTasks);
+                },
+                failed: (e) => { console.error(e) }
+            });
+
+
         });
 
-        gantt.attachEvent("onBeforeTaskDrag", function (id, mode) {
-            var task = gantt.getTask(id);
-            var message = task.text + " ";
-
-            if (mode == gantt.config.drag_mode.progress) {
-                message += "progress is being updated";
-            } else {
-                message += "is being ";
-                if (mode == gantt.config.drag_mode.move)
-                    message += "moved";
-                else if (mode == gantt.config.drag_mode.resize)
-                    message += "resized";
-            }
-
-            gantt.message(message);
-            return true;
-        });
-
+        // Guardar en el modal
         gantt.attachEvent("onLightboxSave", function (id, task, is_new) {
             //any custom logic here
             let message = "Guardar!!";
             gantt.message(message);
+            console.log(task);
+
             return true;
         })
 

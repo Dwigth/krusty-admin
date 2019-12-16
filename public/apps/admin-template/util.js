@@ -46,6 +46,8 @@ function AppendToHEAD(options) {
  *              -method: string
  *              -success: function
  *              -failed: function
+ * @example 
+ * { url:'', token:'', data:'', method:'', success:()=>{}, failed:()=>{} }
  * 
  */
 async function HTTP(options) {

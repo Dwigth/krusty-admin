@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import requestIp from 'request-ip';
 import compression from 'compression';
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import { json, urlencoded } from 'express';
 import { environments } from '../../environments/enviroment';
 
@@ -20,4 +21,5 @@ export const MIDDLEWARES: any[] = [
             expires: new Date(Date.now() + environments.Session.expires),
         }
     }),
+    cookieParser(),
 ];

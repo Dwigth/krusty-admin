@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var planner_controller_1 = require("../../controllers/general/planner.controller");
 var lodash_1 = require("lodash");
+var GlobalPlannerCtlr = new planner_controller_1.PlannerController();
 function CreateProject(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var IncomingPlanner, plannerctl, project;
@@ -229,3 +230,39 @@ function UnassingTask(req, res) {
     });
 }
 exports.UnassingTask = UnassingTask;
+function LinkTask(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var link, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    link = req.body.link;
+                    GlobalPlannerCtlr.SetLink(link);
+                    return [4 /*yield*/, GlobalPlannerCtlr.CreateTaskLink()];
+                case 1:
+                    response = _a.sent();
+                    res.json({ msg: 'ok' });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.LinkTask = LinkTask;
+function UnlinkTask(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var link, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    link = req.body.link;
+                    GlobalPlannerCtlr.SetLink(link);
+                    return [4 /*yield*/, GlobalPlannerCtlr.DeleteTaskLink()];
+                case 1:
+                    response = _a.sent();
+                    res.json({ msg: 'ok' });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.UnlinkTask = UnlinkTask;

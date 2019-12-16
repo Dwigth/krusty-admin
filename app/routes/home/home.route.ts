@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { ShowKeys, CreateKeys } from '../../middlewares/home/keys-admin.mw';
 import { AdminUserProfile, AdminUpdateProfile, UploadCoverPic, UploadProfilePic } from '../../middlewares/home/profile.mw';
 import { Settings, Home } from '../../middlewares/home/home.mw';
-import { GetAdministrators } from '../../middlewares/auth/auth.mw';
+import { GetAdministrators, CreateUser } from '../../middlewares/auth/auth.mw';
 import multer from 'multer';
 
 const upload = multer({ dest: 'public/uploads/' });
@@ -25,3 +25,4 @@ HomeRouter.post('/profile/upload-profile-pic', upload.single('profile'), UploadP
 HomeRouter.post('/profile/upload-cover-pic', upload.single('cover'), UploadCoverPic)
 
 HomeRouter.post('/admins/getAllExceptMe', GetAdministrators)
+HomeRouter.post('/admins/create', CreateUser);

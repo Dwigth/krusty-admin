@@ -36,11 +36,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var planner_controller_1 = require("../../controllers/general/planner.controller");
+var admin_controller_1 = require("../../controllers/models/admin.controller");
 function Settings(req, res) {
     return __awaiter(this, void 0, void 0, function () {
+        var isAdmin, id_admin, adminctl, admins;
         return __generator(this, function (_a) {
-            res.render('settings');
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    isAdmin = (req.cookies.isAdmin == 'true') ? true : false;
+                    id_admin = req.cookies.id_admin;
+                    if (!isAdmin) return [3 /*break*/, 2];
+                    adminctl = new admin_controller_1.AdminController();
+                    adminctl.id_admin = id_admin;
+                    return [4 /*yield*/, adminctl.GetAdmins()];
+                case 1:
+                    admins = _a.sent();
+                    res.render('settings', { isAdmin: isAdmin, admins: admins });
+                    return [3 /*break*/, 3];
+                case 2:
+                    res.render('settings', { isAdmin: isAdmin });
+                    _a.label = 3;
+                case 3: return [2 /*return*/];
+            }
         });
     });
 }

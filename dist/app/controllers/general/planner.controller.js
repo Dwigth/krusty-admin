@@ -59,6 +59,9 @@ var PlannerController = /** @class */ (function () {
     PlannerController.prototype.SetCurrentUser = function (userid) {
         this.CurrentUser = userid;
     };
+    PlannerController.prototype.SetLink = function (link) {
+        this.Link = link;
+    };
     /**
      * @description Obtiene a los usuarios invitados del proyecto
      * @param id_proyecto
@@ -136,7 +139,7 @@ var PlannerController = /** @class */ (function () {
                                         case 2:
                                             _b.invitados = _d.sent();
                                             _c = p;
-                                            return [4 /*yield*/, this.GetTasksRelationByProject(p.id)];
+                                            return [4 /*yield*/, this.GetTasksLinksByProject(p.id)];
                                         case 3:
                                             _c.links = _d.sent();
                                             return [2 /*return*/, p];
@@ -154,7 +157,7 @@ var PlannerController = /** @class */ (function () {
      * @description Obtiene las relaciones de las tareas por proyecto en especifico
      * @param id_proyecto
      */
-    PlannerController.prototype.GetTasksRelationByProject = function (id_proyecto) {
+    PlannerController.prototype.GetTasksLinksByProject = function (id_proyecto) {
         return __awaiter(this, void 0, void 0, function () {
             var sql;
             return __generator(this, function (_a) {
@@ -172,20 +175,34 @@ var PlannerController = /** @class */ (function () {
      * @requires Instancia de proyecto
      * @requires Instancia de tarea
      */
-    PlannerController.prototype.CreateTaskRelation = function () {
+    PlannerController.prototype.CreateTaskLink = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var sql;
             return __generator(this, function (_a) {
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        sql = "INSERT INTO tareas_relaciones SET ?";
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql, this.Link)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
             });
         });
     };
     /**
      *
      */
-    PlannerController.prototype.DeleteTaskRelation = function () {
-        return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-            return [2 /*return*/];
-        }); });
+    PlannerController.prototype.DeleteTaskLink = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sql = "DELETE FROM tareas_relaciones WHERE id = " + this.Link.id;
+                        return [4 /*yield*/, Database_1.Database.Instance.Query(sql)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
     };
     /**
      * @description Retorna a los usuarios asignados de cierta tarea en específico.

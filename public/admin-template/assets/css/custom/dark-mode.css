@@ -51,3 +51,25 @@ header,.header,body,footer,.footer{
 .footer a{
   color: var(--primaryVariant) !important;
 }
+.gantt_control{
+  background: var(--gray) !important;
+}
+.gantt_control button{
+  background: var(--light) !important;
+}
+.gantt_grid_scale,
+ .gantt_scale_line,
+ .gantt_data_area,
+ .gantt_grid_data,
+ .gantt_cell,
+ .gantt_row,
+ .gantt_cal_light,
+ .gantt_cal_larea,
+ .gantt_cal_larea input, textarea, select,.gantt_section_time
+ {
+  background-color: var(--darker-gray) !important;
+  color: #FFFF !important;
+}
+.gantt_task_cell, .gantt_row_task{
+  background-color: var(--darker-gray) !important;
+}

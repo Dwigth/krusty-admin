@@ -24,3 +24,4 @@ exports.HomeRouter.post('/create-keys', keys_admin_mw_1.CreateKeys);
 exports.HomeRouter.post('/profile/upload-profile-pic', upload.single('profile'), profile_mw_1.UploadProfilePic);
 exports.HomeRouter.post('/profile/upload-cover-pic', upload.single('cover'), profile_mw_1.UploadCoverPic);
 exports.HomeRouter.post('/admins/getAllExceptMe', auth_mw_1.GetAdministrators);
+exports.HomeRouter.post('/admins/create', auth_mw_1.CreateUser);

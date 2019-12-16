@@ -1,6 +1,6 @@
 import { IProyecto } from "../../interfaces/Database/models/planner/proyecto";
 import { Database } from "../../db/Database";
-import { ITareas } from "../../interfaces/Database/models/planner/tareas";
+import { ITareas, ILink } from "../../interfaces/Database/models/planner/tareas";
 import { OkPacket } from "../../interfaces/Database/IDatabase";
 import moment from 'moment';
 
@@ -9,6 +9,7 @@ export class PlannerController {
     private ProjectInstance: IProyecto;
     private TaskInstance: ITareas | Array<ITareas>;
     private Guests: Array<number>;
+    private Link: ILink;
 
     constructor(ins?: IProyecto) {
         this.ProjectInstance = ins;
@@ -34,6 +35,11 @@ export class PlannerController {
     public SetCurrentUser(userid: number) {
         this.CurrentUser = userid;
     }
+
+    public SetLink(link: ILink) {
+        this.Link = link;
+    }
+
     /**
      * @description Obtiene a los usuarios invitados del proyecto
      * @param id_proyecto 
@@ -70,7 +76,7 @@ export class PlannerController {
         let ProjectsWithTasks = await Promise.all(projects.map(async p => {
             p.tareas = await this.GetTasks(p.id);
             p.invitados = await this.GetProjectGuests(p.id);
-            p.links = await this.GetTasksRelationByProject(p.id);
+            p.links = await this.GetTasksLinksByProject(p.id);
             return p
         }
         ));
@@ -81,9 +87,9 @@ export class PlannerController {
      * @description Obtiene las relaciones de las tareas por proyecto en especifico
      * @param id_proyecto 
      */
-    private async GetTasksRelationByProject(id_proyecto: number) {
+    private async GetTasksLinksByProject(id_proyecto: number) {
         let sql = `SELECT tr.id,tr.source,tr.target,tr.type FROM tareas_relaciones tr WHERE tr.id_proyecto = ${id_proyecto}`;
-        return await Database.Instance.Query<{ id: number, source: number, target: number, type: string }[]>(sql)
+        return await Database.Instance.Query<ILink[]>(sql)
     }
 
     /**
@@ -91,14 +97,18 @@ export class PlannerController {
      * @requires Instancia de proyecto
      * @requires Instancia de tarea
      */
-    public async CreateTaskRelation() {
-
+    public async CreateTaskLink() {
+        const sql = `INSERT INTO tareas_relaciones SET ?`;
+        return await Database.Instance.Query<OkPacket>(sql, this.Link);
     }
 
     /**
      * 
      */
-    public async DeleteTaskRelation() { }
+    public async DeleteTaskLink() {
+        const sql = `DELETE FROM tareas_relaciones WHERE id = ${this.Link.id}`;
+        return await Database.Instance.Query<OkPacket>(sql);
+    }
 
 
     /**

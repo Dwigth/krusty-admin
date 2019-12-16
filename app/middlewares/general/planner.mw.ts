@@ -4,6 +4,9 @@ import { IProyecto } from "../../interfaces/Database/models/planner/proyecto";
 import { ITareas } from "../../interfaces/Database/models/planner/tareas";
 import { flattenDeep } from 'lodash'
 
+const GlobalPlannerCtlr = new PlannerController();
+
+
 export async function CreateProject(req: Request, res: Response) {
     let IncomingPlanner = <IProyecto>req.body.proyecto;
     const plannerctl = new PlannerController(IncomingPlanner);
@@ -92,4 +95,18 @@ export async function UnassingTask(req: Request, res: Response) {
     const plannerctl = new PlannerController();
     const resp = await plannerctl.UnassingAdminTask(id);
     res.json({ msg: 'ok' });
+}
+
+export async function LinkTask(req: Request, res: Response) {
+    const link = req.body.link;
+    GlobalPlannerCtlr.SetLink(link);
+    const response = await GlobalPlannerCtlr.CreateTaskLink();
+    res.json({ msg: 'ok' })
+}
+
+export async function UnlinkTask(req: Request, res: Response) {
+    const link = req.body.link;
+    GlobalPlannerCtlr.SetLink(link);
+    const response = await GlobalPlannerCtlr.DeleteTaskLink();
+    res.json({ msg: 'ok' })
 }

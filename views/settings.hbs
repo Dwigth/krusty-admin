@@ -11,15 +11,23 @@
             <div class="my-3 my-md-5">
                 <div class="container">
                     <div class="row">
+
                         <div class="col-md-3">
                             <h3 class="page-title mb-5">Configuración</h3>
                             <div>
                                 <div class="list-group list-group-transparent mb-0">
-                                    <a href="#"
+                                    <a id="general" data-ref="general" href="#"
                                         class="list-group-item list-group-item-action d-flex align-items-center active">
                                         <span class="icon mr-3"><i class="fe fe-sliders"></i></span>
                                         General
                                     </a>
+                                    {{#if isAdmin}}
+                                    <a id="members" data-ref="members" href="#"
+                                        class="list-group-item list-group-item-action d-flex align-items-center">
+                                        <span class="icon mr-3"><i class="fe fe-users"></i></span>
+                                        Miembros
+                                    </a>
+                                    {{/if}}
                                 </div>
 
                             </div>
@@ -29,8 +37,8 @@
                                 <div class="card-header">
                                     <h3 class="card-title">Propiedades</h3>
                                 </div>
-                                <div class="card-body">
-                                    <form action="">
+                                <div id="Body-Content" class="card-body">
+                                    <form id="general-content" action="">
                                         <div class="row">
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
@@ -58,16 +66,25 @@
                                             <button type="submit" class="btn btn-primary btn-space">Actualizar</button>
                                         </div>
                                     </form>
+                                    {{#if isAdmin}}
+                                    <form id="members-content" style="display: none;" action="">
+                                        <h2>Miembros administradores</h2>
+                                        <div class="container">
+                                            {{settings admins}}
+                                        </div>
+                                    </form>
+                                    {{/if}}
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
-
-
         </div>
         {{>footer}}
+        <script src="/apps/admin-template/modal.js"></script>
+        <script src="/apps/admin-template/settings.js"></script>
     </div>
 </body>
 
