@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -39,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var admin_controller_1 = require("../models/admin.controller");
-var bcrypt_1 = require("bcrypt");
+var bcryptjs_1 = require("bcryptjs");
 var recuperacion_controller_1 = require("../models/recuperacion.controller");
 var crypto_1 = __importDefault(require("crypto"));
 var AuthController = /** @class */ (function () {
@@ -69,7 +70,7 @@ var AuthController = /** @class */ (function () {
                                     switch (_a.label) {
                                         case 0:
                                             admin = admins[0];
-                                            return [4 /*yield*/, bcrypt_1.compare(this.credentials.password, admin.contrasena)];
+                                            return [4 /*yield*/, bcryptjs_1.compare(this.credentials.password, admin.contrasena)];
                                         case 1:
                                             valid = _a.sent();
                                             if (!valid) return [3 /*break*/, 3];
@@ -101,7 +102,7 @@ var AuthController = /** @class */ (function () {
             var newHash, admCtl;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, bcrypt_1.hash(this.credentials.password, this.saltRounds)];
+                    case 0: return [4 /*yield*/, bcryptjs_1.hash(this.credentials.password, this.saltRounds)];
                     case 1:
                         newHash = _a.sent();
                         admCtl = new admin_controller_1.AdminController();
@@ -159,7 +160,7 @@ var AuthController = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, bcrypt_1.compare(this.credentials.password, password)];
+                    case 0: return [4 /*yield*/, bcryptjs_1.compare(this.credentials.password, password)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -192,7 +193,7 @@ var AuthController = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         phrase = '1234a';
-                        return [4 /*yield*/, bcrypt_1.hash(phrase, this.saltRounds)];
+                        return [4 /*yield*/, bcryptjs_1.hash(phrase, this.saltRounds)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });

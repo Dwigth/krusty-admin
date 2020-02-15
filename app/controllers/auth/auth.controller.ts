@@ -1,7 +1,7 @@
 import { IAuthController } from "../../interfaces/controllers/auth/auth";
 import { ICredentials } from "../../interfaces/controllers/auth/credentials";
 import { AdminController } from "../models/admin.controller";
-import { compare, hash } from 'bcrypt';
+import { compare, hash } from 'bcryptjs';
 import { IRecuperacionContra } from "../../interfaces/Database/models/recuperacion_contra";
 import { RecuperacionController } from "../models/recuperacion.controller";
 import crypto from 'crypto';
