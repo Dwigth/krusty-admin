@@ -14,6 +14,7 @@ var http_1 = __importDefault(require("http"));
 var https_1 = __importDefault(require("https"));
 var colors_1 = __importDefault(require("colors"));
 var hbs_1 = __importDefault(require("hbs"));
+var socket_io_1 = __importDefault(require("socket.io"));
 var Database_1 = require("../db/Database");
 var express_1 = __importDefault(require("express"));
 var middlewares_idx_1 = require("../server/middlewares.idx");
@@ -23,10 +24,12 @@ var routes_module_1 = require("../routes/routes.module");
 var helpers_module_1 = require("../helpers/hbs/helpers.module");
 var moment = __importStar(require("moment-timezone"));
 require("moment/locale/es-us");
+var notification_controller_1 = require("../controllers/notification.controller");
 exports.ROOTDIRNAME = __dirname.slice(0, __dirname.indexOf('dist'));
 var Server = /** @class */ (function () {
     function Server() {
         var DB = new Database_1.Database();
+        exports.APPDB = DB.Pool;
         this.WebService();
     }
     /**
@@ -46,6 +49,7 @@ var Server = /** @class */ (function () {
         this.LoadTimeUtilities();
         // Siempre a lo ultimo de la jerarquía
         this.InitializeServer();
+        this.InitializeSocketServer();
     };
     /**
      * =============================================
@@ -138,6 +142,30 @@ var Server = /** @class */ (function () {
     Server.prototype.LoadTimeUtilities = function () {
         moment.tz("America/Mexico_City");
         moment.locale('es');
+    };
+    /**
+     * =============================================
+     *
+     * Inicializa un servidor http para otra instancia de SOCKET.IO
+     * Y monta el archivo cliente js de socket
+     *
+     * =============================================
+     */
+    Server.prototype.InitializeSocketServer = function () {
+        var httpsocket = http_1.default.createServer(function (req, res) {
+            fs_1.readFile(exports.ROOTDIRNAME + '/public/socket.js', function (err, data) {
+                if (err) {
+                    res.writeHead(404, { 'Content-Type': 'text/html' });
+                    return res.end("404 Not Found");
+                }
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.write(data);
+                return res.end();
+            });
+        }).listen(enviroment_1.environments.Socket.PORT);
+        socket_io_1.default(httpsocket).on('connection', function (socket) {
+            var nctl = new notification_controller_1.NotificationController(socket);
+        });
     };
     return Server;
 }());

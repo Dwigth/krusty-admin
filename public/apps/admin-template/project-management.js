@@ -292,32 +292,7 @@ class ProjectManagement {
                 gantt.message(task.text + " starts at " + s + " and ends at " + e);
             }
 
-            const TaskObject = {
-                id: task.id,
-                id_proyecto: task.id_proyecto,
-                nombre: task.text,
-                fecha_inicio: self.moment(task.start_date).format('YYYY-MM-DD'),
-                fecha_termino: self.moment(task.end_date).format('YYYY-MM-DD'),
-                progreso: task.progress,
-                orden: task.order,
-                dependencia: task.parent,
-                descripcion: ''
-            };
-
-            // Se actualiza la tarea
-            await HTTP({
-                url: '/planner/tasks/update',
-                token: profile.profile.token,
-                data: { tareas: [TaskObject] },
-                method: 'PATCH',
-                success: async (data) => {
-                    const RecentlyUpdatedTasks = await data.json();
-                    console.log(RecentlyUpdatedTasks);
-                },
-                failed: (e) => { console.error(e) }
-            });
-
-
+            self.UpdateTask(task, self);
         });
 
         // Guardar en el modal
@@ -326,10 +301,40 @@ class ProjectManagement {
             let message = "Guardar!!";
             gantt.message(message);
             console.log(task);
-
+            self.UpdateTask(task, self);
             return true;
         })
 
+    }
+    /**
+     * 
+     * @param {*} task Objeto tarea de la gráfica de Gantt
+     */
+    async UpdateTask(task, self) {
+        const TaskObject = {
+            id: task.id,
+            id_proyecto: task.id_proyecto,
+            nombre: task.text,
+            fecha_inicio: self.moment(task.start_date).format('YYYY-MM-DD'),
+            fecha_termino: self.moment(task.end_date).format('YYYY-MM-DD'),
+            progreso: task.progress,
+            orden: task.order,
+            dependencia: task.parent,
+            descripcion: ''
+        };
+
+
+        await HTTP({
+            url: '/planner/tasks/update',
+            token: profile.profile.token,
+            data: { tareas: [TaskObject] },
+            method: 'PATCH',
+            success: async (data) => {
+                const RecentlyUpdatedTasks = await data.json();
+                console.log(RecentlyUpdatedTasks);
+            },
+            failed: (e) => { console.error(e) }
+        });
     }
 
     /**

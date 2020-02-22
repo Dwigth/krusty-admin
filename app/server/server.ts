@@ -2,17 +2,19 @@ import http from 'http';
 import https from 'https';
 import colors from 'colors';
 import hbs from 'hbs';
+import io from 'socket.io';
 
 import { Database } from "../db/Database";
 import express, { Application } from 'express';
 import { MIDDLEWARES } from "../server/middlewares.idx";
 import { environments } from "../../environments/enviroment";
-import { readFileSync } from "fs";
+import { readFileSync, readFile } from "fs";
 import { Routes } from '../routes/routes.module'
 import { HelpersModule } from '../helpers/hbs/helpers.module';
 
 import * as moment from 'moment-timezone';
 import 'moment/locale/es-us';
+import { NotificationController } from '../controllers/notification.controller';
 
 
 /**
@@ -25,11 +27,13 @@ import 'moment/locale/es-us';
 
 export let WEB_SERVER: Application;
 export let ROOTDIRNAME = __dirname.slice(0, __dirname.indexOf('dist'));
+export let APPDB: any;
 
 export class Server {
     constructor() {
 
         const DB = new Database();
+        APPDB = DB.Pool;
         this.WebService();
 
     }
@@ -52,6 +56,7 @@ export class Server {
         this.LoadTimeUtilities();
         // Siempre a lo ultimo de la jerarquía
         this.InitializeServer();
+        this.InitializeSocketServer();
     }
 
     /**
@@ -73,7 +78,6 @@ export class Server {
             } else {
                 SERVER = http.createServer(WEB_SERVER);
             }
-
             SERVER.listen(environments.PORT, () => {
                 if (environments.logging) {
                     console.log(colors
@@ -153,5 +157,30 @@ export class Server {
     LoadTimeUtilities() {
         moment.tz("America/Mexico_City");
         moment.locale('es');
+    }
+
+    /**
+     * =============================================
+     * 
+     * Inicializa un servidor http para otra instancia de SOCKET.IO
+     * Y monta el archivo cliente js de socket
+     * 
+     * =============================================
+     */
+    InitializeSocketServer() {
+        let httpsocket = http.createServer(function (req, res) {
+            readFile(ROOTDIRNAME + '/public/socket.js', function (err, data) {
+                if (err) {
+                    res.writeHead(404, { 'Content-Type': 'text/html' });
+                    return res.end("404 Not Found");
+                }
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.write(data);
+                return res.end();
+            });
+        }).listen(environments.Socket.PORT);
+        io(httpsocket).on('connection', function (socket) {
+            const nctl = new NotificationController(socket);
+        });
     }
 }

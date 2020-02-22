@@ -4,10 +4,10 @@ export const environments = {
     */
     database: {
         connectionLimit: 10,
-        host: 'localhost',
+        host: process.env.HOST || 'localhost',
         user: process.env.DBUSER || 'root',
         password: process.env.DBPASS || 'rootroot',
-        database: 'tscbit_matilde',
+        database: process.env.DATABASE || 'tscbit_matilde',
         timezone: 'utc'
     },
     /**
@@ -40,5 +40,8 @@ export const environments = {
                 rejectUnauthorized: false
             }
         }
+    },
+    Socket: {
+        PORT: 3020
     }
 }

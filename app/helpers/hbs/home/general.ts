@@ -69,7 +69,7 @@ export const GeneralHelperManager: IHelperModel[] = [
                 </div>
             </div>`;
           } else {
-
+            admin.img = (admin.img == '') ? '/images/avatar.png' : admin.img;
             finalHTML += `
             <div class="col-md-4">
                 <div class="card">
