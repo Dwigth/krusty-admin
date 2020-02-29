@@ -10,7 +10,7 @@ exports.environments = {
         user: process.env.DBUSER || 'root',
         password: process.env.DBPASS || 'rootroot',
         database: process.env.DATABASE || 'tscbit_matilde',
-        timezone: 'utc'
+        timezone: 'UTC'
     },
     /**
      *

@@ -5,7 +5,7 @@ import { QueryModeler } from "../classes/querymodeler";
 
 
 export class DAO extends QueryModeler implements IDAO {
-    DB: { query: any };
+    DB: { Query: any };
     tablename: string;
     constructor() {
         super();
@@ -40,31 +40,31 @@ export class DAO extends QueryModeler implements IDAO {
         // Se agregan los inserts a la consulta.
         sql += `${insertsStr}`;
         // console.log(colors.green(sql));
-        this.DB.query(sql).then(console.log).catch(console.log);
+        this.DB.Query(sql).then(console.log).catch(console.log);
     }
     /**
      * Genera una consulta de inserción para un dato dado.
      * @returns Promise
      * @param data Dato a insertar
      */
-    Insert<T extends any>(data: T) {
+    async Insert<T extends any>(data: T) {
         const keys = Object.keys(data);
         let sql = `INSERT INTO ${this.tablename} (${keys}) VALUES (${this.SanitizeData(data, 'insert')})`;
         console.log(sql);
-        return this.DB.query(sql);
+        return await this.DB.Query(sql);
     }
     /**
      * 
      * @param data Objeto a actualizar
      * @param where Sentencia WHERE ej. "WHERE id = 2" { property:'id',value:2 }
      */
-    Update<T extends any>(data: T, where?: string) {
+    async Update<T extends any>(data: T, where?: string) {
         if (where == undefined) {
             console.error(colors.red('Se requiere la sentencia WHERE para seguir'));
             return;
         }
         let sql = `UPDATE ${this.tablename} SET ${this.SanitizeData(data, 'update')}  ${where};`;
-        return this.DB.query(sql);
+        return await this.DB.Query(sql);
     }
     /**
      * El batch update es un metodo especial y especifico para crear una consulta por cada uno de los elementos agregados
@@ -73,7 +73,7 @@ export class DAO extends QueryModeler implements IDAO {
      * @param where Objeto con dos propiedades: `global` boolean que nos permite saber si el primer elemento del arreglo de valores where 
      * se aplicará para todas las consultas. `Values` arreglo de valores sentencias where.
      */
-    BatchUpdate<T>(data: Array<T>, where?: { global?: boolean, values: Array<string> }) {
+    async BatchUpdate<T>(data: Array<T>, where?: { global?: boolean, values: Array<string> }) {
         let sql = '';
         data.map((d, i) => {
             let sentence;
@@ -84,7 +84,7 @@ export class DAO extends QueryModeler implements IDAO {
             }
             sql += `UPDATE ${this.tablename} SET ${this.SanitizeData(d, 'update')} ${sentence};`;
         })
-        this.DB.query(sql);
+        await this.DB.Query(sql);
         return sql;
     }
     /**
@@ -95,7 +95,7 @@ export class DAO extends QueryModeler implements IDAO {
     /**
      * Obtiene un elemento de la tabla asignada al controlador
      */
-    Get(options?: { where: IWhere }) {
+    async Get(options?: { where: IWhere }) {
         let keysString = (options?.where.Properties != undefined) ? options?.where.Properties?.join(',') : '*';
         let sql = `SELECT ${keysString} FROM ${this.tablename} `;
         if (options) {
@@ -103,7 +103,7 @@ export class DAO extends QueryModeler implements IDAO {
         }
         sql += ' LIMIT 1'
         console.log(sql);
-        return this.DB.query(sql).then((r: any) => r.rows[0]);
+        return await this.DB.Query(sql).then((r: any) => r[0]);
     }
     /**
      * @description Retorna un arreglo de datos (rows), la consulta básica es SELECT * FROM foo
@@ -127,11 +127,11 @@ export class DAO extends QueryModeler implements IDAO {
      *  append:['WHERE id_usuario_tipo = 3']
      * }
      */
-    GetAll(options?: any) {
-        const keys_count = (options.keys) ? options.keys.length : 0;
-        const append_count = (options.append) ? options.append.length : 0;
+    async GetAll(options?: any) {
 
         if (options) {
+            const append_count = (options.append) ? options.append.length : 0;
+            const keys_count = (options.keys) ? options.keys.length : 0;
             let sql = 'SELECT ';
             if (keys_count > 0) {
                 // Obtenemos los valores que se van a insertar
@@ -150,10 +150,10 @@ export class DAO extends QueryModeler implements IDAO {
                 // }
             }
             console.log(colors.yellow(sql));
-            return this.DB.query(sql).then((r: any) => r.rows);
+            return await this.DB.Query(sql).then((r: any) => r);
         } else {
             let sql = `SELECT * FROM ${this.tablename}`;
-            return this.DB.query(sql).then((r: any) => r.rows);
+            return await this.DB.Query(sql).then((r: any) => r);
         }
     }
 

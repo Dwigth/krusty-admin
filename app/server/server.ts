@@ -33,7 +33,7 @@ export class Server {
     constructor() {
 
         const DB = new Database();
-        APPDB = DB.Pool;
+        APPDB = DB;
         this.WebService();
 
     }
@@ -156,7 +156,7 @@ export class Server {
      */
     LoadTimeUtilities() {
         moment.tz("America/Mexico_City");
-        moment.locale('es');
+        moment.locale('es-us');
     }
 
     /**

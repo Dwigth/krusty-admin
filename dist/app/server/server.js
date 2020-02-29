@@ -29,7 +29,7 @@ exports.ROOTDIRNAME = __dirname.slice(0, __dirname.indexOf('dist'));
 var Server = /** @class */ (function () {
     function Server() {
         var DB = new Database_1.Database();
-        exports.APPDB = DB.Pool;
+        exports.APPDB = DB;
         this.WebService();
     }
     /**
@@ -141,7 +141,7 @@ var Server = /** @class */ (function () {
      */
     Server.prototype.LoadTimeUtilities = function () {
         moment.tz("America/Mexico_City");
-        moment.locale('es');
+        moment.locale('es-us');
     };
     /**
      * =============================================

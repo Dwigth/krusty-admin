@@ -3,6 +3,6 @@ require.config({
         'socket': ['core'],
     },
     paths: {
-        'socket': '',
+        'socket': '/admin-template/assets/plugins/socket.io/socket',
     }
 });
