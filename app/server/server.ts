@@ -15,6 +15,7 @@ import { HelpersModule } from '../helpers/hbs/helpers.module';
 import * as moment from 'moment-timezone';
 import 'moment/locale/es-us';
 import { NotificationController } from '../controllers/notification.controller';
+import { SocketClass } from '../sockets/socket';
 
 
 /**
@@ -181,6 +182,7 @@ export class Server {
         }).listen(environments.Socket.PORT);
         io(httpsocket).on('connection', function (socket) {
             const nctl = new NotificationController(socket);
+            const socketCtrl = new SocketClass(socket);
         });
     }
 }

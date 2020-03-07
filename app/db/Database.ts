@@ -3,6 +3,7 @@ import { environments } from "../../environments/enviroment";
 import { IDatabase } from "../interfaces/Database/IDatabase";
 import colors from 'colors';
 import { QueryValues } from "../interfaces/Database/QueryValues";
+import { UsuarioAdmin } from "../interfaces/krusty_machine/usuario.model";
 
 /**
  * ==============================================
@@ -88,6 +89,65 @@ export class Database implements IDatabase {
             QueryValues: queryResult.fields
         }
         return result;
+    }
+
+    //EJECUTA UNA CONSULTA
+    public async ejecutarConsulta(query: string, requireToken: boolean, token: string, callback: Function) {
+
+        let queryAdmin = `SELECT * FROM admin WHERE token = '${token}'`;
+        let validacionUser: boolean = false;
+        let promiseUser: Promise<UsuarioAdmin> = new Promise(
+            (resolve, reject) => {
+                this.Pool.query(
+                    queryAdmin,
+                    (err: any, results: UsuarioAdmin[], fields: any) => {
+                        //SI ENCONTRAMOS UN ERROR DE SINTAXIS
+                        if (err) {
+                            //   console.log("Error al ejecutar consulta", err);
+                            reject(err);
+                        }
+                        // console.log("query", queryAdmin);
+                        // console.log("results", results);
+
+                        //SI EL DATO BUSCADO NO EXISTE
+                        if (results.length === 0) {
+                            //   console.log("No se encontro el usuario");
+                            reject("No se encontro el usuario");
+                        }
+
+                        resolve(results[0]);
+                    }
+                );
+            }
+        );
+
+        if (requireToken) {
+            await promiseUser.then(user => validacionUser = true).catch(e => validacionUser = false);
+            // console.log("promise user", promiseUser);
+        } else {
+            validacionUser = true;
+        }
+
+        if (validacionUser) {
+            this.Pool.query(query, (err: any, results: Object[], fields: any) => {
+                //SI ENCONTRAMOS UN ERROR DE SINTAXIS
+                if (err) {
+                    // console.log("Error al ejecutar consulta", err);
+                    return callback(err);
+                }
+                //SI EL DATO BUSCADO NO EXISTE
+                if (results.length === 0) {
+                    return callback("El registro no existe");
+                } else {
+                    //TODO SALIO BIEN
+                    return callback(null, results);
+                }
+            });
+        } else {
+            return callback("Error al validar usuario");
+        }
+
+
     }
 
 }

@@ -25,6 +25,7 @@ var helpers_module_1 = require("../helpers/hbs/helpers.module");
 var moment = __importStar(require("moment-timezone"));
 require("moment/locale/es-us");
 var notification_controller_1 = require("../controllers/notification.controller");
+var socket_1 = require("../sockets/socket");
 exports.ROOTDIRNAME = __dirname.slice(0, __dirname.indexOf('dist'));
 var Server = /** @class */ (function () {
     function Server() {
@@ -165,6 +166,7 @@ var Server = /** @class */ (function () {
         }).listen(enviroment_1.environments.Socket.PORT);
         socket_io_1.default(httpsocket).on('connection', function (socket) {
             var nctl = new notification_controller_1.NotificationController(socket);
+            var socketCtrl = new socket_1.SocketClass(socket);
         });
     };
     return Server;

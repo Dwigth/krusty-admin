@@ -144,6 +144,67 @@ var Database = /** @class */ (function () {
             });
         });
     };
+    //EJECUTA UNA CONSULTA
+    Database.prototype.ejecutarConsulta = function (query, requireToken, token, callback) {
+        return __awaiter(this, void 0, void 0, function () {
+            var queryAdmin, validacionUser, promiseUser;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        queryAdmin = "SELECT * FROM admin WHERE token = '" + token + "'";
+                        validacionUser = false;
+                        promiseUser = new Promise(function (resolve, reject) {
+                            _this.Pool.query(queryAdmin, function (err, results, fields) {
+                                //SI ENCONTRAMOS UN ERROR DE SINTAXIS
+                                if (err) {
+                                    //   console.log("Error al ejecutar consulta", err);
+                                    reject(err);
+                                }
+                                // console.log("query", queryAdmin);
+                                // console.log("results", results);
+                                //SI EL DATO BUSCADO NO EXISTE
+                                if (results.length === 0) {
+                                    //   console.log("No se encontro el usuario");
+                                    reject("No se encontro el usuario");
+                                }
+                                resolve(results[0]);
+                            });
+                        });
+                        if (!requireToken) return [3 /*break*/, 2];
+                        return [4 /*yield*/, promiseUser.then(function (user) { return validacionUser = true; }).catch(function (e) { return validacionUser = false; })];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        validacionUser = true;
+                        _a.label = 3;
+                    case 3:
+                        if (validacionUser) {
+                            this.Pool.query(query, function (err, results, fields) {
+                                //SI ENCONTRAMOS UN ERROR DE SINTAXIS
+                                if (err) {
+                                    // console.log("Error al ejecutar consulta", err);
+                                    return callback(err);
+                                }
+                                //SI EL DATO BUSCADO NO EXISTE
+                                if (results.length === 0) {
+                                    return callback("El registro no existe");
+                                }
+                                else {
+                                    //TODO SALIO BIEN
+                                    return callback(null, results);
+                                }
+                            });
+                        }
+                        else {
+                            return [2 /*return*/, callback("Error al validar usuario")];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     Database.instance = null;
     return Database;
 }());

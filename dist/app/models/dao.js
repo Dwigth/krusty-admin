@@ -151,13 +151,12 @@ var DAO = /** @class */ (function (_super) {
                     case 0:
                         sql = '';
                         data.map(function (d, i) {
-                            var _a, _b, _c;
                             var sentence;
-                            if ((_a = where) === null || _a === void 0 ? void 0 : _a.global) {
-                                sentence = (_b = where) === null || _b === void 0 ? void 0 : _b.values[0];
+                            if (where === null || where === void 0 ? void 0 : where.global) {
+                                sentence = where === null || where === void 0 ? void 0 : where.values[0];
                             }
                             else {
-                                sentence = (_c = where) === null || _c === void 0 ? void 0 : _c.values[i];
+                                sentence = where === null || where === void 0 ? void 0 : where.values[i];
                             }
                             sql += "UPDATE " + _this.tablename + " SET " + _this.SanitizeData(d, 'update') + " " + sentence + ";";
                         });
@@ -178,13 +177,13 @@ var DAO = /** @class */ (function (_super) {
      * Obtiene un elemento de la tabla asignada al controlador
      */
     DAO.prototype.Get = function (options) {
-        var _a, _b, _c;
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
             var keysString, sql;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        keysString = (((_a = options) === null || _a === void 0 ? void 0 : _a.where.Properties) != undefined) ? (_c = (_b = options) === null || _b === void 0 ? void 0 : _b.where.Properties) === null || _c === void 0 ? void 0 : _c.join(',') : '*';
+                        keysString = ((options === null || options === void 0 ? void 0 : options.where.Properties) != undefined) ? (_a = options === null || options === void 0 ? void 0 : options.where.Properties) === null || _a === void 0 ? void 0 : _a.join(',') : '*';
                         sql = "SELECT " + keysString + " FROM " + this.tablename + " ";
                         if (options) {
                             sql += this.Whereify(options.where);
@@ -192,7 +191,7 @@ var DAO = /** @class */ (function (_super) {
                         sql += ' LIMIT 1';
                         console.log(sql);
                         return [4 /*yield*/, this.DB.Query(sql).then(function (r) { return r[0]; })];
-                    case 1: return [2 /*return*/, _d.sent()];
+                    case 1: return [2 /*return*/, _b.sent()];
                 }
             });
         });
