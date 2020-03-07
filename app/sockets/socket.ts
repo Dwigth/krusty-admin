@@ -1,21 +1,23 @@
 import { UsuarioSocket } from "./models/usuario.model";
 import { UsuarioController } from './controllers/usuario.controller';
-import { Socket } from 'socket.io';
+import socket from "socket.io";
 
 export const usuarioController = new UsuarioController();
 
 export class SocketClass{
   
   constructor(
-    public socket: Socket
+    public socket: socket.Server
   ){
     this.initSocket();
   }
 
   private initSocket(){
-
+    console.log("init socket");
+    
     // Usuario conectado
     this.socket.on("connection", (client: any) => {
+      console.log("conection", client);
       
       client.on("usuariosConectar", (usuario: UsuarioSocket) => {
         //Asignar el id al usuario

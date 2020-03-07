@@ -2,7 +2,7 @@ import http from 'http';
 import https from 'https';
 import colors from 'colors';
 import hbs from 'hbs';
-import io from 'socket.io';
+import socket from 'socket.io';
 
 import { Database } from "../db/Database";
 import express, { Application } from 'express';
@@ -31,158 +31,167 @@ export let ROOTDIRNAME = __dirname.slice(0, __dirname.indexOf('dist'));
 export let APPDB: any;
 
 export class Server {
-    constructor() {
+         public io: socket.Server;
+         public server: http.Server | any;
 
-        const DB = new Database();
-        APPDB = DB;
-        this.WebService();
+         constructor() {}
 
-    }
+         static init() {
+           return new Server();
+         }
 
-    /**
-     * =============================================
-     * 
-     * Inicializa el servidor Express
-     * 
-     * =============================================
-     */
-    WebService() {
+         start(callback: Function) {
+           const DB = new Database();
+           APPDB = DB;
+           this.WebService(callback);
+         }
 
-        WEB_SERVER = express();
-        this.LoadMiddlewares();
-        this.LoadStaticFiles();
-        this.LoadTemplateEngine();
-        this.LoadRoutes();
-        this.SecurityConfig();
-        this.LoadTimeUtilities();
-        // Siempre a lo ultimo de la jerarquía
-        this.InitializeServer();
-        this.InitializeSocketServer();
-    }
+         /**
+          * =============================================
+          *
+          * Inicializa el servidor Express
+          *
+          * =============================================
+          */
+         WebService(callback: Function) {
+           WEB_SERVER = express();
+           this.LoadMiddlewares();
+           this.LoadStaticFiles();
+           this.LoadTemplateEngine();
+           this.LoadRoutes();
+           this.SecurityConfig();
+           this.LoadTimeUtilities();
+           // Siempre a lo ultimo de la jerarquía
+           this.InitializeServer(callback);
+           this.InitializeSocketServer();
+         }
 
-    /**
-     * =============================================
-     * 
-     * Inicializa los servidores HTTP o HTTPS 
-     * 
-     * =============================================
-     */
-    InitializeServer() {
-        try {
-            let SERVER;
+         /**
+          * =============================================
+          *
+          * Inicializa los servidores HTTP o HTTPS
+          *
+          * =============================================
+          */
 
-            if (environments.enableSSL) {
-                SERVER = https.createServer({
-                    key: readFileSync(environments.SSLConfig.key),
-                    cert: readFileSync(environments.SSLConfig.cert)
-                }, WEB_SERVER);
-            } else {
-                SERVER = http.createServer(WEB_SERVER);
-            }
-            SERVER.listen(environments.PORT, () => {
-                if (environments.logging) {
-                    console.log(colors
-                        .green('Servicio corriendo desde el puerto: ' + environments.PORT.toString())
-                    );
-                }
-            });
-        } catch (e) {
-            console.log(colors.red(e));
-        }
-    }
+         InitializeServer(callback: Function) {
+           try {
+             if (environments.enableSSL) {
+               this.server = https.createServer(
+                 {
+                   key: readFileSync(environments.SSLConfig.key),
+                   cert: readFileSync(environments.SSLConfig.cert)
+                 },
+                 WEB_SERVER
+               );
+               this.io = socket(this.server);
+             } else {
+               this.server = http.createServer(WEB_SERVER);
+               this.io = socket(this.server);
+             }
 
-    /**
-     * =============================================
-     * 
-     * Carga todos los complementos o middlewares de
-     * una lista
-     * 
-     * =============================================
-     */
-    LoadMiddlewares() {
-        WEB_SERVER.use(MIDDLEWARES);
-    }
+             this.server.listen(environments.PORT, callback);
+           } catch (e) {
+             console.log(colors.red(e));
+           }
+         }
 
-    /**
-     * =============================================
-     * 
-     * Permite que el programador defina el motor de 
-     * renderizado que prefiera
-     * 
-     * =============================================
-     */
-    LoadTemplateEngine() {
-        WEB_SERVER.set('view engine', 'hbs');
-        hbs.registerPartials(ROOTDIRNAME + 'views/partials');
-        const HelpMod = new HelpersModule();
+         /**
+          * =============================================
+          *
+          * Carga todos los complementos o middlewares de
+          * una lista
+          *
+          * =============================================
+          */
+         LoadMiddlewares() {
+           WEB_SERVER.use(MIDDLEWARES);
+         }
 
-        if (environments.logging) {
-            console.log(colors.america('Parciales de HBS =>'), ROOTDIRNAME + 'views/partials');
-        }
-    }
+         /**
+          * =============================================
+          *
+          * Permite que el programador defina el motor de
+          * renderizado que prefiera
+          *
+          * =============================================
+          */
+         LoadTemplateEngine() {
+           WEB_SERVER.set("view engine", "hbs");
+           hbs.registerPartials(ROOTDIRNAME + "views/partials");
+           const HelpMod = new HelpersModule();
 
-    /**
-     * =============================================
-     * 
-     * Carga archivos estáticos
-     * 
-     * =============================================
-     */
-    LoadStaticFiles() {
-        WEB_SERVER.use(express.static(ROOTDIRNAME + 'public/'))
-    }
+           if (environments.logging) {
+             console.log(
+               colors.america("Parciales de HBS =>"),
+               ROOTDIRNAME + "views/partials"
+             );
+           }
+         }
 
-    /**
-     * =============================================
-     * 
-     * Carga todas las rutas de express
-     * 
-     * =============================================
-     */
-    LoadRoutes() {
-        const routes = new Routes();
-    }
+         /**
+          * =============================================
+          *
+          * Carga archivos estáticos
+          *
+          * =============================================
+          */
+         LoadStaticFiles() {
+           WEB_SERVER.use(express.static(ROOTDIRNAME + "public/"));
+         }
 
-    SecurityConfig() {
-        WEB_SERVER.disable('x-powered-by');
-    }
+         /**
+          * =============================================
+          *
+          * Carga todas las rutas de express
+          *
+          * =============================================
+          */
+         LoadRoutes() {
+           const routes = new Routes();
+         }
 
-    /**
-     * =============================================
-     * 
-     * Carga utilerias y establece configuraciones 
-     * para usar momentjs
-     * 
-     * =============================================
-     */
-    LoadTimeUtilities() {
-        moment.tz("America/Mexico_City");
-        moment.locale('es-us');
-    }
+         SecurityConfig() {
+           WEB_SERVER.disable("x-powered-by");
+         }
 
-    /**
-     * =============================================
-     * 
-     * Inicializa un servidor http para otra instancia de SOCKET.IO
-     * Y monta el archivo cliente js de socket
-     * 
-     * =============================================
-     */
-    InitializeSocketServer() {
-        let httpsocket = http.createServer(function (req, res) {
-            readFile(ROOTDIRNAME + '/public/socket.js', function (err, data) {
-                if (err) {
-                    res.writeHead(404, { 'Content-Type': 'text/html' });
-                    return res.end("404 Not Found");
-                }
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                res.write(data);
-                return res.end();
-            });
-        }).listen(environments.Socket.PORT);
-        io(httpsocket).on('connection', function (socket) {
-            const nctl = new NotificationController(socket);
-            const socketCtrl = new SocketClass(socket);
-        });
-    }
-}
+         /**
+          * =============================================
+          *
+          * Carga utilerias y establece configuraciones
+          * para usar momentjs
+          *
+          * =============================================
+          */
+         LoadTimeUtilities() {
+           moment.tz("America/Mexico_City");
+           moment.locale("es-us");
+         }
+
+         /**
+          * =============================================
+          *
+          * Inicializa un servidor http para otra instancia de SOCKET.IO
+          * Y monta el archivo cliente js de socket
+          *
+          * =============================================
+          */
+         InitializeSocketServer() {
+           let httpsocket = http
+             .createServer(function(req, res) {
+               readFile(ROOTDIRNAME + "/public/socket.js", function(err, data) {
+                 if (err) {
+                   res.writeHead(404, { "Content-Type": "text/html" });
+                   return res.end("404 Not Found");
+                 }
+                 res.writeHead(200, { "Content-Type": "text/html" });
+                 res.write(data);
+                 return res.end();
+               });
+             })
+             .listen(environments.Socket.PORT);
+           socket(httpsocket).on("connection", function(socket) {
+             const nctl = new NotificationController(socket);
+           });
+         }
+       }

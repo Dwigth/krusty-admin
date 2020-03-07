@@ -9,8 +9,10 @@ var SocketClass = /** @class */ (function () {
     }
     SocketClass.prototype.initSocket = function () {
         var _this = this;
+        console.log("init socket");
         // Usuario conectado
         this.socket.on("connection", function (client) {
+            console.log("conection", client);
             client.on("usuariosConectar", function (usuario) {
                 //Asignar el id al usuario
                 usuario.id_socket = client.id;

@@ -1,9 +1,18 @@
 import { Server } from "./server/server";
+import { SocketClass } from "./sockets/socket";
+import { environments } from "../environments/enviroment";
+import colors from "colors";
 
-class App {
-    constructor() {
-        const myServer = new Server();
-    }
-}
+const myServer = Server.init();
 
-const myApp = new App();
+myServer.start(() => {
+  if (environments.logging) {
+    console.log(
+      colors.green(
+        "Servicio corriendo desde el puerto: " + environments.PORT.toString()
+      )
+    );
+  }
+
+  const socketServer = new SocketClass(myServer.io);
+});
