@@ -21,7 +21,7 @@ router.post('/loginAdmin', function (req, res) {
         if (err) {
             var response = {
                 error: true,
-                mensaje: "Algo salio mal en la consulta.",
+                msg: "Algo salio mal en la consulta.",
                 data: err
             };
             return res.json(response);
@@ -40,7 +40,7 @@ router.post('/loginAdmin', function (req, res) {
                             //Error al actualizar el toekn
                             var response = {
                                 error: true,
-                                mensaje: "Algo salio mal al actualizar el token.",
+                                msg: "Algo salio mal al actualizar el token.",
                                 data: errUpdate
                             };
                             return res.json(response);
@@ -50,7 +50,7 @@ router.post('/loginAdmin', function (req, res) {
                             //Todo salio biwen
                             var response = {
                                 error: false,
-                                mensaje: "Login correcto",
+                                msg: "Login correcto",
                                 data: user_1
                             };
                             return res.json(response);
@@ -61,7 +61,7 @@ router.post('/loginAdmin', function (req, res) {
                     //La contraseña no coincide con el hash
                     var response = {
                         error: true,
-                        mensaje: "Sus credenciales son incorrectas.",
+                        msg: "Sus credenciales son incorrectas.",
                         data: valid
                     };
                     return res.json(response);
@@ -71,7 +71,7 @@ router.post('/loginAdmin', function (req, res) {
                 //Algo salio mal al validar el hash de la contraseña
                 var response = {
                     error: true,
-                    mensaje: "Hubo un error en el valid del login.",
+                    msg: "Hubo un error en el valid del login.",
                     data: errorValid
                 };
                 return res.json(response);

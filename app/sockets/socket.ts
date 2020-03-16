@@ -5,27 +5,27 @@ import socket from "socket.io";
 export const usuarioController = new UsuarioController();
 
 export class SocketClass{
-  
+
+  public io: socket.Server;
   constructor(
     public socket: socket.Server
   ){
-    this.initSocket();
+    this.io = socket;
   }
 
-  private initSocket(){
-    console.log("init socket");
+  public initSocket(){
+    // console.log("init socket", io);
     
     // Usuario conectado
-    this.socket.on("connection", (client: any) => {
-      console.log("conection", client);
+    this.io.on("connection", (client: any) => {
+      // console.log("conection", client);
       
       client.on("usuariosConectar", (usuario: UsuarioSocket) => {
         //Asignar el id al usuario
         usuario.id_socket = client.id;
         usuarioController.conectarUsuario(usuario);
         //Cuanto alguien se conecta, emitimos los usuarios
-        this.socket.emit("usuarios", usuarioController.usuariosSocket);
-
+        this.io.emit("usuarios", usuarioController.usuariosSocket);
       });
 
 
@@ -33,12 +33,20 @@ export class SocketClass{
       client.on("disconnect", () => {
         usuarioController.desconectarUsuario(client.id);
         //Cuando alguien de desconecta, emitimos el evento
-        this.socket.emit("usuarios", usuarioController.usuariosSocket);
+        this.io.emit("usuarios", usuarioController.usuariosSocket);
       });
 
     });
 
   }
 
+
+  public emitirReinicio(nombreServidor: string) {
+    this.io.emit("reiniciar" + nombreServidor);
+  }
+
+  public emitirApagado(nombreServidor: string) {
+    this.io.emit("apagar" + nombreServidor);
+  }
 
 }

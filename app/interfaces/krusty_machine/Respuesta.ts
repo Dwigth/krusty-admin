@@ -1,6 +1,6 @@
 export interface Respuesta{
     error: boolean;
-    mensaje: string;
+    msg: string;
     msjUsuario?: string;
     data?: any;
 }

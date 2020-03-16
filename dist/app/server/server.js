@@ -25,14 +25,18 @@ var helpers_module_1 = require("../helpers/hbs/helpers.module");
 var moment = __importStar(require("moment-timezone"));
 require("moment/locale/es-us");
 var notification_controller_1 = require("../controllers/notification.controller");
-var socket_1 = require("../sockets/socket");
 exports.ROOTDIRNAME = __dirname.slice(0, __dirname.indexOf('dist'));
 var Server = /** @class */ (function () {
     function Server() {
+    }
+    Server.init = function () {
+        return new Server();
+    };
+    Server.prototype.start = function (callback) {
         var DB = new Database_1.Database();
         exports.APPDB = DB;
-        this.WebService();
-    }
+        this.WebService(callback);
+    };
     /**
      * =============================================
      *
@@ -40,7 +44,7 @@ var Server = /** @class */ (function () {
      *
      * =============================================
      */
-    Server.prototype.WebService = function () {
+    Server.prototype.WebService = function (callback) {
         exports.WEB_SERVER = express_1.default();
         this.LoadMiddlewares();
         this.LoadStaticFiles();
@@ -49,7 +53,7 @@ var Server = /** @class */ (function () {
         this.SecurityConfig();
         this.LoadTimeUtilities();
         // Siempre a lo ultimo de la jerarquía
-        this.InitializeServer();
+        this.InitializeServer(callback);
         this.InitializeSocketServer();
     };
     /**
@@ -59,24 +63,22 @@ var Server = /** @class */ (function () {
      *
      * =============================================
      */
-    Server.prototype.InitializeServer = function () {
+    Server.prototype.InitializeServer = function (callback) {
         try {
-            var SERVER = void 0;
             if (enviroment_1.environments.enableSSL) {
-                SERVER = https_1.default.createServer({
+                this.server = https_1.default.createServer({
                     key: fs_1.readFileSync(enviroment_1.environments.SSLConfig.key),
                     cert: fs_1.readFileSync(enviroment_1.environments.SSLConfig.cert)
                 }, exports.WEB_SERVER);
+                this.io = socket_io_1.default(this.server);
+                exports.socket_KrustyMachine = this.io;
             }
             else {
-                SERVER = http_1.default.createServer(exports.WEB_SERVER);
+                this.server = http_1.default.createServer(exports.WEB_SERVER);
+                this.io = socket_io_1.default(this.server);
+                exports.socket_KrustyMachine = this.io;
             }
-            SERVER.listen(enviroment_1.environments.PORT, function () {
-                if (enviroment_1.environments.logging) {
-                    console.log(colors_1.default
-                        .green('Servicio corriendo desde el puerto: ' + enviroment_1.environments.PORT.toString()));
-                }
-            });
+            this.server.listen(enviroment_1.environments.PORT, callback);
         }
         catch (e) {
             console.log(colors_1.default.red(e));
@@ -102,11 +104,11 @@ var Server = /** @class */ (function () {
      * =============================================
      */
     Server.prototype.LoadTemplateEngine = function () {
-        exports.WEB_SERVER.set('view engine', 'hbs');
-        hbs_1.default.registerPartials(exports.ROOTDIRNAME + 'views/partials');
+        exports.WEB_SERVER.set("view engine", "hbs");
+        hbs_1.default.registerPartials(exports.ROOTDIRNAME + "views/partials");
         var HelpMod = new helpers_module_1.HelpersModule();
         if (enviroment_1.environments.logging) {
-            console.log(colors_1.default.america('Parciales de HBS =>'), exports.ROOTDIRNAME + 'views/partials');
+            console.log(colors_1.default.america("Parciales de HBS =>"), exports.ROOTDIRNAME + "views/partials");
         }
     };
     /**
@@ -117,7 +119,7 @@ var Server = /** @class */ (function () {
      * =============================================
      */
     Server.prototype.LoadStaticFiles = function () {
-        exports.WEB_SERVER.use(express_1.default.static(exports.ROOTDIRNAME + 'public/'));
+        exports.WEB_SERVER.use(express_1.default.static(exports.ROOTDIRNAME + "public/"));
     };
     /**
      * =============================================
@@ -130,7 +132,7 @@ var Server = /** @class */ (function () {
         var routes = new routes_module_1.Routes();
     };
     Server.prototype.SecurityConfig = function () {
-        exports.WEB_SERVER.disable('x-powered-by');
+        exports.WEB_SERVER.disable("x-powered-by");
     };
     /**
      * =============================================
@@ -142,7 +144,7 @@ var Server = /** @class */ (function () {
      */
     Server.prototype.LoadTimeUtilities = function () {
         moment.tz("America/Mexico_City");
-        moment.locale('es-us');
+        moment.locale("es-us");
     };
     /**
      * =============================================
@@ -153,20 +155,21 @@ var Server = /** @class */ (function () {
      * =============================================
      */
     Server.prototype.InitializeSocketServer = function () {
-        var httpsocket = http_1.default.createServer(function (req, res) {
-            fs_1.readFile(exports.ROOTDIRNAME + '/public/socket.js', function (err, data) {
+        var httpsocket = http_1.default
+            .createServer(function (req, res) {
+            fs_1.readFile(exports.ROOTDIRNAME + "/public/socket.js", function (err, data) {
                 if (err) {
-                    res.writeHead(404, { 'Content-Type': 'text/html' });
+                    res.writeHead(404, { "Content-Type": "text/html" });
                     return res.end("404 Not Found");
                 }
-                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.writeHead(200, { "Content-Type": "text/html" });
                 res.write(data);
                 return res.end();
             });
-        }).listen(enviroment_1.environments.Socket.PORT);
-        socket_io_1.default(httpsocket).on('connection', function (socket) {
+        })
+            .listen(enviroment_1.environments.Socket.PORT);
+        socket_io_1.default(httpsocket).on("connection", function (socket) {
             var nctl = new notification_controller_1.NotificationController(socket);
-            var socketCtrl = new socket_1.SocketClass(socket);
         });
     };
     return Server;

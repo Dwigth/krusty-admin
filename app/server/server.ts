@@ -29,6 +29,7 @@ import { SocketClass } from '../sockets/socket';
 export let WEB_SERVER: Application;
 export let ROOTDIRNAME = __dirname.slice(0, __dirname.indexOf('dist'));
 export let APPDB: any;
+export let socket_KrustyMachine: any;
 
 export class Server {
          public io: socket.Server;
@@ -85,9 +86,12 @@ export class Server {
                  WEB_SERVER
                );
                this.io = socket(this.server);
+               socket_KrustyMachine = this.io;
+
              } else {
                this.server = http.createServer(WEB_SERVER);
                this.io = socket(this.server);
+               socket_KrustyMachine = this.io;
              }
 
              this.server.listen(environments.PORT, callback);

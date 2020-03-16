@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "nodemon dist/app/app.js -e js,ts,hbs,css,html",
+    "serve": "tsc && nodemon dist/app/app.js -e js,ts,hbs,css,html",
     "compile": "tsc --w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

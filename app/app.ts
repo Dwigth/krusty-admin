@@ -14,5 +14,5 @@ myServer.start(() => {
     );
   }
 
-  const socketServer = new SocketClass(myServer.io);
+  const socketServer = new SocketClass(myServer.io).initSocket();
 });

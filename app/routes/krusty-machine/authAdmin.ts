@@ -27,7 +27,7 @@ router.post('/loginAdmin', (req: Request, res: Response)  => {
         if (err) {
             let response: Respuesta = {
                 error: true,
-                mensaje: "Algo salio mal en la consulta.",
+                msg: "Algo salio mal en la consulta.",
                 data: err
             };
 
@@ -53,7 +53,7 @@ router.post('/loginAdmin', (req: Request, res: Response)  => {
                           //Error al actualizar el toekn
                           let response: Respuesta = {
                             error: true,
-                            mensaje: "Algo salio mal al actualizar el token.",
+                            msg: "Algo salio mal al actualizar el token.",
                             data: errUpdate
                           };
 
@@ -64,7 +64,7 @@ router.post('/loginAdmin', (req: Request, res: Response)  => {
                           //Todo salio biwen
                           let response: Respuesta = {
                             error: false,
-                            mensaje: "Login correcto",
+                            msg: "Login correcto",
                             data: user
                           };
 
@@ -76,7 +76,7 @@ router.post('/loginAdmin', (req: Request, res: Response)  => {
                     //La contraseña no coincide con el hash
                     let response: Respuesta = {
                         error: true,
-                        mensaje: "Sus credenciales son incorrectas.",
+                        msg: "Sus credenciales son incorrectas.",
                         data: valid
                     };
 
@@ -87,7 +87,7 @@ router.post('/loginAdmin', (req: Request, res: Response)  => {
                 //Algo salio mal al validar el hash de la contraseña
                 let response: Respuesta = {
                     error: true,
-                    mensaje: "Hubo un error en el valid del login.",
+                    msg: "Hubo un error en el valid del login.",
                     data: errorValid
                 };
 
