@@ -4,22 +4,13 @@ exports.environments = {
     /**
      * Información de la base de datos
     */
-    // database: {
-    //     connectionLimit: 10,
-    //     host: process.env.HOST || 'localhost',
-    //     user: process.env.DBUSER || 'root',
-    //     password: process.env.DBPASS || 'rootroot',
-    //     database: process.env.DATABASE || 'tscbit_matilde',
-    //     timezone: 'UTC'
-    // },
     database: {
         connectionLimit: 10,
-        host: 'localhost',
+        host: process.env.HOST || 'localhost',
         user: process.env.DBUSER || 'root',
-        password: process.env.DBPASS || '',
-        // database: 'tscbit_matilde',
-        database: 'krusty_machine',
-        timezone: 'utc'
+        password: process.env.DBPASS || 'rootroot',
+        database: process.env.DATABASE || 'tscbit_matilde',
+        timezone: 'UTC'
     },
     /**
      *

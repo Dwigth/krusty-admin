@@ -1,0 +1,27 @@
+#guessList {
+    width: 100%;
+    height: 50px;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#guessList span {
+    margin-left: 1rem;
+}
+
+#guessList span small {
+    border-radius: 5px;
+    position: absolute;
+    color: white;
+    /* color: gray; */
+    /* background-color: rgba(255, 255, 255, 0.8); */
+    background-color: rgba(0, 0, 0, 0.5);
+    line-height: 1rem !important;
+    bottom: 0;
+}
+
+.gantt_task_progress_wrapper .avatar {
+    width: 1.8rem;
+    height: 1.8rem;
+    margin-left: 0.2rem;
+}

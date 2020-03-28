@@ -1,9 +1,11 @@
 export const environments = {
     database: {
         connectionLimit: 10,
-        host: 'example.org',
-        user: 'bob',
-        password: 'secret',
-        database: 'my_db'
-    }
+        host: 'localhost',
+        user: process.env.DBUSER || 'root',
+        password: process.env.DBPASS || '',
+        // database: 'tscbit_matilde',
+        database: 'krusty_machine',
+        timezone: 'utc'
+    },
 }

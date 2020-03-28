@@ -23,6 +23,8 @@ class ProjectManagement {
             this.InitGanttChart();
             this.GanttConfiguration();
             this.GanttEvents();
+            this.GetTaskBars();
+            this.AddUserImgToTasks();
         }
 
         initialWrapper();
@@ -38,14 +40,6 @@ class ProjectManagement {
             data: this.CurrentProject.tareas,
             links: this.CurrentProject.links
         };
-
-        gantt.attachEvent("onGanttReady", function () {
-            var tooltips = gantt.ext.tooltips;
-            console.log(tooltips, gantt.ext);
-            console.log('=======>', gantt.$task_data);
-            // tooltips.tooltip.setViewport(tasks.data);
-        });
-
 
         this.Gantt.init("gantt_here");
         this.Gantt.parse(tasks);
@@ -281,7 +275,8 @@ class ProjectManagement {
         // Editar la fecha de la tarea
         gantt.attachEvent("onAfterTaskDrag", async function (id, mode) {
             var task = gantt.getTask(id);
-            console.log(task.nombre)
+            var pr = Math.floor(task.progress * 100 * 10) / 10;
+
             if (mode == gantt.config.drag_mode.progress) {
                 var pr = Math.floor(task.progress * 100 * 10) / 10;
                 gantt.message(task.text + " is now " + pr + "% completed!");
@@ -291,6 +286,7 @@ class ProjectManagement {
                 var e = convert(task.end_date);
                 gantt.message(task.text + " starts at " + s + " and ends at " + e);
             }
+            task.progreso = task.progress;
 
             self.UpdateTask(task, self);
         });
@@ -305,6 +301,19 @@ class ProjectManagement {
             return true;
         })
 
+        // abre todas las ramas de tareas
+        gantt.eachTask(function (task2open) {
+            gantt.open(task2open.id);
+        });
+
+        // Cada que le de click se renderizarán quienes están asignados a la tarea
+        gantt.attachEvent("onTaskClick", function (id, e) {
+            setTimeout(() => {
+                self.AddUsersImgsToTaskBar(id)
+            }, 100);
+            //any custom logic here
+            return true;
+        });
     }
     /**
      * 
@@ -380,6 +389,8 @@ class ProjectManagement {
             this.InitAssignTaskProperties();
             this.Gantt.clearAll();
             this.InitGanttChart();
+            this.GetTaskBars();
+            this.AddUserImgToTasks();
             // this.DeleteProject();
         });
     }
@@ -396,13 +407,113 @@ class ProjectManagement {
         this.CurrentProject.tareas = this.CurrentProject.tareas.map(tarea => {
             tarea.id = tarea.id.toString()
             tarea.text = tarea.nombre;
-            tarea.start_date = this.moment(tarea.fecha_inicio).format('DD-MM-YYYY');
+            tarea.start_date = this.moment(tarea.fecha_inicio).add(1, 'day').format('DD-MM-YYYY');
             tarea.order = tarea.orden;
             tarea.duration = this.moment(tarea.fecha_termino).diff(this.moment(tarea.fecha_inicio), 'days');
             tarea.progress = tarea.progreso;
             tarea.parent = tarea.dependencia;
             return tarea;
         });
+    }
+
+    /**
+     * Le agregamos la imagen del usuario(s) asignado a la(s) tarea(s) 
+     * al inicio de la carga del proyecto
+     */
+    AddUserImgToTasks() {
+        // Obtenemos todas las barras de tareas
+        // Están ordenadas en cascada
+        this.TaskBars.map(elem => {
+            const TaskId = elem.getAttribute('task_id');
+            const task = this.CurrentProject.tareas.find(tarea => tarea.id == TaskId)
+            // Ahora buscamos el elemento con la clase "gantt_task_progress_wrapper"
+            // Siempre es el primero => [0]
+            const TaskWrapper = elem.children[0];
+            const asignados = task.asignados;
+            if (asignados.length >= 1) {
+                // Creamos los elementos y los agregamos al wrapper
+                asignados.forEach(asignado => {
+                    const avatar = window.ProjectManagementGuessList.CreateGuessElement(asignado);
+                    TaskWrapper.prepend(avatar)
+                })
+            }
+        });
+    }
+
+    /**
+     * Agregamos las imagenes de los usuarios asignados a 
+     * las barras de tareas
+     * @param {*} id
+     */
+    AddUsersImgsToTaskBar(TaskId) {
+        const TaskBar = document.getElementsByClassName('gantt_selected')[2];
+        const Task = this.CurrentProject.tareas.find(tarea => tarea.id == TaskId);
+        const TaskWrapper = TaskBar.children[0];
+        const asignados = Task.asignados;
+        if (asignados.length >= 1) {
+            if (TaskWrapper.children.length == 1) {
+                // Creamos los elementos y los agregamos al wrapper
+                asignados.forEach(asignado => {
+                    const avatar = window.ProjectManagementGuessList.CreateGuessElement(asignado);
+                    TaskWrapper.prepend(avatar)
+                })
+            }
+        }
+    }
+
+    /**
+     * Obtiene las barras de gantt
+     */
+    GetTaskBars() {
+        this.TaskBars = Array.from(document.getElementsByClassName('gantt_bar_task'));
+    }
+
+    /**
+     * Asigna una tarea a un usuario
+     * @param {*} task 
+     */
+    async AssignTask(task) {
+        const guests = task.asignados.map(t => t.id_admin);
+        await HTTP({
+            url: '/planner/tasks/assing',
+            token: profile.profile.token,
+            data: {
+                invitados: guests,
+                id_tarea: task.id
+            },
+            method: 'POST',
+            success: async (data) => {
+                const resp = await data.json();
+                console.log(resp);
+            },
+            failed: (e) => { console.error(e) }
+        });
+    }
+
+    /**
+     * Quita a un usuario de una tarea
+     * @param {*} elem 
+     */
+    async UnassignTask(elem) {
+        const idust = elem.dataset.idust;
+        await HTTP({
+            url: '/planner/tasks/unassing',
+            token: profile.profile.token,
+            data: {
+                id_ust: idust
+            },
+            method: 'POST',
+            success: async (data) => {
+                const resp = await data.json();
+                console.log(resp);
+            },
+            failed: (e) => { console.error(e) }
+        });
+    }
+
+    AssignForm(TaskContentElem) {
+        const TaskId = TaskContentElem.parentElement.getAttribute('task_id');
+        const Task = this.CurrentProject.tareas.find(tarea => tarea.id == TaskId);
     }
 
 }
@@ -416,4 +527,5 @@ require(
     ],
     function (dhtmlxgantt, dhtmlxgantt_tooltip, moment) {
         const pm = new ProjectManagement(moment);
+        window.ProjectManagement = pm;
     });
