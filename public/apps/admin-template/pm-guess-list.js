@@ -15,21 +15,27 @@ class ProjectManagementGuessList {
     }
 
     BuildGuessList() {
-        const userSession = session.Get();
-        const user = { id_admin: userSession.id_admin, img: userSession.img, nombre: userSession.nombre }
+        // const userSession = session.Get();
+        // const user = { id_admin: userSession.id_admin, img: userSession.img, nombre: userSession.nombre }
+
         setTimeout(() => {
-            const guesses = window.ProjectManagement.CurrentProject.invitados;
-            guesses.push(user)
-            guesses.forEach(guess => {
-                const guessElement = document.createElement('span');
-                const smallName = document.createElement('small');
-                guessElement.classList.add('avatar', 'avatar-lg');
-                guessElement.style.backgroundImage = `url(${guess.img})`;
-                smallName.textContent = guess.nombre;
-                guessElement.appendChild(smallName)
-                this.GUESS_LIST_ELEMENTS.push(guessElement);
-                this.GUESS_LIST.appendChild(guessElement);
+            const CurrentProjectOwner = window.ProjectManagement.CurrentProject.id_creador;
+            window.ProjectManagement.GetProjectOwner(CurrentProjectOwner, (user) => {
+
+                const guesses = window.ProjectManagement.CurrentProject.invitados;
+                guesses.push(user)
+                guesses.forEach(guess => {
+                    const guessElement = document.createElement('span');
+                    const smallName = document.createElement('small');
+                    guessElement.classList.add('avatar', 'avatar-lg');
+                    guessElement.style.backgroundImage = `url(${guess.img})`;
+                    smallName.textContent = guess.nombre;
+                    guessElement.appendChild(smallName)
+                    this.GUESS_LIST_ELEMENTS.push(guessElement);
+                    this.GUESS_LIST.appendChild(guessElement);
+                });
             });
+
         }, 1000);
     }
 

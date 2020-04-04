@@ -314,6 +314,15 @@ class ProjectManagement {
             //any custom logic here
             return true;
         });
+
+        gantt.attachEvent("onAfterBatchUpdate", function () {
+            // your code here
+            if (self.CurrentProject.asignados.length > 0) {
+                self.CurrentProject.tareas.forEach(tarea => {
+                    self.AddUsersImgsToTaskBar(tarea.id)
+                })
+            }
+        });
     }
     /**
      * 
@@ -443,7 +452,7 @@ class ProjectManagement {
     /**
      * Agregamos las imagenes de los usuarios asignados a 
      * las barras de tareas
-     * @param {*} id
+     * @param {*} id ID de la tarea
      */
     AddUsersImgsToTaskBar(TaskId) {
         const TaskBar = document.getElementsByClassName('gantt_selected')[2];
@@ -491,6 +500,27 @@ class ProjectManagement {
     }
 
     /**
+     * Obtiene al creador del proyecto si no es el usuario en sesion
+     * @param {*} elem 
+     */
+    async GetProjectOwner(owner, callback) {
+        await HTTP({
+            url: '/getAdmin',
+            token: profile.profile.token,
+            data: {
+                id: owner
+            },
+            method: 'POST',
+            success: async (data) => {
+                const resp = await data.json();
+                // console.log(resp);
+                callback(resp[0])
+            },
+            failed: (e) => { console.error(e) }
+        });
+    }
+
+    /**
      * Quita a un usuario de una tarea
      * @param {*} elem 
      */
@@ -510,12 +540,6 @@ class ProjectManagement {
             failed: (e) => { console.error(e) }
         });
     }
-
-    AssignForm(TaskContentElem) {
-        const TaskId = TaskContentElem.parentElement.getAttribute('task_id');
-        const Task = this.CurrentProject.tareas.find(tarea => tarea.id == TaskId);
-    }
-
 }
 
 // Necesitamos usar esta estructura para poder utilizar las dependencias de JS

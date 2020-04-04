@@ -8,7 +8,8 @@ class ProjectManagementContextMenu {
     CONTEXT_MENU_ITEMS = [
         {
             label: 'Asignar tarea',
-            icon: 'fa fa-plus-circle'
+            icon: 'fa fa-plus-circle',
+            action: function () { new UserListContextMenu() }
         }
     ]
 
@@ -22,25 +23,33 @@ class ProjectManagementContextMenu {
 
     MenuVisible = false;
 
-    constructor() {
-        this.BuildContextMenu();
-        // Abrir
-        const self = this;
-        document.addEventListener("contextmenu", function (e) {
-            if (self.APPLY_ON_ELEMENTS.includes(e.srcElement.classList[0])) {
-                e.preventDefault();
-                self.CURRENT_ELEMENT = e.srcElement;
-                const origin = {
-                    left: e.pageX,
-                    top: e.pageY
-                };
-                self.SetPosition(origin);
-                return false;
-            }
-        });
-        window.addEventListener("click", e => {
-            if (self.MenuVisible) self.ToggleMenu("hide");
-        });
+    CURREN_POSITION = { left: 0, top: 0 };
+
+    SELECTED_TASK;
+
+    constructor({ build = true }) {
+        if (build) {
+            this.BuildContextMenu();
+            // Abrir
+            const self = this;
+            document.addEventListener("contextmenu", function (e) {
+                if (self.APPLY_ON_ELEMENTS.includes(e.srcElement.classList[0])) {
+                    e.preventDefault();
+                    self.CURRENT_ELEMENT = e.srcElement;
+                    const origin = {
+                        left: e.pageX,
+                        top: e.pageY
+                    };
+                    self.CURREN_POSITION = origin;
+                    self.SELECTED_TASK = self.GetTask;
+                    self.SetPosition(origin);
+                    return false;
+                }
+            });
+            window.addEventListener("click", e => {
+                if (self.MenuVisible) self.ToggleMenu("hide");
+            });
+        }
     }
 
     /**
@@ -73,7 +82,7 @@ class ProjectManagementContextMenu {
             a.prepend(icon);
 
             li.addEventListener('click', () => {
-                window.ProjectManagement.AssignForm(self.CURRENT_ELEMENT);
+                item.action();
             })
 
             ul.appendChild(li);
@@ -95,10 +104,11 @@ class ProjectManagementContextMenu {
         this.ToggleMenu('show');
     };
 
-    GetTask() {
-
+    get GetTask() {
+        const task_id = this.CURRENT_ELEMENT.parentElement.getAttribute('task_id');
+        return window.ProjectManagement.CurrentProject.tareas.find(task => task.id == task_id);
     }
 
 }
-
-const contextMenu = new ProjectManagementContextMenu();
+const build = { build: true }
+const contextMenu = new ProjectManagementContextMenu(build);

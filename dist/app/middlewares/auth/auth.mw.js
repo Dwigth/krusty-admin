@@ -372,3 +372,20 @@ function CreateUser(req, res) {
     });
 }
 exports.CreateUser = CreateUser;
+function GetAdmin(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var authctl, _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    authctl = new auth_controller_1.AuthController();
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, authctl.GetAdminByID(req.body.id)];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.GetAdmin = GetAdmin;

@@ -230,3 +230,8 @@ export async function CreateUser(req: Request, res: Response) {
 
     res.redirect('back');
 }
+
+export async function GetAdmin(req: Request, res: Response) {
+    const authctl = new AuthController();
+    res.json(await authctl.GetAdminByID(<number>req.body.id))
+}

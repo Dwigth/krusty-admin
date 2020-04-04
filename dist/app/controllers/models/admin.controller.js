@@ -92,7 +92,7 @@ var AdminController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = "SELECT * FROM admin WHERE id_admin = " + id_admin;
+                        query = "SELECT id_admin,usuario,img,nombre FROM admin WHERE id_admin = " + id_admin;
                         return [4 /*yield*/, Database_1.Database.Instance.Query(query)];
                     case 1:
                         resultado = _a.sent();

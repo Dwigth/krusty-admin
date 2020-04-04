@@ -44,7 +44,7 @@ export class AdminController implements IAdminModel {
      * @param id_admin 
      */
     public async SearchAdminById(id_admin: number) {
-        let query = `SELECT * FROM admin WHERE id_admin = ${id_admin}`;
+        let query = `SELECT id_admin,usuario,img,nombre FROM admin WHERE id_admin = ${id_admin}`;
         let resultado = await Database.Instance.Query<IAdmin[]>(query);
         return resultado;
     }

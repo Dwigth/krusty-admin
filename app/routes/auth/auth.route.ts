@@ -8,7 +8,8 @@ import {
     RestorePasswordPage,
     changePasswordPage,
     changePassword,
-    DisableUser
+    DisableUser,
+    GetAdmin
 } from "../../middlewares/auth/auth.mw";
 
 export const AuthRouter = Router();
@@ -27,3 +28,4 @@ AuthRouter.get('/redirect', Redirect)
 AuthRouter.get('/change-password', changePasswordPage)
 AuthRouter.post('/change-password', changePassword)
 AuthRouter.post('/disable-user', DisableUser)
+AuthRouter.post('/getAdmin', GetAdmin)

@@ -199,6 +199,19 @@ var AuthController = /** @class */ (function () {
             });
         });
     };
+    AuthController.prototype.GetAdminByID = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var adminCtl;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        adminCtl = new admin_controller_1.AdminController();
+                        return [4 /*yield*/, adminCtl.SearchAdminById(id)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     return AuthController;
 }());
 exports.AuthController = AuthController;

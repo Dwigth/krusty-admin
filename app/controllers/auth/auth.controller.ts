@@ -118,4 +118,9 @@ export class AuthController implements IAuthController {
         return await hash(phrase, this.saltRounds);
     }
 
+    public async GetAdminByID(id: number) {
+        const adminCtl = new AdminController();
+        return await adminCtl.SearchAdminById(id);
+    }
+
 }
