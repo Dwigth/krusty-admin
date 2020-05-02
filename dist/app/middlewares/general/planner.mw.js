@@ -144,6 +144,10 @@ function Planner(req, res) {
             switch (_a.label) {
                 case 0:
                     id_admin = +req.params.admin;
+                    if (isNaN(id_admin)) {
+                        res.status(400).json({ msg: 'El ID es invalido', data: id_admin });
+                        return [2 /*return*/];
+                    }
                     plannerctl = new planner_controller_1.PlannerController();
                     plannerctl.SetCurrentUser(id_admin);
                     return [4 /*yield*/, plannerctl.GetProjectsByUser()];
@@ -163,6 +167,10 @@ function GetProjects(req, res) {
             switch (_a.label) {
                 case 0:
                     id_admin = +req.params.admin;
+                    if (isNaN(id_admin)) {
+                        res.status(400).json({ msg: 'El ID es invalido', data: id_admin });
+                        return [2 /*return*/];
+                    }
                     plannerctl = new planner_controller_1.PlannerController();
                     plannerctl.SetCurrentUser(id_admin);
                     return [4 /*yield*/, plannerctl.GetProjectsByUser()];

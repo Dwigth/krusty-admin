@@ -75,6 +75,6 @@ require([
     'socket',
     'moment'
 ], function (io, moment) {
-    var socket = io.connect('http://localhost:3020');
+    var socket = io.connect('https://tscbit.com:3020');
     const notifications = new Notifications(socket, moment);
 });

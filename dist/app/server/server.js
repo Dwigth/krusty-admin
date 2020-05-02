@@ -155,22 +155,45 @@ var Server = /** @class */ (function () {
      * =============================================
      */
     Server.prototype.InitializeSocketServer = function () {
-        var httpsocket = http_1.default
-            .createServer(function (req, res) {
-            fs_1.readFile(exports.ROOTDIRNAME + "/public/socket.js", function (err, data) {
-                if (err) {
-                    res.writeHead(404, { "Content-Type": "text/html" });
-                    return res.end("404 Not Found");
-                }
-                res.writeHead(200, { "Content-Type": "text/html" });
-                res.write(data);
-                return res.end();
+        var httpsocket;
+        try {
+            if (enviroment_1.environments.enableSSL) {
+                httpsocket = https_1.default.createServer({
+                    key: fs_1.readFileSync(enviroment_1.environments.SSLConfig.key),
+                    cert: fs_1.readFileSync(enviroment_1.environments.SSLConfig.cert)
+                }, function (req, res) {
+                    fs_1.readFile(exports.ROOTDIRNAME + "/public/socket.js", function (err, data) {
+                        if (err) {
+                            res.writeHead(404, { "Content-Type": "text/html" });
+                            return res.end("404 Not Found");
+                        }
+                        res.writeHead(200, { "Content-Type": "text/html" });
+                        res.write(data);
+                        return res.end();
+                    });
+                });
+            }
+            else {
+                httpsocket = http_1.default.createServer(function (req, res) {
+                    fs_1.readFile(exports.ROOTDIRNAME + "/public/socket.js", function (err, data) {
+                        if (err) {
+                            res.writeHead(404, { "Content-Type": "text/html" });
+                            return res.end("404 Not Found");
+                        }
+                        res.writeHead(200, { "Content-Type": "text/html" });
+                        res.write(data);
+                        return res.end();
+                    });
+                });
+            }
+            httpsocket.listen(enviroment_1.environments.Socket.PORT);
+            socket_io_1.default(httpsocket).on("connection", function (socket) {
+                var nctl = new notification_controller_1.NotificationController(socket);
             });
-        })
-            .listen(enviroment_1.environments.Socket.PORT);
-        socket_io_1.default(httpsocket).on("connection", function (socket) {
-            var nctl = new notification_controller_1.NotificationController(socket);
-        });
+        }
+        catch (e) {
+            console.log(colors_1.default.red(e));
+        }
     };
     return Server;
 }());

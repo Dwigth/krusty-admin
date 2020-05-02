@@ -14,10 +14,10 @@ export const environments = {
      * 
      */
     logging: true,
-    enableSSL: false,
+    enableSSL: true,
     SSLConfig: {
-        cert: '',
-        key: ''
+        cert: '/etc/letsencrypt/live/tscbit.com/cert.pem',
+        key: '/etc/letsencrypt/live/tscbit.com/privkey.pem'
     },
     MatildeAPIURL: 'https://tscbit.com:3000',
     Session: {

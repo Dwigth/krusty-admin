@@ -54,6 +54,10 @@ export async function UpdateTask(req: Request, res: Response) {
 
 export async function Planner(req: Request, res: Response) {
     const id_admin = +req.params.admin;
+    if (isNaN(id_admin)) {
+        res.status(400).json({ msg: 'El ID es invalido', data: id_admin })
+        return;
+    }
     const plannerctl = new PlannerController();
     plannerctl.SetCurrentUser(id_admin);
     const projects = await plannerctl.GetProjectsByUser();
@@ -62,6 +66,10 @@ export async function Planner(req: Request, res: Response) {
 
 export async function GetProjects(req: Request, res: Response) {
     const id_admin = +req.params.admin;
+    if (isNaN(id_admin)) {
+        res.status(400).json({ msg: 'El ID es invalido', data: id_admin })
+        return;
+    }
     const plannerctl = new PlannerController();
     plannerctl.SetCurrentUser(id_admin);
     const projects = await plannerctl.GetProjectsByUser();
