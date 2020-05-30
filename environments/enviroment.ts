@@ -2,11 +2,12 @@ export const environments = {
     /** 
      * Información de la base de datos 
     */
+   requiereToken: false,
     database: {
         connectionLimit: 10,
         host: process.env.HOST || 'localhost',
         user: process.env.DBUSER || 'root',
-        password: process.env.DBPASS || 'rootroot',
+        password: process.env.DBPASS || '',
         database: process.env.DATABASE || 'tscbit_matilde',
         timezone: 'UTC'
     },
@@ -14,7 +15,7 @@ export const environments = {
      * 
      */
     logging: true,
-    enableSSL: true,
+    enableSSL: false,
     SSLConfig: {
         cert: '/etc/letsencrypt/live/tscbit.com/cert.pem',
         key: '/etc/letsencrypt/live/tscbit.com/privkey.pem'

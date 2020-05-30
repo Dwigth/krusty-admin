@@ -166,7 +166,7 @@ var Database = /** @class */ (function () {
                                 //SI EL DATO BUSCADO NO EXISTE
                                 if (results.length === 0) {
                                     //   console.log("No se encontro el usuario");
-                                    reject("No se encontro el usuario");
+                                    // reject("No se encontro el usuario");
                                 }
                                 resolve(results[0]);
                             });

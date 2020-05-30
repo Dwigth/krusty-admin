@@ -200,7 +200,7 @@ router.post('/insertar_krusty_machine', (req: Request, res: Response)=>{
 
     var token: string = req.header("Authorization");
     // console.log("Token", token);
-
+    //EL TIPO 0 ES UNICO PAGO Y EL TIPO 1 ES PAGO RECURRENTE
     let consulta = `
         INSERT INTO krusty_machine (id_server,ultimaFechaActivo,activo,longitud,
         latitud,nombreServer,velocidad_conexion,ip_server) 

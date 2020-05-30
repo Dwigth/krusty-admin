@@ -158,6 +158,7 @@ router.post('/insertar_krusty_machine', function (req, res) {
     var fecha_acual = moment_1.default().locale('es').format('YYYY-MM-DD');
     var token = req.header("Authorization");
     // console.log("Token", token);
+    //EL TIPO 0 ES UNICO PAGO Y EL TIPO 1 ES PAGO RECURRENTE
     var consulta = "\n        INSERT INTO krusty_machine (id_server,ultimaFechaActivo,activo,longitud,\n        latitud,nombreServer,velocidad_conexion,ip_server) \n        VALUES (NULL,'" + fecha_acual + "'," + body.activo + ",'" + body.longitud + "','" + body.latitud + "', \n        '" + body.nombreServer + "','" + body.velocidad_conexion + "','" + body.ip_server + "');\n    ";
     Database_1.Database.Instance.ejecutarConsulta(consulta, true, token, function (err, datos) {
         if (err) {
