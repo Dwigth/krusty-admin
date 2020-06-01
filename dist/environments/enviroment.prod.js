@@ -4,6 +4,7 @@ exports.environments = {
     /**
      * Información de la base de datos
     */
+    requiereToken: true,
     database: {
         connectionLimit: 10,
         host: process.env.HOST || 'localhost',

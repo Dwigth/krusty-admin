@@ -34,7 +34,7 @@ router.post('/ingresarEmpresa', (req: Request, res: Response) => {
         INSERT INTO empresas (id,nombreEmpresa,usuario,password,
           fecha_registro,token) 
         VALUES (NULL,'${body.nombreEmpresa}','${body.usuario}','${body.password}','${fecha_inicio}', 
-        '${body.token}');
+        '');
   `;
   console.log("consulta", consulta);
   

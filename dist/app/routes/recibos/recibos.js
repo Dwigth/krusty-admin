@@ -58,7 +58,7 @@ router.post('/ingresarEmpresa', function (req, res) {
     console.log("Token", token);
     console.log("body", body);
     var fecha_inicio = moment_1.default().locale('es').format('YYYY-MM-DD HH:mm');
-    var consulta = "\n        INSERT INTO empresas (id,nombreEmpresa,usuario,password,\n          fecha_registro,token) \n        VALUES (NULL,'" + body.nombreEmpresa + "','" + body.usuario + "','" + body.password + "','" + fecha_inicio + "', \n        '" + body.token + "');\n  ";
+    var consulta = "\n        INSERT INTO empresas (id,nombreEmpresa,usuario,password,\n          fecha_registro,token) \n        VALUES (NULL,'" + body.nombreEmpresa + "','" + body.usuario + "','" + body.password + "','" + fecha_inicio + "', \n        '');\n  ";
     console.log("consulta", consulta);
     Database_1.Database.Instance.ejecutarConsulta(consulta, enviroment_1.environments.requiereToken, token, function (err, data) {
         //Error si no se encuentra el usuario
