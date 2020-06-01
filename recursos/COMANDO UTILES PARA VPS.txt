@@ -1,0 +1,96 @@
+------------------------------------COMANDOS DE PM2 PARA NODEJS-------------------------------------------
+#(lista todas las aplicaciones de node que se estan ejecutando sobre pm2)
+pm2 list 
+
+
+#(Esto elimina la aplicacion de pm2)
+pm2 delete [id del proceso]  
+
+#(Inicia la aplicacion pm2 con un nombre especifico)
+pm2 start app.js --name=[nombrequequiera] 
+pm2 start dist/index.js --name=CHAMBITAS
+
+
+############################################################################################################
+
+
+------------------------------------COMANDOS GIT--------------------------------------------------
+#Descarta todos los cambios de un proyecto y solo descarga a la fuerza los nuevos cambios
+git reset --hard
+
+
+#Se usa para salir despues de un git pull (generalmente ocurre en bitbucket en la api de chambitas php)
+:q
+
+#Descarga los últimos cambios (ultimo commit)
+git pull
+
+
+############################################################################################################
+
+
+------------------------------------COMANDOS PARA UBUNTU/LINUX-------------------------------------------
+#Entrar como root
+sudo su
+
+#Lista un directorio
+ls
+
+#Navegar entre directorios
+cd nombredeldirectorio
+
+#Navegar hacia atras de un directorio
+cd ..
+
+#Crear una nueva carpeta
+mkdir nombredelacarpeta
+
+#Eliminar archivos o carpetas
+rm -r nombredelacarpetaoarchivo
+
+#Borrar la consola
+clear
+
+############################################################################################################
+
+
+------------------------------------------COMANDOS DE NODEJS--------------------------------------------
+#Ejecuta algun codigo o archivo de node
+node rutadelproyecto
+
+
+#Para nodemon ejecuta una aplicacion de node
+nodemon rutadelproyecto
+
+#Descarga las dependencias de node
+npm install
+
+#Descarga los types de typescript de algun modulo de npm 
+#(el --save-dev hace que se instale como dependencia de desarrollo)
+npm i @types/nombredelmodulo --save-dev
+
+############################################################################################################
+
+
+---------------------------------------------TYPESCRIPT----------------------------------------------
+#Compila los archivos de typescript
+tsc compiler
+
+#Esta pendiente de los cambios en los archivos de typescript 
+tsc -w
+
+############################################################################################################
+
+------------------------------------------MYSQL-------------------------------------------------------
+#OTORGAR PERMISOS A UNA IP PARA CONSULTAR REMOTAMENTE MYSQL REMOTO DE CHAMBITAS
+GRANT ALL PRIVILEGES ON *.* TO 'basededatos'@'Ip_o_nombreequipo' IDENTIFIED BY 'contraseña';
+GRANT ALL PRIVILEGES ON *.* TO 'admintuchambita'@'187.187.192.77' IDENTIFIED BY 'C;,j.InxawY)'
+
+
+############################################################################################################
+
+
+
+
+
+
